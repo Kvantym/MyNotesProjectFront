@@ -1,0 +1,218 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 900;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 950px;
+  max-height: 90vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-with-right-column {
+  display: flex;
+  gap: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 900px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease-out;
+  box-sizing: border-box;
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  flex: 1;
+  height: 450px;
+}
+
+.modal-with-right-column {
+  display: flex;
+  gap: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 900px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease-out;
+  box-sizing: border-box;
+}
+
+.right-column {
+  background-color: #f7f7f7; /* світліший фон для історії */
+  border: 1px solid #ddd;
+ max-height: 450px;
+  overflow-y: auto;
+}
+
+.right-column h3 {
+  margin-top: 0;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+/* Тепер кнопки поруч із заголовком */
+.modal-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn.icon {
+  font-size: 1.2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.btn.icon:hover {
+  color: #000;
+}
+
+/* Лейбли і поля вводу */
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  background-color: #fff;
+  resize: none;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+textarea {
+  min-height: 60px;
+  max-height: 150px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.btn.cancel {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn.cancel:hover {
+  background-color: #ccc;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 8px;
+}
+.right-column {
+  padding: 1rem;
+  border-left: 1px solid #ccc;
+
+  h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .activity-list {
+    list-style: none;
+    padding: 0;
+
+    .activity-item {
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+
+      .activity-time {
+        color: #888;
+        margin-right: 0.5rem;
+      }
+
+      .activity-action {
+        margin-right: 0.5rem;
+        color: #007bff;
+      }
+
+      .activity-info {
+        color: #333;
+      }
+    }
+  }
+}
+.btn.load-more {
+  display: block;               // кнопка на новому рядку
+  width: 100%;                  // займає всю ширину контейнера
+  padding: 10px 15px;           // внутрішні відступи
+  margin: 10px 0;               // відступ зверху і знизу
+  font-size: 14px;              // розмір тексту
+  font-weight: 600;
+  color: #fff;                  // колір тексту
+  background-color: #3f51b5;   // фоновий колір кнопки (синій)
+  border: none;                 // без рамки
+  border-radius: 8px;           // закруглені кути
+  cursor: pointer;              // курсор при наведенні
+  transition: background-color 0.2s ease, transform 0.2s ease; // плавна анімація
+  text-align: center;
+}
+
+.btn.load-more:hover {
+  background-color: #303f9f;    // темніший синій при наведенні
+  transform: translateY(-2px);  // легкий підйом при наведенні
+}
+
+.btn.load-more:active {
+  transform: translateY(0);     // натискання
+  background-color: #283593;
+}

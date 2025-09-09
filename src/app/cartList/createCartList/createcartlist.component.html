@@ -1,0 +1,28 @@
+<div class="modal-overlay" (click)="onCancel()"></div>
+
+<div class="modal-container">
+  <h2>Створити список карток</h2>
+
+  <form [formGroup]="createCartListForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Назва списку</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Введіть назву списку"
+      />
+    </div>
+
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="actions">
+      <button type="submit" class="btn save" [disabled]="createCartListForm.invalid">
+        ➕ Створити
+      </button>
+      <button type="button" class="btn cancel" (click)="onCancel()">
+        ❌ Відмінити
+      </button>
+    </div>
+  </form>
+</div>

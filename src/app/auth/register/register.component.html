@@ -1,0 +1,35 @@
+<div class="login-container">
+  <h2>Увійти в акаунт</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" type="text" formControlName="username" placeholder="Введіть ваш username">
+      <div class="error" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+        Некоректний username
+      </div>
+    </div>
+     <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="Введіть ваш Email">
+      <div class="error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+         Некоректний Email
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль</label>
+      <input id="password" type="password" formControlName="password" placeholder="Введіть ваш пароль">
+      <div class="error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        Пароль повинен бути мінімум 4 символи
+      </div>
+    </div>
+
+    <button type="submit">Увійти</button>
+
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

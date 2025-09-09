@@ -1,0 +1,79 @@
+<div class="modal-overlay" *ngIf="showCartForm"></div>
+
+<div class="modal modal-with-right-column" *ngIf="showCartForm">
+  <!-- Ліва частина: картка -->
+  <div class="left-column">
+
+<div class="modal-title-wrapper">
+    <h2 class="modal-title">Інформація про картку</h2>
+        <div class="modal-actions">
+      <button class="btn icon" (click)="openUpdateCarForm(selectedCartData); $event.stopPropagation()">✏️</button>
+      <button class="btn icon" (click)="deleteCard(cartId); $event.stopPropagation()">🗑️</button>
+    </div>
+    </div>
+
+
+    <form [formGroup]="showCartForm">
+      <div class="form-group">
+        <label for="name">Назва</label>
+        <input id="name" type="text" formControlName="name" readonly />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Опис</label>
+        <textarea id="description" formControlName="description" rows="3" readonly></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="dueDate">Дата виконання</label>
+        <input id="dueDate" type="datetime-local" formControlName="dueDate" readonly />
+      </div>
+
+      <div class="form-group">
+        <label for="priorityNote">Пріоритет</label>
+        <input id="priorityNote" type="text" formControlName="priorityNote" readonly />
+      </div>
+
+      <div class="form-group">
+        <label for="statusNote">Статус</label>
+        <input id="statusNote" type="text" formControlName="statusNote" readonly />
+      </div>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div class="actions">
+        <button type="button" class="btn cancel" (click)="onCancel()">Закрити</button>
+      </div>
+    </form>
+  </div>
+
+<div class="right-column">
+  <h3>Історія</h3>
+
+  <div *ngIf="activities.length === 0">
+    <p>Історія дій відсутня</p>
+  </div>
+
+<ul *ngIf="displayedActivities.length > 0" class="activity-list">
+  <li *ngFor="let activity of displayedActivities" class="activity-item">
+    <span class="activity-time">{{ activity.activityTime | date:'short' }}</span>
+    <span class="activity-action"><strong>{{ activity.action }}</strong></span>
+    <span class="activity-info">{{ activity.activityInformation }}</span>
+  </li>
+</ul>
+
+<button *ngIf="currentIndex < activities.length" (click)="loadMoreActivities()" class="btn load-more">
+  Показати ще
+</button>
+
+
+
+
+
+<app-cart-updateCart
+  *ngIf="isUpdateCartModalOpen"
+  [cart]="selectedCart"
+  (closeModal)="closeUpdateCartModal()"
+  (cartUpdated)="reloadCart()">
+</app-cart-updateCart>
+

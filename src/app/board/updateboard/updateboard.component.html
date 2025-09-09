@@ -1,0 +1,25 @@
+<div class="modal-overlay" (click)="onCancel()"></div>
+
+<div class="modal-container">
+  <h2>Редагувати дошку</h2>
+
+  <form [formGroup]="updateBoardForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Назва дошки</label>
+      <input id="name" type="text" formControlName="name" placeholder="Введіть назву" />
+
+      <div class="error" *ngIf="updateBoardForm.get('name')?.touched && updateBoardForm.get('name')?.invalid">
+        Назва обов’язкова.
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn save" [disabled]="!updateBoardForm.valid">Зберегти</button>
+      <button type="button" class="btn cancel" (click)="onCancel()">Скасувати</button>
+    </div>
+
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

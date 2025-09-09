@@ -1,0 +1,46 @@
+<div class="modal-overlay" (click)="onCancel()"></div>
+<div class="modal-container" (click)="$event.stopPropagation()">
+  <h2>Створити картку</h2>
+
+  <form [formGroup]="createCartForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Назва</label>
+      <input id="name" type="text" formControlName="name" placeholder="Введіть назву" />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Опис</label>
+      <textarea id="description" formControlName="description" placeholder="Додайте опис"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="dueDate">Дата завершення</label>
+      <input id="dueDate" type="datetime-local" formControlName="dueDate" />
+    </div>
+
+    <div class="form-group">
+      <label for="priorityNote">Пріоритет</label>
+      <select id="priorityNote" formControlName="priorityNote">
+        <option value="Low">Низький</option>
+        <option value="Medium">Середній</option>
+        <option value="High">Високий</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="statusNote">Статус</label>
+      <select id="statusNote" formControlName="statusNote">
+        <option value="Draft">Чернетка</option>
+        <option value="InProgress">У процесі</option>
+        <option value="Done">Виконано</option>
+      </select>
+    </div>
+
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="actions">
+      <button type="submit" class="btn save" [disabled]="createCartForm.invalid">➕ Створити</button>
+      <button type="button" class="btn cancel" (click)="onCancel()">❌ Відмінити</button>
+    </div>
+  </form>
+</div>

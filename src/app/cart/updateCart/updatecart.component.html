@@ -1,0 +1,48 @@
+<!-- Затемнення -->
+<div class="modal-overlay" (click)="onCancel()"></div>
+
+<!-- Контейнер модалки -->
+<div class="modal-container">
+  <h2>Редагувати картку</h2>
+
+  <form [formGroup]="updateCartForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Назва картки</label>
+      <input id="name" type="text" formControlName="name" placeholder="Введіть назву">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Опис</label>
+      <textarea id="description" formControlName="description" placeholder="Введіть опис"></textarea>
+    </div>
+
+<div class="form-group">
+  <label for="dueDate">Термін</label>
+  <input id="dueDate" type="datetime-local" formControlName="dueDate" #dateInput>
+
+</div>
+
+    <input type="hidden" formControlName="listCartId">
+
+    <div class="form-group">
+      <label for="priorityNote">Пріоритет</label>
+      <select id="priorityNote" formControlName="priorityNote">
+        <option *ngFor="let p of priorityOptions" [value]="p">{{ p }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="statusNote">Статус</label>
+      <select id="statusNote" formControlName="statusNote">
+        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+      </select>
+    </div>
+
+    <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="actions">
+      <button type="submit" class="btn save" [disabled]="updateCartForm.invalid">💾 Зберегти</button>
+      <button type="button" class="btn cancel" (click)="onCancel()">❌ Відмінити</button>
+    </div>
+  </form>
+</div>

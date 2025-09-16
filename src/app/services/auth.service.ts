@@ -6,7 +6,7 @@ import { isPlatformBrowser } from "@angular/common";
 
 interface User {
   id: string;
-  username: string;
+  userName: string;
   email?: string;
 }
 
@@ -56,7 +56,7 @@ export class AuthService {
         if (decoded) {
           this.currentUserSubject.next({
             id: decoded.sub,
-            username: decoded.username,
+            userName: decoded.username,
             email: decoded.email,
           });
         }
@@ -92,6 +92,24 @@ export class AuthService {
     return this.isBrowser ? localStorage.getItem("authToken") : null;
   }
 
+  updateUserName(newUserName: string): Observable<any> {
+    const formData = new FormData();
+    formData.append("newUserName", newUserName);
+      return this.http.put(`${this.apiUrl}/update-user-name`, formData, { responseType: "text" });
+  }
+    updateUserEmail(newUserEmail: string): Observable<any> {
+    const formData = new FormData();
+    formData.append("newUserEmail", newUserEmail);
+      return this.http.put(`${this.apiUrl}/update-user-email`, formData, { responseType: "text" });
+  }
+
+      updateUserPassword(newUserPassword: string): Observable<any> {
+    const formData = new FormData();
+    formData.append("newUserPassword", newUserPassword);
+      return this.http.put(`${this.apiUrl}/update-user-password`, formData, { responseType: "text" });
+  }
+
+
   private loadUserFromStorage() {
     if (!this.isBrowser) return;
 
@@ -101,7 +119,7 @@ export class AuthService {
       if (decoded) {
         this.currentUserSubject.next({
           id: decoded.sub,
-          username: decoded.username,
+          userName: decoded.username,
           email: decoded.email,
         });
       } else {

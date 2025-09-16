@@ -28,29 +28,38 @@ export class CreateCartComponent {
       name: ['', [Validators.required, Validators.minLength(1)]],
       description: [''],
       dueDate: [''],
-      priorityNote: ['Low'],
-      statusNote: ['Draft']
+      priorityNote: [''],
+      statusNote: ['']
     });
 
   }
 
   onSubmit() {
-    if (!this.createCartForm.valid) return;
+  if (!this.createCartForm.valid) return;
 
-    const newcart = this.createCartForm.value;
-    this.cartService.createCart(this.cartListId,newcart).subscribe({
-      next: () => {
-        this.ngZone.run(() => {
+  const newCart = {
+    ...this.createCartForm.value,
+    dueDate: this.createCartForm.value.dueDate
+      ? new Date(this.createCartForm.value.dueDate).toISOString()
+      : null,
+  priorityNote: this.createCartForm.value.priorityNote,
+  statusNote: this.createCartForm.value.statusNote
+  };
+
+  this.cartService.createCart(this.cartListId, newCart).subscribe({
+    next: () => {
+      this.ngZone.run(() => {
         this.onCancel();
-        });
+        this.cartCreated.emit();
+      });
+    },
+    error: (err) => {
+      console.error(err);
+      this.errorMessage = 'Не вдалося створити картку. Спробуйте ще раз.';
+    }
+  });
+}
 
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMessage = 'Не вдалося створити дошку. Спробуйте ще раз.';
-      }
-    });
-  }
 
   onCancel() {
     this.closeModal.emit();

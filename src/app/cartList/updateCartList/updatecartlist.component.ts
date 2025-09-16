@@ -51,6 +51,5 @@ export class UpdateCartListComponent {
 
   onCancel() {
     this.closeModal.emit();
-
   }
 }

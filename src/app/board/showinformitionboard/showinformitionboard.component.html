@@ -1,19 +1,20 @@
-<div class="modal-overlay" *ngIf="showCartListForm"></div>
+<div class="modal-overlay" *ngIf="showBoardForm"></div>
 
-<div class="modal modal-with-right-column" *ngIf="showCartListForm">
+<div class="modal modal-with-right-column" *ngIf="showBoardForm">
   <!-- Ліва частина: картка -->
   <div class="left-column">
 
 <div class="modal-title-wrapper">
-    <h2 class="modal-title">Information about list</h2>
+    <h2 class="modal-title">Information about board</h2>
         <div class="modal-actions">
-      <button class="btn icon" (click)="openUpdateListCartForm(selectedCartListData); $event.stopPropagation()">✏️</button>
-      <button class="btn icon" (click)="deleteListCard(cartListId); $event.stopPropagation()">🗑️</button>
+      <button class="btn icon" (click)="openUpdateBoardForm(selectedBoardData); $event.stopPropagation()">✏️</button>
+      <button class="btn icon" (click)="deleteBoard(boardId); $event.stopPropagation()">🗑️</button>
+
     </div>
     </div>
 
 
-    <form [formGroup]="showCartListForm">
+    <form [formGroup]="showBoardForm">
       <div class="form-group">
         <label for="name">Name</label>
         <input id="name" type="text" formControlName="name" readonly />
@@ -47,13 +48,12 @@
   Show more
 </button>
 
-
-<app-cartList-updateCartList
-  *ngIf="isUpdateCartListModalOpen"
-  [cartList]="selectedCartList"
-  (closeModal)="closeUpdateListCartModal()"
-  (cartUpdated)="reloadListCart()"
-  (closeModal)="reloadListCart()">
-</app-cartList-updateCartList>
+<app-board-updateboard
+  *ngIf="isUpdateBoardModalOpen"
+  [board]="selectedBoard"
+  (closeModal)="closeUpdateBoardModal()"
+  (cartUpdated)="reloadBoard()"
+  (closeModal)="reloadBoard()">
+</app-board-updateboard>
 
 

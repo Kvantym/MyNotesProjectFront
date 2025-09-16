@@ -3,46 +3,51 @@
 
 <!-- Контейнер модалки -->
 <div class="modal-container">
-  <h2>Редагувати картку</h2>
+  <h2>Update Cart</h2>
 
   <form [formGroup]="updateCartForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Назва картки</label>
-      <input id="name" type="text" formControlName="name" placeholder="Введіть назву">
+      <label for="name">Name</label>
+      <input id="name" type="text" formControlName="name" placeholder="Enter name" />
     </div>
 
     <div class="form-group">
-      <label for="description">Опис</label>
-      <textarea id="description" formControlName="description" placeholder="Введіть опис"></textarea>
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" placeholder="Enter description"></textarea>
     </div>
 
 <div class="form-group">
-  <label for="dueDate">Термін</label>
+  <label for="dueDate">Execution date</label>
   <input id="dueDate" type="datetime-local" formControlName="dueDate" #dateInput>
 
 </div>
 
     <input type="hidden" formControlName="listCartId">
 
-    <div class="form-group">
-      <label for="priorityNote">Пріоритет</label>
+   <div class="form-group">
+      <label for="priorityNote">Prioritet</label>
       <select id="priorityNote" formControlName="priorityNote">
-        <option *ngFor="let p of priorityOptions" [value]="p">{{ p }}</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+         <option value="Urgent">Urgent</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="statusNote">Статус</label>
+      <label for="statusNote">Status</label>
       <select id="statusNote" formControlName="statusNote">
-        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+        <option value="Draft">Draft</option>
+        <option value="Published">Published</option>
+        <option value="Done">Done</option>
       </select>
     </div>
 
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="actions">
-      <button type="submit" class="btn save" [disabled]="updateCartForm.invalid">💾 Зберегти</button>
-      <button type="button" class="btn cancel" (click)="onCancel()">❌ Відмінити</button>
+      <button type="submit" class="btn save" [disabled]="updateCartForm.invalid">💾 Seve</button>
+      <button type="button" class="btn cancel" (click)="onCancel()">❌ Cancel</button>
     </div>
   </form>
 </div>

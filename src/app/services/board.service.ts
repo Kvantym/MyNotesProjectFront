@@ -3,6 +3,12 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import{ environment } from "../../environments/environment";
 import { isPlatformBrowser } from "@angular/common";
 
+export interface ActivityBoardResponse {
+  action: string;
+  activityInformation: string;
+  activityTime: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -30,5 +36,8 @@ export class BoardService {
   getBoardsByUser() {
     return this.http.get(`${this.apiUrl}/board-by-user`);
   }
+    getBoardActivityByBoardId(boardId: string){
+  return this.http.get<ActivityBoardResponse[]>(`${this.apiUrl}/get-activity-board/${boardId}`);
+    }
 }
 

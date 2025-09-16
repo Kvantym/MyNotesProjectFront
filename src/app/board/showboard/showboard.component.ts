@@ -27,7 +27,7 @@ interface ListCart {
   templateUrl: "./showboard.component.html",
   styleUrls: ["./showboard.component.scss"],
   standalone: true,
-  imports: [CommonModule, UpdateCartListComponent, UpdateCartComponent,CreateCartListComponent,CreateCartComponent,FormsModule,ShowCartComponent, ShowCartListComponent],
+  imports: [CommonModule, UpdateCartListComponent, UpdateCartComponent,CreateCartListComponent,CreateCartComponent,FormsModule,ShowCartComponent,ShowCartListComponent],
 })
 export class ShowBoardComponent implements OnInit {
   boardId!: string;

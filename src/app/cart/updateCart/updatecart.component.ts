@@ -11,15 +11,13 @@ import { CartService } from "../../services/cart.service";
   styleUrls: ['./updatecart.component.scss']
 })
 export class UpdateCartComponent implements OnChanges {
-  @Input() cart: any; // картка, що редагується
-  @Output() closeModal = new EventEmitter<void>(); // подія закриття модалки
-  @Output() cartUpdated = new EventEmitter<void>(); // подія оновлення
+  @Input() cart: any;
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() cartUpdated = new EventEmitter<void>();
 
   updateCartForm: FormGroup;
   errorMessage: string | null = null;
 
-  priorityOptions = ['Low', 'Medium', 'High'];
-  statusOptions = ['Draft', 'Published', 'Deleted'];
 
   constructor(private fb: FormBuilder, private cartService: CartService) {
     this.updateCartForm = this.fb.group({
@@ -34,21 +32,14 @@ export class UpdateCartComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['cart'] && this.cart) {
+
+
       this.updateCartForm.patchValue({
         name: this.cart.name ?? '',
         description: this.cart.description ?? '',
         dueDate: this.cart.dueDate ? this.cart.dueDate.substring(0, 16) : '',
         listCartId: this.cart.listCartId ?? '',
-        priorityNote: this.cart.priorityNote ?? 'Low',
-        statusNote: this.cart.statusNote ?? 'Draft'
-      });
-    }
-  }
 
-  confirmDate(value: string) {
-    if (value) {
-      this.updateCartForm.patchValue({
-        dueDate: value
       });
     }
   }
@@ -56,12 +47,17 @@ export class UpdateCartComponent implements OnChanges {
   onSubmit() {
     if (!this.updateCartForm.valid || !this.cart) return;
 
-    const updatedCart = this.updateCartForm.value;
+    const formValue = this.updateCartForm.value;
 
-    this.cartService.updateCart(this.cart.id, updatedCart).subscribe({
+    // Перетворюємо на бекенд-формат
+    const payload = {
+      ...formValue,
+    };
+
+    this.cartService.updateCart(this.cart.id, payload).subscribe({
       next: () => {
-        this.cartUpdated.emit(); // кажемо батьку: "дані оновлені"
-        this.onCancel(); // закриваємо модалку
+        this.cartUpdated.emit();
+        this.onCancel();
       },
       error: (err) => {
         console.error(err);

@@ -4,11 +4,12 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { CreateBoardComponent } from '../board/createBoard/createboard.component';
 import { BoardService } from '../services/board.service';
 import { UpdateBoardComponent } from '../board/updateboard/updateboard.component';
+import { ShowBoardInformationComponent } from '../board/showinformitionboard/showinformitionboard.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, CreateBoardComponent, UpdateBoardComponent],
+  imports: [CommonModule, RouterModule, CreateBoardComponent, UpdateBoardComponent, ShowBoardInformationComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -19,6 +20,8 @@ export class DashboardComponent {
   showUpdateBoardForm = false;
   boardId!: string;
   selectedBoard: any = null;
+  showBoardInfoForm = false;
+  selectedBoardId: string | null = null;
 
   constructor(
     private router: Router,
@@ -45,6 +48,48 @@ export class DashboardComponent {
   }
 
   }
+
+  isUserMenuOpen = false;
+userMenuTimeout: any;
+
+toggleUserMenu() {
+  this.isUserMenuOpen = !this.isUserMenuOpen;
+
+  if (this.isUserMenuOpen) {
+    this.startUserMenuTimeout();
+  } else {
+    this.clearUserMenuTimeout();
+  }
+}
+
+startUserMenuTimeout() {
+  this.clearUserMenuTimeout();
+  this.userMenuTimeout = setTimeout(() => {
+    this.isUserMenuOpen = false;
+  }, 5000); // закриття через 5 секунд
+}
+
+clearUserMenuTimeout() {
+  if (this.userMenuTimeout) {
+    clearTimeout(this.userMenuTimeout);
+    this.userMenuTimeout = null;
+  }
+}
+
+// Скидаємо таймер при наведенні на меню
+onUserMenuMouseEnter() {
+  this.clearUserMenuTimeout();
+}
+
+// Знову запускаємо таймер, коли курсор залишив меню
+onUserMenuMouseLeave() {
+  this.startUserMenuTimeout();
+}
+
+
+openProfile() {
+ this.router.navigate(['/profil']);
+}
 
   loadBoards() {
     this.boardService.getBoardsByUser().subscribe({
@@ -84,26 +129,6 @@ openBoard(board: any) {
   }
 }
 
-deleteBoard(boardId: string) {
-  console.log('Deleting board with ID:', boardId);
-  if (!boardId) {
-    console.error('boardId відсутній!');
-    return;
-  }
-  const confirmed = window.confirm('Ви впевнені, що хочете видалити цю дошку?');
-  if (!confirmed) {
-    return; // Користувач відмінив видалення
-  }
-  this.boardService.deleteBoard(boardId).subscribe({
-    next: () => {
-      console.log('Board deleted successfully');
-      this.loadBoards();
-    },
-    error: (err) => {
-      console.error('Помилка при видаленні дошки:', err);
-    }
-  });
-}
 
  openUpdateBoardForm(board: any) {
   console.log('Clicked board:', board); // перевір що передається
@@ -119,5 +144,21 @@ deleteBoard(boardId: string) {
       this.loadBoards();
     }
   }
+
+   openShowBoardInformation(boardId: string) {
+    this.selectedBoardId = boardId;
+    this.showBoardInfoForm = true;
+  }
+
+  closeShowBoardInformation(refresh: boolean = false) {
+    this.showBoardInfoForm = false;
+    this.selectedBoardId = null;
+    if (refresh) {
+      this.loadBoards();
+    }
+  }
+
+
+
 
 }

@@ -1,0 +1,116 @@
+.profile-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px 25px;
+  background: linear-gradient(135deg, #ffffff, #e0f7fa);
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+.profile-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #00796b;
+  margin-bottom: 25px;
+  letter-spacing: 0.5px;
+}
+
+.profile-container p {
+  font-size: 1.1rem;
+  color: #004d40;
+  margin-bottom: 12px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  margin-right: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn.edit {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.btn.edit:hover {
+  background-color: #fb8c00;
+  transform: scale(1.05);
+}
+
+.btn.save {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.btn.save:hover {
+  background-color: #43a047;
+  transform: scale(1.05);
+}
+
+.btn.cancel {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.btn.cancel:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+.form-group {
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #00695c;
+}
+
+.form-group input {
+  width: 95%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: 2px solid #b2dfdb;
+  border-radius: 10px;
+  background-color: #ffffffaa;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #00796b;
+  box-shadow: 0 0 10px rgba(0, 121, 107, 0.2);
+  outline: none;
+}
+
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.error-message {
+  margin-top: 18px;
+  color: #d32f2f;
+  font-weight: 600;
+  text-align: center;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}

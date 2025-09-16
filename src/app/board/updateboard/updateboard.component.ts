@@ -51,6 +51,5 @@ export class UpdateBoardComponent {
 
   onCancel() {
     this.closeModal.emit();
-    window.location.reload();
   }
 }

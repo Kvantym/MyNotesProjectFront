@@ -312,6 +312,37 @@
     }
   }
 }
+.btn.more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #555;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.btn.more-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #000;
+  transform: scale(1.05);
+}
+
+.btn.more-btn:active {
+  background-color: rgba(0, 0, 0, 0.15);
+  transform: scale(0.95);
+}
+
+.btn.more-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.4);
+}
+
 
 
 

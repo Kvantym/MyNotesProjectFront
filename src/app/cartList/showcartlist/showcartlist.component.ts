@@ -11,7 +11,8 @@ import { ChangeDetectorRef } from "@angular/core";
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, UpdateCartListComponent],
   templateUrl: './showcartlist.component.html',
-  styleUrls: ['./showcartlist.component.scss']
+  styleUrls: ['./showcartlist.component.scss'],
+
 })
 export class ShowCartListComponent implements OnInit {
   @Input() cartListId!: string;
@@ -34,21 +35,19 @@ export class ShowCartListComponent implements OnInit {
     private listcartService: ListCartService,
     private ngZone: NgZone,
      private cd: ChangeDetectorRef,
+
   ) {
     this.showCartListForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
-  @Output() cartUpdated = new EventEmitter<void>();
+  @Output() cartListUpdated = new EventEmitter<void>();
 
 
-
-//трееба сьворить GetListCartById(guid ListCartId) в сервісі
-//трееба сьворить GetActivityListCartById(guid ListCartId) в сервісі
 
  ngOnInit() {
   if (this.cartListId) {
-    this.listcartService.getCartById(this.cartListId).subscribe({
+    this.listcartService.getListCartById(this.cartListId).subscribe({
       next: (data) => {
         this.showCartListForm.patchValue(data);
         this.selectedCartListData = { ...data, id: this.cartListId };
@@ -63,7 +62,7 @@ export class ShowCartListComponent implements OnInit {
   }
 }
 loadActivities() {
-  this.listcartService.getActivityCart(this.cartListId).subscribe({
+  this.listcartService.getListCartActivityByListId(this.cartListId).subscribe({
     next: (data) => {
       // Сортуємо від нових до старих
       this.activities = data.sort((a, b) => new Date(b.activityTime).getTime() - new Date(a.activityTime).getTime());
@@ -86,14 +85,14 @@ loadMoreActivities() {
   this.currentIndex = nextIndex;
 }
 
-  private loadCartData(cartId: string) {
-    this.listcartService.getCartById(cartId).subscribe({
+  private loadCartListData(cartListId: string) {
+    this.listcartService.getListCartById(cartListId).subscribe({
       next: (data) => {
         this.showCartListForm.patchValue(data);
-        this.selectedCartListData = { ...data, id: cartId };
+        this.selectedCartListData = { ...data, id: cartListId };
 
         // Завантаження активностей
-        this.cartService.getActivityCart(cartId).subscribe({
+        this.listcartService.getListCartActivityByListId(cartListId).subscribe({
           next: (activities) =>{
  this.activities = activities;
  this.ngZone.run(()=>{
@@ -112,23 +111,23 @@ loadMoreActivities() {
       }
     });
   }
- reloadCart() {
+ reloadListCart() {
   if (!this.cartListId) return;
 
-  this.cartService.getCartById(this.cartListId).subscribe({
+  this.listcartService.getListCartById(this.cartListId).subscribe({
     next: (cartListData) => {
       this.showCartListForm.patchValue(cartListData);
       this.selectedCartListData = { ...cartListData, id: this.cartListId };
       this.loadActivities();
-      this.cartUpdated.emit();
+      this.cartListUpdated.emit();
     },
-    error: (err) => console.error("Помилка при завантаженні картки:", err)
+    error: (err) => console.error("Помилка при завантаженні списку:", err)
   });
 }
 
 
 
-  deleteCard(cartId: string): void {
+  deleteListCard(cartListId: string): void {
     if (!confirm('Ви впевнені, що хочете видалити картку?')) return;
 
     this.listcartService.deleteCartList(this.cartListId).subscribe({
@@ -146,8 +145,9 @@ loadMoreActivities() {
       next: () => {
         console.log('Картку оновлено успішно');
 
-          this.loadCartData(cartListId);
+          this.loadCartListData(cartListId);
           this.onCancel();
+          this.cartListUpdated.emit();
 
       },
       error: (err) => {
@@ -159,18 +159,20 @@ loadMoreActivities() {
 
   onCancel() {
     this.closeModal.emit();
-this.cartUpdated.emit();
+this.cartListUpdated.emit();
 
   }
 
-  openUpdateCarForm(cartlist: any) {
-    console.log('clicked open cart', cartlist);
+  openUpdateListCartForm(cartlist: any) {
+    console.log('clicked open cartList with id', cartlist);
     this.selectedCartList = cartlist;
     this.isUpdateCartListModalOpen = true;
+    this.cartListUpdated.emit();
   }
 
-  closeUpdateCartModal() {
+  closeUpdateListCartModal() {
     this.selectedCartList = null;
     this.isUpdateCartListModalOpen = false;
+    this.cartListUpdated.emit();
   }
 }

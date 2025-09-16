@@ -1,31 +1,32 @@
 <div class="login-container">
-  <h2>Увійти в акаунт</h2>
+  <h2>Register account</h2>
 
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit($event)">
     <div class="form-group">
       <label for="username">Username</label>
-      <input id="username" type="text" formControlName="username" placeholder="Введіть ваш username">
+      <input id="username" type="text" formControlName="username" placeholder="Enter username">
       <div class="error" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
-        Некоректний username
+        Incorrect username
       </div>
     </div>
      <div class="form-group">
       <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" placeholder="Введіть ваш Email">
+      <input id="email" type="email" formControlName="email" placeholder="Enter Email">
       <div class="error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-         Некоректний Email
+         Incorrect Email
       </div>
     </div>
 
     <div class="form-group">
-      <label for="password">Пароль</label>
-      <input id="password" type="password" formControlName="password" placeholder="Введіть ваш пароль">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Enter password">
       <div class="error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-        Пароль повинен бути мінімум 4 символи
+        Password must be at least 4 characters long
       </div>
     </div>
 
-    <button type="submit">Увійти</button>
+    <button type="submit">Register user</button>
+    <button type="button" class="ButtonRegister" (click)="goToLogin()">Go to Login</button>
 
 
     <div class="error-message" *ngIf="errorMessage">

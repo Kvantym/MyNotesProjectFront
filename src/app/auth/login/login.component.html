@@ -1,25 +1,25 @@
 <div class="login-container">
-  <h2>Увійти в акаунт</h2>
+  <h2>Login in account</h2>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
     <div class="form-group">
       <label for="username">Username</label>
-      <input id="username" type="text" formControlName="username" placeholder="Введіть ваш username">
+      <input id="username" type="text" formControlName="username" placeholder="Enter username">
       <div class="error" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-        Некоректний username
+        Incorrect username
       </div>
     </div>
 
     <div class="form-group">
-      <label for="password">Пароль</label>
-      <input id="password" type="password" formControlName="password" placeholder="Введіть ваш пароль">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Enter password">
       <div class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        Пароль повинен бути мінімум 4 символи
+        Password must be at least 4 characters long
       </div>
     </div>
 
-    <button type="submit">Увійти</button>
-    <button type="button" class="ButtonRegister" (click)="goToRegister()">Зарееструвати користувача</button>
+    <button type="submit">login</button>
+    <button type="button" class="ButtonRegister" (click)="goToRegister()">Register user</button>
 
     <div class="error-message" *ngIf="errorMessage">
       {{ errorMessage }}

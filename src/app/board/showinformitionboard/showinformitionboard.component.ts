@@ -1,70 +1,60 @@
 import { Component, EventEmitter, Output, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { CartService, ActivityCartResponse } from "../../services/cart.service";
+import { BoardService, ActivityBoardResponse } from "../../services/board.service";
 import { NgZone } from "@angular/core";
-import { UpdateCartComponent } from "../updateCart/updatecart.component";
+import { UpdateBoardComponent } from "../updateboard/updateboard.component";
 import { ChangeDetectorRef } from "@angular/core";
 
-@Component({
-  selector: 'app-cart-showCart',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UpdateCartComponent],
-  templateUrl: './showcart.component.html',
-  styleUrls: ['./showcart.component.scss']
-})
-export class ShowCartComponent implements OnInit {
-  @Input() cartId!: string;
-  @Output() closeModal = new EventEmitter<void>();
 
-  showCartForm: FormGroup;
+
+@Component({
+  selector: 'app-board-showinformitionboard',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, UpdateBoardComponent],
+  templateUrl: './showinformitionboard.component.html',
+  styleUrls: ['./showinformitionboard.component.scss'],
+
+})
+export class ShowBoardInformationComponent implements OnInit {
+  @Input() boardId!: string;
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() boardUpdated = new EventEmitter<void>();
+
+
+  showBoardForm: FormGroup;
   errorMessage: string | null = null;
 
-  selectedCart: any = null;
-  isUpdateCartModalOpen = false;
-  selectedCartData: any = null;
+  selectedBoard: any = null;
+  isUpdateBoardModalOpen = false;
+  selectedBoardData: any = null;
 
-  activities: ActivityCartResponse[] = [];
-  displayedActivities: ActivityCartResponse[] = [];
+  activities: ActivityBoardResponse[] = [];
+  displayedActivities: ActivityBoardResponse[] = [];
   activitiesBatch = 10;
   currentIndex = 0;
 
-  // Опції для відображення українською
-  priorityOptions = ['Низький', 'Середній', 'Високий', 'Терміновий'];
-  statusOptions = ['Чернетка', 'Опубліковано', 'Виконано'];
-
-
   constructor(
     private fb: FormBuilder,
-    private cartService: CartService,
+    private boardService: BoardService,
     private ngZone: NgZone,
      private cd: ChangeDetectorRef,
+
   ) {
-    this.showCartForm = this.fb.group({
+    this.showBoardForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
-      description: [''],
-      dueDate: [''],
-      priorityNote: ['Low'],
-      statusNote: ['Draft']
     });
   }
-  @Output() cartUpdated = new EventEmitter<void>();
 
 
 
+ ngOnInit() {
+  if (this.boardId) {
+    this.boardService.getBoardById(this.boardId).subscribe({
+      next: (data) => {
+        this.showBoardForm.patchValue(data);
+        this.selectedBoardData = { ...data, id: this.boardId };
 
-
-
-ngOnInit() {
-  if (this.cartId) {
-    this.cartService.getCartById(this.cartId).subscribe({
-      next: (data: any) => {
-        // Заповнюємо форму значеннями з бекенду
-        this.showCartForm.patchValue(data);
-        this.selectedCartData = { ...data, id: this.cartId };
-
-
-        // Завантажуємо історію активностей
         this.loadActivities();
       },
       error: (err) => {
@@ -74,9 +64,8 @@ ngOnInit() {
     });
   }
 }
-
 loadActivities() {
-  this.cartService.getActivityCart(this.cartId).subscribe({
+  this.boardService.getBoardActivityByBoardId(this.boardId).subscribe({
     next: (data) => {
       // Сортуємо від нових до старих
       this.activities = data.sort((a, b) => new Date(b.activityTime).getTime() - new Date(a.activityTime).getTime());
@@ -99,14 +88,14 @@ loadMoreActivities() {
   this.currentIndex = nextIndex;
 }
 
-  private loadCartData(cartId: string) {
-    this.cartService.getCartById(cartId).subscribe({
+  private loadBoardData(boardId: string) {
+    this.boardService.getBoardById(boardId).subscribe({
       next: (data) => {
-        this.showCartForm.patchValue(data);
-        this.selectedCartData = { ...data, id: cartId };
+        this.showBoardForm.patchValue(data);
+        this.selectedBoardData = { ...data, id: boardId };
 
         // Завантаження активностей
-        this.cartService.getActivityCart(cartId).subscribe({
+        this.boardService.getBoardActivityByBoardId(boardId).subscribe({
           next: (activities) =>{
  this.activities = activities;
  this.ngZone.run(()=>{
@@ -125,42 +114,40 @@ loadMoreActivities() {
       }
     });
   }
- reloadCart() {
-  if (!this.cartId) return;
+ reloadBoard() {
+  if (!this.boardId) return;
 
-  this.cartService.getCartById(this.cartId).subscribe({
-    next: (cartData) => {
-      this.showCartForm.patchValue(cartData);
-      this.selectedCartData = { ...cartData, id: this.cartId };
+  this.boardService.getBoardById(this.boardId).subscribe({
+    next: (boardData) => {
+      this.showBoardForm.patchValue(boardData);
+      this.selectedBoardData = { ...boardData, id: this.boardId };
       this.loadActivities();
-      this.cartUpdated.emit();
-
     },
-    error: (err) => console.error("Помилка при завантаженні картки:", err)
+    error: (err) => console.error("Помилка при завантаженні списку:", err)
   });
 }
 
 
 
-  deleteCard(cartId: string): void {
+  deleteBoard(boardId: string): void {
     if (!confirm('Ви впевнені, що хочете видалити картку?')) return;
 
-    this.cartService.deleteCart(cartId).subscribe({
+    this.boardService.deleteBoard(this.boardId).subscribe({
       next: () => {this.onCancel()},
       error: err => console.error('Помилка при видаленні картки:', err)
     });
   }
 
-  onSubmit(cartId: string) {
-    if (!this.showCartForm.valid) return;
+  onSubmit(boardId: string) {
+    if (!this.showBoardForm.valid) return;
 
-    const updatedCart = this.showCartForm.value;
+    const updatedBoard = this.showBoardForm.value;
 
-    this.cartService.updateCart(cartId, updatedCart).subscribe({
+    this.boardService.updateBoard(boardId, updatedBoard).subscribe({
       next: () => {
-        console.log('Картку оновлено успішно');
+        console.log('Дошку оновлено успішно');
 
-          this.loadCartData(cartId);
+          this.loadBoardData(boardId);
           this.onCancel();
 
       },
@@ -173,24 +160,18 @@ loadMoreActivities() {
 
   onCancel() {
     this.closeModal.emit();
-this.cartUpdated.emit();
-
+    this.boardUpdated.emit();
   }
 
-  openUpdateCarForm(cart: any) {
-    console.log('clicked open cart', cart);
-    this.selectedCart = cart;
-    this.isUpdateCartModalOpen = true;
+  openUpdateBoardForm(board: any) {
+    console.log('clicked open board with id', board);
+    this.selectedBoard = board;
+    this.isUpdateBoardModalOpen = true;
   }
 
-  closeUpdateCartModal() {
-    this.selectedCart = null;
-    this.isUpdateCartModalOpen = false;
+  closeUpdateBoardModal() {
+    this.selectedBoard = null;
+    this.isUpdateBoardModalOpen = false;
+    //this.boardUpdated.emit();
   }
-
-
-
-
-
-
 }

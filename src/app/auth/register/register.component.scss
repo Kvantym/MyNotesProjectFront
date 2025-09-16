@@ -1,65 +1,101 @@
+/* Контейнер форми */
 .login-container {
-  width: 400px;
-  margin: 50px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 35px 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Заголовок */
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Група форми */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+/* Лейбл */
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Інпут */
+.form-group input {
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-  background-color: #fff;
+  transition: all 0.3s ease;
+}
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.form-group input:focus {
+  border-color: #4CAF50;
+  outline: none;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+}
 
-  .form-group {
-    margin-bottom: 15px;
+/* Повідомлення про помилки під інпутом */
+.error {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #e74c3c;
+  font-weight: 500;
+}
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
+/* Кнопки */
+button {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-    input {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+button:hover {
+  background-color: #45a049;
+}
 
-      &:focus {
-        border-color: #007bff;
-        outline: none;
-      }
-    }
+/* Кнопка переходу на іншу форму */
+.ButtonRegister {
+  background-color: #2196F3;
+  margin-top: 10px;
+}
 
-    .error {
-      color: red;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-  }
+.ButtonRegister:hover {
+  background-color: #1976D2;
+}
 
-  button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+/* Повідомлення про глобальні помилки */
+.error-message {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #e74c3c;
+}
 
-    &:disabled {
-      background-color: #aaa;
-      cursor: not-allowed;
-    }
-  }
-
-  .error-message {
-    margin-top: 10px;
-    color: red;
-    text-align: center;
-    font-weight: bold;
+/* Адаптивність */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 25px 20px;
+    margin: 40px 15px;
   }
 }

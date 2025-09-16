@@ -1,0 +1,72 @@
+<div class="profile-container">
+  <h2>Profile User: {{ userName }}</h2>
+
+
+  <!-- Режим перегляду -->
+  <div *ngIf="!isEditingUserName; else editUserName">
+    <p><strong>Ім’я:</strong> {{ userName }}</p>
+    <button class="btn edit" (click)="isEditingUserName = true">✏️ Update</button>
+  </div>
+
+  <!-- Режим редагування -->
+  <ng-template #editUserName>
+    <form [formGroup]="updateUserNameForm" (ngSubmit)="updateUserName()">
+      <div class="form-group">
+        <label for="name">New Name</label>
+        <input id="name" type="text" formControlName="name" />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn save">✅ Save</button>
+        <button type="button" class="btn cancel" (click)="onCancelEditName()">❌ Cancel</button>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- Режим перегляду -->
+  <div *ngIf="!isEditingUserEmail; else editUserEmail">
+    <p><strong>Email:</strong> {{ email }}</p>
+    <button class="btn edit" (click)="isEditingUserEmail = true">✏️ Update</button>
+  </div>
+
+  <!-- Режим редагування -->
+  <ng-template #editUserEmail>
+    <form [formGroup]="updateUserEmailForm" (ngSubmit)="updateUserEmail()">
+      <div class="form-group">
+        <label for="email">New Email</label>
+        <input id="email" type="text" formControlName="email" />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn save">✅ Save</button>
+        <button type="button" class="btn cancel" (click)="onCancelEditEmail()">❌ Cancel</button>
+      </div>
+    </form>
+  </ng-template>
+
+   <!-- Режим перегляду -->
+  <div *ngIf="!isEditingUserPassword; else editUserPassword">
+    <p><strong>Update Password:</strong></p>
+    <button class="btn edit" (click)="isEditingUserPassword = true">✏️ Update</button>
+  </div>
+
+  <!-- Режим редагування -->
+  <ng-template #editUserPassword>
+    <form [formGroup]="updateUserPasswordForm" (ngSubmit)="updateUserPassword()">
+      <div class="form-group">
+        <label for="password">New password</label>
+        <input id="password" type="text"/>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn save">✅ Save</button>
+        <button type="button" class="btn cancel" (click)="onCancelEditPassword()">❌ Cancel</button>
+      </div>
+    </form>
+  </ng-template>
+
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+</div>

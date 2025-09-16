@@ -1,46 +1,47 @@
 <div class="modal-overlay" (click)="onCancel()"></div>
 <div class="modal-container" (click)="$event.stopPropagation()">
-  <h2>Створити картку</h2>
+  <h2>Create cart</h2>
 
   <form [formGroup]="createCartForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Назва</label>
-      <input id="name" type="text" formControlName="name" placeholder="Введіть назву" />
+      <label for="name">Name</label>
+      <input id="name" type="text" formControlName="name" placeholder="Enter name" />
     </div>
 
     <div class="form-group">
-      <label for="description">Опис</label>
-      <textarea id="description" formControlName="description" placeholder="Додайте опис"></textarea>
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" placeholder="Enter description"></textarea>
     </div>
 
     <div class="form-group">
-      <label for="dueDate">Дата завершення</label>
+      <label for="dueDate">Execution date</label>
       <input id="dueDate" type="datetime-local" formControlName="dueDate" />
     </div>
 
     <div class="form-group">
-      <label for="priorityNote">Пріоритет</label>
+      <label for="priorityNote">Prioritet</label>
       <select id="priorityNote" formControlName="priorityNote">
-        <option value="Low">Низький</option>
-        <option value="Medium">Середній</option>
-        <option value="High">Високий</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+         <option value="Urgent">Urgent</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="statusNote">Статус</label>
+      <label for="statusNote">Status</label>
       <select id="statusNote" formControlName="statusNote">
-        <option value="Draft">Чернетка</option>
-        <option value="InProgress">У процесі</option>
-        <option value="Done">Виконано</option>
+        <option value="Draft">Draft</option>
+        <option value="Published">Published</option>
+        <option value="Done">Done</option>
       </select>
     </div>
 
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="actions">
-      <button type="submit" class="btn save" [disabled]="createCartForm.invalid">➕ Створити</button>
-      <button type="button" class="btn cancel" (click)="onCancel()">❌ Відмінити</button>
+      <button type="submit" class="btn save" [disabled]="createCartForm.invalid">➕ Create</button>
+      <button type="button" class="btn cancel" (click)="onCancel()">❌ Cancel</button>
     </div>
   </form>
 </div>

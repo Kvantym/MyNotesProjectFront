@@ -1,21 +1,21 @@
 <div class="modal-overlay" (click)="onCancel()"></div>
 
 <div class="modal-container">
-  <h2>Редагувати дошку</h2>
+  <h2>Update board</h2>
 
   <form [formGroup]="updateBoardForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Назва дошки</label>
-      <input id="name" type="text" formControlName="name" placeholder="Введіть назву" />
+      <label for="name">Name board</label>
+      <input id="name" type="text" formControlName="name" placeholder="Enter name" />
 
       <div class="error" *ngIf="updateBoardForm.get('name')?.touched && updateBoardForm.get('name')?.invalid">
-        Назва обов’язкова.
+        Name is required.
       </div>
     </div>
 
     <div class="actions">
-      <button type="submit" class="btn save" [disabled]="!updateBoardForm.valid">Зберегти</button>
-      <button type="button" class="btn cancel" (click)="onCancel()">Скасувати</button>
+      <button type="submit" class="btn save" [disabled]="!updateBoardForm.valid">Save</button>
+      <button type="button" class="btn cancel" (click)="onCancel()">Cancel</button>
     </div>
 
     <div class="error" *ngIf="errorMessage">

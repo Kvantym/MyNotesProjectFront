@@ -49,6 +49,6 @@ export class CreateBoardComponent {
 
   onCancel() {
     this.closeModal.emit();
-    window.location.reload();
+
   }
 }

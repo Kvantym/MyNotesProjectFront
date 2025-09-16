@@ -58,7 +58,15 @@ export class ListCartService {
     return this.http.get<ListCart[]>(`${this.apiUrl}/list-cart-by-user`, this.getAuthHeaders());
   }
 
+
   moveToBoard(listCartId: string, boardId: string): Observable<void> {
     return this.http.get<void>(`${this.apiUrl}/move-to-board/${boardId}`, this.getAuthHeaders());
+  }
+  getListCartActivityByListId(listCartId: string){
+return this.http.get<ActivityCartListResponse[]>(`${this.apiUrl}/get-activity-listcart/${listCartId}`, this.getAuthHeaders());
+  }
+
+  getListCartById(listCartId: string): Observable<ListCart> {
+    return this.http.get<ListCart>(`${this.apiUrl}/list-cart-by-id/${listCartId}`, this.getAuthHeaders());
   }
 }

@@ -15,7 +15,7 @@ export class CreateCartListComponent {
   createCartListForm: FormGroup;
   errorMessage: string | null = null;
 
- @Input() boardId!: string;
+  @Input() boardId!: string;
   @Output() closeModal = new EventEmitter<void>();
 
   constructor(
@@ -49,6 +49,5 @@ export class CreateCartListComponent {
 
   onCancel() {
     this.closeModal.emit();
-    window.location.reload();
   }
 }

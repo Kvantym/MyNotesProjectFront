@@ -1,7 +1,7 @@
 <div class="board-container" *ngIf="board">
   <div class="board-header">
     <h2>{{ board.name }}</h2>
-    <button class="btn add-list" (click)="addList()">+ Додати список</button>
+    <button class="btn add-list" (click)="addList()">+ Add list</button>
   </div>
 
   <div class="lists-wrapper">
@@ -11,13 +11,18 @@
         <h3 [title]="list.name">{{ list.name | slice:0:25 }}{{ list.name.length > 25 ? '...' : '' }}</h3>
 
         <div class="list-actions">
-          <button class="btn icon" (click)="openUpdateCartListForm(list)">✏️</button>
-          <button class="btn icon" (click)="deleteList(list.id)">🗑️</button>
-          <button class="btn icon add-card" (click)="addCard(list.id)" title="Додати картку">
+
+          <button class="btn icon add-card" (click)="addCard(list.id)" title="Add cart">
+
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
     <path d="M8 1a.5.5 0 0 1 .5.5V7.5H14a.5.5 0 0 1 0 1H8.5V14a.5.5 0 0 1-1 0V8.5H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z"/>
   </svg>
 </button>
+    <button class="btn more-btn"
+            (click)="openShowListCarForm(list.id); $event.stopPropagation()"
+            title="Show list information">
+      ⋮
+    </button>
         </div>
       </div>
 
@@ -34,13 +39,13 @@
     <!-- Кнопка "три крапки" -->
     <button class="btn more-btn"
             (click)="openShowCarForm(card.id); $event.stopPropagation()"
-            title="Переглянути картку">
+            title="Show cart information">
       ⋮
     </button>
 
     <!-- Форма переміщення картки -->
     <div class="move-cart-container" *ngIf="lists && lists.length">
-      <label for="moveCartSelect">Перемістити картку до списку:</label>
+      <label for="moveCartSelect">Move cart to list:</label>
       <select id="moveCartSelect"
               [(ngModel)]="card.selectedCartListId"
               (change)="moveCartToCartList(card.selectedCartListId, card.id)">
@@ -61,7 +66,7 @@
 </div>
 
 <div *ngIf="!board" class="loading">
-  <p>Завантаження дошки...</p>
+  <p>Load board...</p>
 </div>
 
 <!-- Модалки -->
@@ -88,7 +93,8 @@
   <app-cartList-createCartList
     [boardId]="boardId"
     (closeModal)="closeCreateCartListModal()"
-    (cartListCreated)="loadLists()"> <!-- 🔥 оновлення після створення -->
+    (cartListCreated)="loadLists()"
+    (closeModal)="loadLists()">
   </app-cartList-createCartList>
 </div>
 
@@ -108,6 +114,15 @@
     (cartUpdated)="loadLists()"
     (closeModal)="loadLists()">
   </app-cart-showCart>
+</div>
+<div *ngIf="showCartListModalOpen" class="modal-overlay" (click)="closeShowListCartModal()">
+  <app-cartList-showcartlist
+        [cartListId]="showCartListId"
+    (closeModal)="closeShowListCartModal()"
+    (click)="$event.stopPropagation()"
+    (cartListUpdated)="loadLists()"
+    (closeModal)="loadLists()">
+  </app-cartList-showcartlist>
 </div>
 
 

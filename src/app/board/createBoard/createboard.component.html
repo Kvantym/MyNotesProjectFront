@@ -1,15 +1,15 @@
 <div class="modal-backdrop">
   <div class="modal">
-    <h2>Створити нову дошку</h2>
+    <h2>Create new board</h2>
     <form [formGroup]="createBoardForm" (ngSubmit)="onSubmit()">
-      <input type="text" formControlName="name" placeholder="Назва дошки">
+      <input type="text" formControlName="name" placeholder="Name board ">
       <div class="error" *ngIf="createBoardForm.get('name')?.invalid && createBoardForm.get('name')?.touched">
-        Назва повинна містити мінімум 1 символ
+        Name must be at least 1 character long
       </div>
 
       <div class="modal-actions">
-        <button type="submit">Створити</button>
-        <button type="button" (click)="onCancel()">Скасувати</button>
+        <button type="submit">Create</button>
+        <button type="button" (click)="onCancel()">Cancel</button>
       </div>
 
       <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>

@@ -49,7 +49,7 @@ moveToCartList(cartListId: string, cardId: string) {
   };
 
   return this.http.put(
-    `${this.apiUrl}/cart/move-to-cart-list${cartListId}?cartId=${cardId}`,
+    `${this.apiUrl}/move-to-cart-list${cartListId}?cartId=${cardId}`,
     {},
     { headers }
   );

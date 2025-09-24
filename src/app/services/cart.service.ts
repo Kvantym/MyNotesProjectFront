@@ -36,7 +36,7 @@ return this.http.post(`${this.apiUrl}/create-cart/${listCartId}`, data);
   }
 
 getCartsByCartListId(listCartId: string) {
- return this.http.get<any[]>(`https://localhost:7187/api/cart/carts-by-list-cartId/${listCartId}`);
+ return this.http.get<any[]>(`${this.apiUrl}/carts-by-list-cartId/${listCartId}`);
 }
  getCartsByUser() {
     return this.http.get(`${this.apiUrl}/carts-by-user`);
@@ -49,7 +49,7 @@ moveToCartList(cartListId: string, cardId: string) {
   };
 
   return this.http.put(
-    `https://localhost:7187/api/cart/move-to-cart-list${cartListId}?cartId=${cardId}`,
+    `${this.apiUrl}/cart/move-to-cart-list${cartListId}?cartId=${cardId}`,
     {},
     { headers }
   );

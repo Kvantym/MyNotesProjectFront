@@ -3,15 +3,13 @@
 <div class="modal modal-with-right-column" *ngIf="showCartListForm">
   <!-- Ліва частина: картка -->
   <div class="left-column">
-
-<div class="modal-title-wrapper">
-    <h2 class="modal-title">Information about list</h2>
-        <div class="modal-actions">
-      <button class="btn icon" (click)="openUpdateListCartForm(selectedCartListData); $event.stopPropagation()">✏️</button>
-      <button class="btn icon" (click)="deleteListCard(cartListId); $event.stopPropagation()">🗑️</button>
+    <div class="modal-title-wrapper">
+      <h2 class="modal-title">Information about list</h2>
+      <div class="modal-actions">
+        <button class="btn icon" (click)="openUpdateListCartForm(selectedCartListData); $event.stopPropagation()">✏️</button>
+        <button class="btn icon" (click)="deleteListCard(); $event.stopPropagation()">🗑️</button>
+      </div>
     </div>
-    </div>
-
 
     <form [formGroup]="showCartListForm">
       <div class="form-group">
@@ -19,41 +17,40 @@
         <input id="name" type="text" formControlName="name" readonly />
       </div>
 
-
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
       <div class="actions">
-        <button type="button" class="btn cancel" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn cancel" (click)="cancel()">Cancel</button>
       </div>
     </form>
   </div>
 
-<div class="right-column">
-  <h3>History</h3>
+  <!-- Права частина: історія -->
+  <div class="right-column">
+    <h3>History</h3>
 
-  <div *ngIf="activities.length === 0">
-    <p>No action history</p>
+    <div *ngIf="activities.length === 0">
+      <p>No action history</p>
+    </div>
+
+    <ul *ngIf="displayedActivities.length > 0" class="activity-list">
+      <li *ngFor="let activity of displayedActivities" class="activity-item">
+        <span class="activity-time">{{ activity.activityTime | date:'dd/MM/yy, HH:mm' }}</span>
+        <span class="activity-action"><strong>{{ activity.action }}</strong></span>
+        <span class="activity-info">{{ activity.activityInformation }}</span>
+      </li>
+    </ul>
+
+    <button *ngIf="currentIndex < activities.length" (click)="loadMoreActivities()" class="btn load-more">
+      Show more
+    </button>
   </div>
 
-<ul *ngIf="displayedActivities.length > 0" class="activity-list">
-  <li *ngFor="let activity of displayedActivities" class="activity-item">
-    <span class="activity-time">{{ activity.activityTime | date:'dd/MM/yy, HH:mm' }}</span>
-    <span class="activity-action"><strong>{{ activity.action }}</strong></span>
-    <span class="activity-info">{{ activity.activityInformation }}</span>
-  </li>
-</ul>
-
-<button *ngIf="currentIndex < activities.length" (click)="loadMoreActivities()" class="btn load-more">
-  Show more
-</button>
-
-
-<app-cartList-updateCartList
-  *ngIf="isUpdateCartListModalOpen"
-  [cartList]="selectedCartList"
-  (closeModal)="closeUpdateListCartModal()"
-  (cartUpdated)="reloadListCart()"
-  (closeModal)="reloadListCart()">
-</app-cartList-updateCartList>
-
-
+  <!-- Модалка редагування -->
+  <app-cartList-updateCartList
+    *ngIf="isUpdateCartListModalOpen"
+    [cartList]="selectedCartList"
+    (closeModal)="closeUpdateListCartModal()"
+    (cartUpdated)="loadCartList()">
+  </app-cartList-updateCartList>
+</div>

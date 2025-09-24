@@ -7,7 +7,6 @@
   <div class="lists-wrapper">
     <div class="list-card" *ngFor="let list of lists">
       <div class="list-header">
-        <!-- Назва списку обрізається до 25 символів, повна назва в title -->
         <h3 [title]="list.name">{{ list.name | slice:0:25 }}{{ list.name.length > 25 ? '...' : '' }}</h3>
 
         <div class="list-actions">
@@ -36,14 +35,13 @@
       <p>{{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
     </div>
 
-    <!-- Кнопка "три крапки" -->
+
     <button class="btn more-btn"
             (click)="openShowCarForm(card.id); $event.stopPropagation()"
             title="Show cart information">
       ⋮
     </button>
 
-    <!-- Форма переміщення картки -->
     <div class="move-cart-container" *ngIf="lists && lists.length">
       <label for="moveCartSelect">Move cart to list:</label>
       <select id="moveCartSelect"
@@ -70,23 +68,6 @@
 </div>
 
 <!-- Модалки -->
-<!-- Update CartList -->
-<app-cartList-updateCartList
-  *ngIf="showUpdateCartListForm"
-  [cartList]="selectedCartList"
-  (closeModal)="cancelEditCart()"
-  (cartUpdated)="loadLists()"
-  (closeModal)="loadLists()"> <!-- 🔥 оновлення списків -->
-</app-cartList-updateCartList>
-
-<!-- Update Cart -->
-<div class="modal-overlay" *ngIf="isUpdateCartModalOpen" (click)="closeUpdateCartModal()"></div>
-<app-cart-updateCart
-  *ngIf="isUpdateCartModalOpen"
-  [cart]="selectedCart"
-  (closeModal)="closeUpdateCartModal()"
-  (cartUpdated)="loadLists()"> <!-- 🔥 оновлення карток -->
-</app-cart-updateCart>
 
 <!-- Create CartList -->
 <div *ngIf="isCreateCartListOpen" class="modal-overlay">

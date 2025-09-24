@@ -60,3 +60,8 @@
     (closeModal)="closeShowBoardInformation()"
     (boardUpdated)="closeShowBoardInformation(true)">
 </app-board-showinformitionboard>
+
+<app-board-createboard
+  *ngIf="showCreateBoardForm"
+    (closeModal)="closeCreateBoardForm(true)">
+</app-board-createboard>

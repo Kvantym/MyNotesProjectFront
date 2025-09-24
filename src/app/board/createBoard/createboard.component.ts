@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angula
 import { CommonModule } from "@angular/common";
 import { BoardService } from "../../services/board.service";
 import { NgZone } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
+
 
 @Component({
   selector: 'app-board-createboard',
@@ -21,7 +23,8 @@ export class CreateBoardComponent {
   constructor(
     private fb: FormBuilder,
     private boardService: BoardService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private cd: ChangeDetectorRef,
   ) {
   this.createBoardForm = this.fb.group({
   name: ['', [Validators.required, Validators.minLength(1)]]
@@ -36,7 +39,9 @@ export class CreateBoardComponent {
     this.boardService.createBoard({ name }).subscribe({
       next: () => {
         this.ngZone.run(() => {
-        this.onCancel();
+          this.cd.detectChanges();
+          this.cd.markForCheck();
+          this.onCancel();
         });
 
       },
@@ -49,6 +54,5 @@ export class CreateBoardComponent {
 
   onCancel() {
     this.closeModal.emit();
-
   }
 }

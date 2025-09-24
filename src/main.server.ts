@@ -1,7 +1,4 @@
 import 'zone.js/node';
-
-(process.env as any)['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
-
 import { bootstrapApplication } from '@angular/platform-browser';
 import { App } from './app/app';
 import { provideRouter } from '@angular/router';
@@ -10,8 +7,9 @@ import { importProvidersFrom } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { provideServerRendering } from '@angular/platform-server';
+import type { BootstrapContext } from '@angular/platform-browser';
 
-export async function renderApp() {
+export async function renderApp(context: BootstrapContext) {
   return bootstrapApplication(App, {
     providers: [
       provideRouter(routes),
@@ -19,7 +17,7 @@ export async function renderApp() {
       provideServerRendering(),
       provideHttpClient(),
     ],
-  });
+  }, context);
 }
 
 export default renderApp;

@@ -39,7 +39,7 @@ export class RegisterComponent {
       this.authService.register({username, password, email}).subscribe({
         next: (token: string) => {
           console.log('Registration successful', token);
-          localStorage.setItem('token', token);
+          localStorage.setItem('authToken', token);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {

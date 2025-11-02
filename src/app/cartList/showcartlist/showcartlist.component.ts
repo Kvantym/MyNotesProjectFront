@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angula
 import { CommonModule } from "@angular/common";
 import { ListCartService, ActivityCartListResponse } from "../../services/list-cart.service";
 import { UpdateCartListComponent } from "../updateCartList/updatecartlist.component";
+import { Store } from "@ngrx/store";
+import { selectCartList, selectCartListActivities } from "../cartListNgRx/cartList.selectors";
+import * as CartListActions from "../cartListNgRx/cartList.actions";
+import { CartListState } from "../cartListNgRx/cartList.reducer";
+import { Observable } from "rxjs";
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cartList-showcartlist',
@@ -26,11 +32,15 @@ export class ShowCartListComponent implements OnInit {
   activities: ActivityCartListResponse[] = [];
   displayedActivities: ActivityCartListResponse[] = [];
   activitiesBatch = 10;
-  public currentIndex = 0; // зроблено public для шаблону
+  currentIndex = 0;
+
+  cartList$!: Observable<any>;
+  cartListLoadingActivities$!: Observable<ActivityCartListResponse[]>;
 
   constructor(
     private fb: FormBuilder,
-    private listcartService: ListCartService
+    private store: Store<{ cartList: CartListState }>,
+    private listCartService: ListCartService
   ) {
     this.showCartListForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
@@ -38,47 +48,38 @@ export class ShowCartListComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.cartListId) {
-      this.loadCartList();
-    }
+    this.cartList$ = this.store.select(selectCartList);
+    this.cartListLoadingActivities$ = this.store.select(selectCartListActivities);
+
+    this.cartList$.pipe(filter(cartList => !!cartList)).subscribe(cartList => {
+      this.showCartListForm.patchValue(cartList);
+      this.selectedCartListData = cartList;
+    });
+
+    this.cartListLoadingActivities$.pipe(filter(data => !!data)).subscribe(activities => {
+      this.activities = activities;
+      this.displayedActivities = this.activities.slice(0, this.activitiesBatch);
+      this.currentIndex = this.displayedActivities.length;
+    });
+
+    if (this.cartListId) this.loadCartList();
   }
 
-  // --- Завантаження картки та активностей ---
   loadCartList() {
-    this.listcartService.getListCartById(this.cartListId).subscribe({
-      next: (data) => {
-        this.showCartListForm.patchValue(data);
-        this.selectedCartListData = { ...data, id: this.cartListId };
-        this.loadActivities();
-      },
-      error: () => {
-        this.errorMessage = 'Не вдалося завантажити картку.';
-      }
-    });
+    this.store.dispatch(CartListActions.loadCartList({ cartListId: this.cartListId }));
+    this.loadActivities();
   }
 
   loadActivities() {
-    this.listcartService.getListCartActivityByListId(this.cartListId).subscribe({
-      next: (data) => {
-        this.activities = data.sort(
-          (a, b) => new Date(b.activityTime).getTime() - new Date(a.activityTime).getTime()
-        );
-        this.displayedActivities = this.activities.slice(0, this.activitiesBatch);
-        this.currentIndex = this.activitiesBatch;
-      },
-      error: () => {
-        this.errorMessage = 'Не вдалося завантажити історію дій.';
-      }
-    });
+    this.store.dispatch(CartListActions.loadActivities({ cartListId: this.cartListId }));
   }
 
   loadMoreActivities() {
     const nextIndex = this.currentIndex + this.activitiesBatch;
     this.displayedActivities = this.activities.slice(0, nextIndex);
-    this.currentIndex = nextIndex;
+    this.currentIndex = Math.min(nextIndex, this.activities.length);
   }
 
-  // --- Картка ---
   openUpdateListCartForm(cartlist: any) {
     this.selectedCartList = cartlist;
     this.isUpdateCartListModalOpen = true;
@@ -87,38 +88,26 @@ export class ShowCartListComponent implements OnInit {
   closeUpdateListCartModal() {
     this.selectedCartList = null;
     this.isUpdateCartListModalOpen = false;
-    this.loadCartList();
     this.cartListUpdated.emit();
   }
 
   deleteListCard() {
     if (!confirm('Ви впевнені, що хочете видалити картку?')) return;
 
-    this.listcartService.deleteCartList(this.cartListId).subscribe({
+    this.listCartService.deleteCartList(this.cartListId).subscribe({
       next: () => this.cancel(),
       error: (err) => console.error('Помилка при видаленні картки:', err)
-    });
-  }
-
-  onSubmit() {
-    if (!this.showCartListForm.valid) return;
-
-    const updatedCartList = this.showCartListForm.value;
-
-    this.listcartService.updateCartList(this.cartListId, updatedCartList).subscribe({
-      next: () => {
-        this.loadCartList();
-        this.cancel();
-        this.cartListUpdated.emit();
-      },
-      error: () => {
-        this.errorMessage = 'Не вдалося оновити картку. Спробуйте ще раз.';
-      }
     });
   }
 
   cancel() {
     this.closeModal.emit();
     this.cartListUpdated.emit();
+  }
+
+  onUpdateModalClose() {
+    this.closeUpdateListCartModal();
+    this.loadCartList();
+    this.loadActivities();
   }
 }

@@ -1,164 +1,106 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+
 import { CreateBoardComponent } from '../board/createBoard/createboard.component';
-import { BoardService } from '../services/board.service';
 import { UpdateBoardComponent } from '../board/updateboard/updateboard.component';
 import { ShowBoardInformationComponent } from '../board/showinformitionboard/showinformitionboard.component';
+
+import * as BoardSelectors from '../board/boardNgRx/board.selectors';
+import * as BoardActions from '../board/boardNgRx/board.actions';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, CreateBoardComponent, UpdateBoardComponent, ShowBoardInformationComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    CreateBoardComponent,
+    UpdateBoardComponent,
+    ShowBoardInformationComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
-  userName: string | null = null;
-  boards: any[] = [];
-  showCreateBoardForm = false;
+export class DashboardComponent implements OnInit {
+  userName: string = 'користувач'; // зробили дефолтне ім'я
+  boards$: Observable<any[]>;
+  isCreateBoardOpen$: Observable<boolean>;
+
   showUpdateBoardForm = false;
-  boardId!: string;
   selectedBoard: any = null;
   showBoardInfoForm = false;
   selectedBoardId: string | null = null;
 
+  isUserMenuOpen = false;
+  userMenuTimeout: any;
+
   constructor(
     private router: Router,
-    private boardService: BoardService,
+    private store: Store,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const payload = JSON.parse(atob(token.split('.')[1]));
-          this.userName = payload.unique_name || payload.email || 'користувач';
-        } catch (e) {
-          console.error('Помилка при розборі токена:', e);
-          this.userName = 'користувач';
-        }
-      }
-    }
+    this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+    this.isCreateBoardOpen$ = this.store.pipe(select(BoardSelectors.selectIsCreateBoardOpen));
   }
 
   ngOnInit() {
-     if (isPlatformBrowser(this.platformId)) {
-    this.loadBoards();
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.dispatch(BoardActions.loadBoards());
+      this.loadUserNameFromToken();
+    }
   }
 
+  private loadUserNameFromToken() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      this.userName = payload.unique_name || payload.email || 'користувач';
+    } catch (e) {
+      console.error('Помилка при розборі токена:', e);
+      this.userName = 'користувач';
+    }
   }
 
-  isUserMenuOpen = false;
-userMenuTimeout: any;
+  toggleUserMenu() {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+    if (this.isUserMenuOpen) this.startUserMenuTimeout();
+    else this.clearUserMenuTimeout();
+  }
 
-toggleUserMenu() {
-  this.isUserMenuOpen = !this.isUserMenuOpen;
-
-  if (this.isUserMenuOpen) {
-    this.startUserMenuTimeout();
-  } else {
+  startUserMenuTimeout() {
     this.clearUserMenuTimeout();
+    this.userMenuTimeout = setTimeout(() => (this.isUserMenuOpen = false), 5000);
   }
-}
 
-startUserMenuTimeout() {
-  this.clearUserMenuTimeout();
-  this.userMenuTimeout = setTimeout(() => {
-    this.isUserMenuOpen = false;
-  }, 5000); // закриття через 5 секунд
-}
-
-clearUserMenuTimeout() {
-  if (this.userMenuTimeout) {
-    clearTimeout(this.userMenuTimeout);
-    this.userMenuTimeout = null;
+  clearUserMenuTimeout() {
+    if (this.userMenuTimeout) {
+      clearTimeout(this.userMenuTimeout);
+      this.userMenuTimeout = null;
+    }
   }
-}
 
-// Скидаємо таймер при наведенні на меню
-onUserMenuMouseEnter() {
-  this.clearUserMenuTimeout();
-}
+  onUserMenuMouseEnter() { this.clearUserMenuTimeout(); }
+  onUserMenuMouseLeave() { this.startUserMenuTimeout(); }
 
-// Знову запускаємо таймер, коли курсор залишив меню
-onUserMenuMouseLeave() {
-  this.startUserMenuTimeout();
-}
-
-
-openProfile() {
- this.router.navigate(['/profil']);
-}
-
-  loadBoards() {
-    this.boardService.getBoardsByUser().subscribe({
-      next: (response: any) => {
-        this.boards = response;
-        console.log('Дошки завантажено:', this.boards);
-      },
-      error: (err) => {
-        console.error('Помилка при завантаженні дошок:', err);
-      }
-    });
-  }
+  openProfile() { this.router.navigate(['/profil']); }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
+      localStorage.clear();
     }
     this.router.navigate(['/login']);
   }
 
-  openCreateBoardForm() {
-    this.showCreateBoardForm = true;
-  }
-
-  closeCreateBoardForm(refresh: boolean = false) {
-    this.showCreateBoardForm = false;
-    if (refresh) {
-      this.loadBoards();
-    }
-  }
-openBoard(board: any) {
-  console.log(board);  // перевір що є в board
-  if (board && board.id) {
-    this.router.navigate(['/boards', board.id]);
-  } else {
-    console.error('board.id відсутній!', board);
-  }
-}
-
-
- openUpdateBoardForm(board: any) {
-  console.log('Clicked board:', board); // перевір що передається
-  this.selectedBoard = board; // передаємо весь об'єкт, не тільки id
-  this.showUpdateBoardForm = true;
-}
-
-
-  closeUpdateBoardForm(refresh: boolean = false) {
-    this.showUpdateBoardForm = false;
-    this.selectedBoard = null;
-    if (refresh) {
-      this.loadBoards();
-    }
-  }
-
-   openShowBoardInformation(boardId: string) {
-    this.selectedBoardId = boardId;
-    this.showBoardInfoForm = true;
-  }
-
-  closeShowBoardInformation(refresh: boolean = false) {
-    this.showBoardInfoForm = false;
-    this.selectedBoardId = null;
-    if (refresh) {
-      this.loadBoards();
-    }
-  }
-
-
-
-
+  openCreateBoardForm() { this.store.dispatch(BoardActions.openCreateBoardModal()); }
+  closeCreateBoardForm() { this.store.dispatch(BoardActions.closeCreateBoardModal()); }
+  openBoard(board: any) { if (board?.id) this.router.navigate(['/boards', board.id]); }
+  openUpdateBoardForm(board: any) { this.selectedBoard = board; this.showUpdateBoardForm = true; }
+  closeUpdateBoardForm() { this.showUpdateBoardForm = false; this.selectedBoard = null; }
+  openShowBoardInformation(boardId: string) { this.selectedBoardId = boardId; this.showBoardInfoForm = true; }
+  closeShowBoardInformation() { this.showBoardInfoForm = false; this.selectedBoardId = null; this.store.dispatch(BoardActions.loadBoards()); }
 }

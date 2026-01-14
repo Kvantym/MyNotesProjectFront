@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output , Input} from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { ListCartService } from "../../services/list-cart.service";
-import { NgZone } from "@angular/core";
+
+import { Store } from "@ngrx/store";
+import * as CartListActions from "../cartListNgRx/cartList.actions";
 
 @Component({
   selector: 'app-cartList-createCartList',
@@ -17,34 +18,24 @@ export class CreateCartListComponent {
 
   @Input() boardId!: string;
   @Output() closeModal = new EventEmitter<void>();
+  @Output() cartListCreated = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
-    private listCartService: ListCartService,
-    private ngZone: NgZone
+    private store: Store
   ) {
   this.createCartListForm = this.fb.group({
   name: ['', [Validators.required, Validators.minLength(1)]]
 });
-
   }
 
   onSubmit() {
     if (!this.createCartListForm.valid) return;
 
-    const { name } = this.createCartListForm.value;
-    this.listCartService.createCartList(this.boardId,{ name }).subscribe({
-      next: () => {
-        this.ngZone.run(() => {
-        this.onCancel();
-        });
+    this.store.dispatch(CartListActions.createCartList({ boardId: this.boardId, name: this.createCartListForm.value.name }));
 
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMessage = 'Не вдалося створити дошку. Спробуйте ще раз.';
-      }
-    });
+    this.cartListCreated.emit();  // ✅ повідомляємо батька про створення
+  this.onCancel();
   }
 
   onCancel() {

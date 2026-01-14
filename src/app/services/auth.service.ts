@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 import { isPlatformBrowser } from "@angular/common";
+import { HttpHeaders } from "@angular/common/http";
 
 interface User {
   id: string;
@@ -27,6 +28,19 @@ export class AuthService {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.loadUserFromStorage();
   }
+
+    public getAuthHeaders(): { headers: HttpHeaders } {
+  let headers = new HttpHeaders();
+  if (isPlatformBrowser(this.platformId)) {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      headers = headers.set("Authorization", `Bearer ${token}`);
+    } else {
+      console.warn('No token found in localStorage');
+    }
+  }
+  return { headers };
+}
 
   // Кастомний декодер JWT
   private decodeJwt(token: string): any {

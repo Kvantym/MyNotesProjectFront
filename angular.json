@@ -69,14 +69,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "MyNotesProjectFront:build:development"
+         "buildTarget": "MyNotesProjectFront:build:development"
           },
           "configurations": {
             "production": {
-              "browserTarget": "MyNotesProjectFront:build:production"
+              "buildTarget": "MyNotesProjectFront:build:development"
             },
             "development": {
-              "browserTarget": "MyNotesProjectFront:build:development"
+             "buildTarget": "MyNotesProjectFront:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "MyNotesProjectFront:build"
+            "buildTarget": "MyNotesProjectFront:build:development"
           }
         },
         "test": {

@@ -1,6 +1,6 @@
-<div class="modal-overlay" *ngIf="showCartListForm"></div>
+<div class="modal-overlay" *ngIf="cartListId"></div>
 
-<div class="modal modal-with-right-column" *ngIf="showCartListForm">
+<div class="modal modal-with-right-column" *ngIf="cartListId">
   <!-- Ліва частина: картка -->
   <div class="left-column">
     <div class="modal-title-wrapper">
@@ -29,28 +29,29 @@
   <div class="right-column">
     <h3>History</h3>
 
-    <div *ngIf="activities.length === 0">
-      <p>No action history</p>
-    </div>
-
     <ul *ngIf="displayedActivities.length > 0" class="activity-list">
-      <li *ngFor="let activity of displayedActivities" class="activity-item">
-        <span class="activity-time">{{ activity.activityTime | date:'dd/MM/yy, HH:mm' }}</span>
-        <span class="activity-action"><strong>{{ activity.action }}</strong></span>
-        <span class="activity-info">{{ activity.activityInformation }}</span>
-      </li>
+<li *ngFor="let activity of displayedActivities" class="activity-item">
+  <span class="activity-time">{{ activity.activityTime | date:'dd/MM/yy, HH:mm' }}</span>
+  <span class="activity-action"><strong>{{ activity.action }}</strong></span>
+  <span class="activity-info">{{ activity.activityInformation }}</span>
+</li>
+
     </ul>
 
-    <button *ngIf="currentIndex < activities.length" (click)="loadMoreActivities()" class="btn load-more">
+    <button
+      *ngIf="currentIndex < activities.length"
+      (click)="loadMoreActivities()"
+      class="btn load-more">
       Show more
     </button>
+
+    <p *ngIf="activities.length === 0">No action history</p>
+    <p *ngIf="!activities">Loading...</p>
   </div>
 
-  <!-- Модалка редагування -->
   <app-cartList-updateCartList
     *ngIf="isUpdateCartListModalOpen"
     [cartList]="selectedCartList"
-    (closeModal)="closeUpdateListCartModal()"
-    (cartUpdated)="loadCartList()">
-  </app-cartList-updateCartList>
+    (closeModal)="onUpdateModalClose()"
+  ></app-cartList-updateCartList>
 </div>

@@ -1,11 +1,12 @@
-<div class="board-container" *ngIf="board">
+<div class="board-container" *ngIf="board$ | async as board">
   <div class="board-header">
     <h2>{{ board.name }}</h2>
     <button class="btn add-list" (click)="addList()">+ Add list</button>
   </div>
 
-  <div class="lists-wrapper">
-    <div class="list-card" *ngFor="let list of lists">
+<div class="lists-wrapper" *ngIf="lists$ | async as lists">
+  <div class="list-card" *ngFor="let list of lists">
+
       <div class="list-header">
         <h3 [title]="list.name">{{ list.name | slice:0:25 }}{{ list.name.length > 25 ? '...' : '' }}</h3>
 
@@ -27,13 +28,12 @@
 
 
 
-    <div class="cards-wrapper">
-  <div class="card-item" *ngFor="let card of list.carts">
-
-    <div class="card-info" [title]="card.name">
-      <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
-      <p>{{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
-    </div>
+ <div class="cards-wrapper">
+      <div class="card-item" *ngFor="let card of list.carts">
+        <div class="card-info" [title]="card.name">
+          <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
+          <p>{{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
+        </div>
 
 
     <button class="btn more-btn"
@@ -42,19 +42,20 @@
       ⋮
     </button>
 
-    <div class="move-cart-container" *ngIf="lists && lists.length">
-      <label for="moveCartSelect">Move cart to list:</label>
-      <select id="moveCartSelect"
-              [(ngModel)]="card.selectedCartListId"
-              (change)="moveCartToCartList(card.selectedCartListId, card.id)">
-        <option
-          *ngFor="let listOption of lists"
-          [value]="listOption.id"
-          [disabled]="listOption.id === list.id">
-          {{ listOption.name | slice:0:25 }}{{ listOption.name.length > 25 ? '...' : '' }}
-        </option>
-      </select>
-    </div>
+<div class="move-cart-container" *ngIf="lists && lists.length">
+  <label for="moveCartSelect">Move cart to list:</label>
+  <select id="moveCartSelect"
+          [(ngModel)]="selectedCartListIds[card.id]"
+          (change)="moveCartToCartList(card.id)">
+    <option
+      *ngFor="let listOption of lists"
+      [value]="listOption.id"
+      [disabled]="listOption.id === list.id">
+      {{ listOption.name | slice:0:25 }}{{ listOption.name.length > 25 ? '...' : '' }}
+    </option>
+  </select>
+</div>
+
 
   </div>
 </div>
@@ -63,7 +64,7 @@
   </div>
 </div>
 
-<div *ngIf="!board" class="loading">
+<div *ngIf="loading$ | async" class="loading">
   <p>Load board...</p>
 </div>
 
@@ -74,8 +75,10 @@
   <app-cartList-createCartList
     [boardId]="boardId"
     (closeModal)="closeCreateCartListModal()"
-    (cartListCreated)="loadLists()"
-    (closeModal)="loadLists()">
+        (closeModal)="storeLoad()"
+    (cartListCreated)="storeLoad()"
+
+>
   </app-cartList-createCartList>
 </div>
 
@@ -84,7 +87,9 @@
   <app-createCart-createCart
     [cartListId]="cartListId"
     (closeModal)="closeCreateCartModal()"
-    (cartCreated)="loadLists()"> <!-- 🔥 оновлення після створення -->
+    (cartCreated)="storeLoad()"
+
+> <!-- 🔥 оновлення після створення -->
   </app-createCart-createCart>
 </div>
 <div *ngIf="showCartModalOpen" class="modal-overlay" (click)="closeShowCartModal()">
@@ -92,8 +97,7 @@
     [cartId]="showCartId"
     (closeModal)="closeShowCartModal()"
     (click)="$event.stopPropagation()"
-    (cartUpdated)="loadLists()"
-    (closeModal)="loadLists()">
+>
   </app-cart-showCart>
 </div>
 <div *ngIf="showCartListModalOpen" class="modal-overlay" (click)="closeShowListCartModal()">
@@ -101,8 +105,9 @@
         [cartListId]="showCartListId"
     (closeModal)="closeShowListCartModal()"
     (click)="$event.stopPropagation()"
-    (cartListUpdated)="loadLists()"
-    (closeModal)="loadLists()">
+    (closeModal)="storeLoad()"
+    (cartListUpdated)="storeLoad()"
+>
   </app-cartList-showcartlist>
 </div>
 

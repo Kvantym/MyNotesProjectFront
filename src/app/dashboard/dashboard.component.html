@@ -2,66 +2,57 @@
   <h2 class="logo">Dashboard</h2>
 
   <div class="header-actions-right">
-  <button (click)="showCreateBoardForm = true" class="create-board-btn">
-    Create Board
-  </button>
-<div class="user-section" *ngIf="userName">
-  <div class="user-avatar" (click)="toggleUserMenu()">
-    <span>{{ userName }}</span>
-  </div>
+    <button (click)="openCreateBoardForm()" class="create-board-btn">Create Board</button>
 
-  <div class="user-menu"
-       *ngIf="isUserMenuOpen"
-       (mouseenter)="onUserMenuMouseEnter()"
-       (mouseleave)="onUserMenuMouseLeave()">
-    <button (click)="openProfile()">Profil</button>
-    <button (click)="logout()">logout</button>
-  </div>
-</div>
+    <!-- Блок користувача завжди видно, дефолтне ім'я 'користувач' -->
+    <div class="user-section">
+      <div class="user-avatar" (click)="toggleUserMenu()">
+        <span>{{ userName }}</span>
+      </div>
 
-  </div>
-
-
-
-  <div *ngIf="showCreateBoardForm" class="overlay">
-    <app-board-createboard (closeModal)="showCreateBoardForm = false"></app-board-createboard>
+      <div
+        class="user-menu"
+        *ngIf="isUserMenuOpen"
+        (mouseenter)="onUserMenuMouseEnter()"
+        (mouseleave)="onUserMenuMouseLeave()"
+      >
+        <button (click)="openProfile()">Profil</button>
+        <button (click)="logout()">Logout</button>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- Модалка створення дошки -->
+<div *ngIf="isCreateBoardOpen$ | async" class="overlay">
+  <app-board-createboard (closeModal)="closeCreateBoardForm()"></app-board-createboard>
+</div>
 
+<!-- Список дошок -->
 <div class="boards-list grid-container">
-  <div class="board-card" *ngFor="let board of boards">
+  <div class="board-card" *ngFor="let board of boards$ | async">
     <h3>{{ board.name }}</h3>
     <p>Створено: {{ board.createdAt | date }}</p>
     <div class="board-actions">
-
-   <button class="btn more-btn"
-            (click)="openShowBoardInformation(board.id); $event.stopPropagation()"
-            title="Information about board">
-      ⋮
-    </button>
-
+      <button
+        class="btn more-btn"
+        (click)="openShowBoardInformation(board.id); $event.stopPropagation()"
+        title="Information about board"
+      >
+        ⋮
+      </button>
     </div>
-
     <button class="open-board-btn" (click)="openBoard(board)">Open</button>
   </div>
 </div>
 
-<!-- 🔹 модалка редагування дошки -->
+<!-- Модалки редагування та інформації про дошку -->
 <div *ngIf="showUpdateBoardForm" class="overlay">
-  <app-board-updateboard
-    [board]="selectedBoard"
-    (closeModal)="closeUpdateBoardForm()">
-  </app-board-updateboard>
+  <app-board-updateboard [board]="selectedBoard" (closeModal)="closeUpdateBoardForm()"></app-board-updateboard>
 </div>
 <app-board-showinformitionboard
   *ngIf="showBoardInfoForm"
   [boardId]="selectedBoardId!"
-    (closeModal)="closeShowBoardInformation()"
-    (boardUpdated)="closeShowBoardInformation(true)">
-</app-board-showinformitionboard>
-
-<app-board-createboard
-  *ngIf="showCreateBoardForm"
-    (closeModal)="closeCreateBoardForm(true)">
-</app-board-createboard>
+  (closeModal)="closeShowBoardInformation()"
+  (boardUpdated)="closeShowBoardInformation()"
+></app-board-showinformitionboard>

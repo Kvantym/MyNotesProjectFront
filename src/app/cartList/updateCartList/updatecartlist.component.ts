@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { ListCartService } from "../../services/list-cart.service";
-import { NgZone } from "@angular/core";
+
+import { Store } from "@ngrx/store";
+import * as CartListActions from "../cartListNgRx/cartList.actions";
 
 @Component({
   selector: 'app-cartList-updateCartList',
@@ -20,8 +21,7 @@ export class UpdateCartListComponent {
 
   constructor(
     private fb: FormBuilder,
-    private cartListService: ListCartService,
-    private ngZone: NgZone
+    private store: Store
   ) {
     this.updateCartListForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]]
@@ -39,14 +39,8 @@ export class UpdateCartListComponent {
   onSubmit() {
   if (!this.updateCartListForm.valid || !this.cartList) return;
 
-  const { name } = this.updateCartListForm.value;
-  this.cartListService.updateCartList(this.cartList.id, { name }).subscribe({
-    next: () => this.ngZone.run(() => this.onCancel()),
-    error: (err) => {
-      console.error(err);
-      this.errorMessage = 'Не вдалося оновити лист. Спробуйте ще раз.';
-    }
-  });
+  this.store.dispatch(CartListActions.updateCartList({ cartListId: this.cartList.listCartId, updatedData: this.updateCartListForm.value.name }));
+  this.closeModal.emit();
 }
 
   onCancel() {

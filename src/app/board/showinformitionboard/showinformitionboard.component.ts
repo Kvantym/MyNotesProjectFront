@@ -5,6 +5,8 @@ import { BoardService, ActivityBoardResponse } from "../../services/board.servic
 import { NgZone } from "@angular/core";
 import { UpdateBoardComponent } from "../updateboard/updateboard.component";
 import { ChangeDetectorRef } from "@angular/core";
+import { Store } from "@ngrx/store";
+import * as BoardActions from "../boardNgRx/board.actions";
 
 
 
@@ -38,6 +40,7 @@ export class ShowBoardInformationComponent implements OnInit {
     private fb: FormBuilder,
     private boardService: BoardService,
     private ngZone: NgZone,
+    private store: Store,
      private cd: ChangeDetectorRef,
 
   ) {
@@ -136,6 +139,7 @@ loadMoreActivities() {
       next: () => {this.onCancel()},
       error: err => console.error('Помилка при видаленні картки:', err)
     });
+       this.store.dispatch(BoardActions.loadBoards());
   }
 
   onSubmit(boardId: string) {

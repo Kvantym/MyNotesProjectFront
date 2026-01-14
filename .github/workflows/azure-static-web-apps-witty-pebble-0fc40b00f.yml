@@ -50,8 +50,8 @@ jobs:
           app_location: "/" 
           api_location: "" 
           # 2. ПЕРЕВІРТЕ ЦЕЙ ШЛЯХ (має бути dist/назва-проєкту)
-          output_location: "dist/my-notes-project-front" 
-          app_build_command: "npm run build && ls -R dist"
+          output_location: "dist/browser" 
+          app_build_command: "npm run build"
           github_id_token: ${{ steps.idtoken.outputs.result }}
 
   close_pull_request_job:
@@ -64,6 +64,7 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           action: "close"
+
 
 
 

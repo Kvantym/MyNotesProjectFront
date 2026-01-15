@@ -179,3 +179,18 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Це подіє ТІЛЬКИ на Dashboard */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .boards-list {
+    grid-template-columns: 1fr; /* Одна картка на рядок на телефоні */
+    gap: 16px;
+    padding: 16px;
+  }
+}

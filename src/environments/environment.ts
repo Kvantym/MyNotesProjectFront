@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7187/api'
+  apiUrl: 'https://tabledashboard-hkg4abg6hzgxd0hu.westeurope-01.azurewebsites.net'
 };

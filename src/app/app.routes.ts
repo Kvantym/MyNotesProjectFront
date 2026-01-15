@@ -13,13 +13,13 @@ export const routes: Routes = [
   { path: '', component: WelcomeComponent }, // Твоя нова головна сторінка
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'dashboard', component: DashboardComponent },
 
 
   {
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
       { path: 'create-board', component: CreateBoardComponent },
       { path: 'boards/:id', component: ShowBoardComponent },
       { path: 'profil', component: UpdateUserComponent },

@@ -1,16 +1,21 @@
-import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { Router, RouterModule } from "@angular/router";
-import { AuthService } from "../../services/auth.service";
-import { CommonModule } from "@angular/common";
-import { HttpClientModule } from "@angular/common/http";
+import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterModule, CommonModule, HttpClientModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -43,8 +48,8 @@ export class LoginComponent {
         },
         error: (err) => {
           console.error('Login failed', err);
-          this.errorMessage = 'Невірний username або пароль';
-        }
+          this.errorMessage = 'Incorrect username or password';
+        },
       });
     } else {
       console.warn('Form invalid');

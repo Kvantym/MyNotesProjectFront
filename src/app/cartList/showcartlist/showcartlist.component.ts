@@ -1,13 +1,24 @@
-import { Component, EventEmitter, Output, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { ListCartService, ActivityCartListResponse } from "../../services/list-cart.service";
-import { UpdateCartListComponent } from "../updateCartList/updatecartlist.component";
-import { Store } from "@ngrx/store";
-import { selectCartList, selectCartListActivities } from "../cartListNgRx/cartList.selectors";
-import * as CartListActions from "../cartListNgRx/cartList.actions";
-import { CartListState } from "../cartListNgRx/cartList.reducer";
-import { Observable } from "rxjs";
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import {
+  ListCartService,
+  ActivityCartListResponse,
+} from '../../services/list-cart.service';
+import { UpdateCartListComponent } from '../updateCartList/updatecartlist.component';
+import { Store } from '@ngrx/store';
+import {
+  selectCartList,
+  selectCartListActivities,
+} from '../cartListNgRx/cartList.selectors';
+import * as CartListActions from '../cartListNgRx/cartList.actions';
+import { CartListState } from '../cartListNgRx/cartList.reducer';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -49,29 +60,42 @@ export class ShowCartListComponent implements OnInit {
 
   ngOnInit() {
     this.cartList$ = this.store.select(selectCartList);
-    this.cartListLoadingActivities$ = this.store.select(selectCartListActivities);
+    this.cartListLoadingActivities$ = this.store.select(
+      selectCartListActivities
+    );
 
-    this.cartList$.pipe(filter(cartList => !!cartList)).subscribe(cartList => {
-      this.showCartListForm.patchValue(cartList);
-      this.selectedCartListData = cartList;
-    });
+    this.cartList$
+      .pipe(filter((cartList) => !!cartList))
+      .subscribe((cartList) => {
+        this.showCartListForm.patchValue(cartList);
+        this.selectedCartListData = cartList;
+      });
 
-    this.cartListLoadingActivities$.pipe(filter(data => !!data)).subscribe(activities => {
-      this.activities = activities;
-      this.displayedActivities = this.activities.slice(0, this.activitiesBatch);
-      this.currentIndex = this.displayedActivities.length;
-    });
+    this.cartListLoadingActivities$
+      .pipe(filter((data) => !!data))
+      .subscribe((activities) => {
+        this.activities = activities;
+        this.displayedActivities = this.activities.slice(
+          0,
+          this.activitiesBatch
+        );
+        this.currentIndex = this.displayedActivities.length;
+      });
 
     if (this.cartListId) this.loadCartList();
   }
 
   loadCartList() {
-    this.store.dispatch(CartListActions.loadCartList({ cartListId: this.cartListId }));
+    this.store.dispatch(
+      CartListActions.loadCartList({ cartListId: this.cartListId })
+    );
     this.loadActivities();
   }
 
   loadActivities() {
-    this.store.dispatch(CartListActions.loadActivities({ cartListId: this.cartListId }));
+    this.store.dispatch(
+      CartListActions.loadActivities({ cartListId: this.cartListId })
+    );
   }
 
   loadMoreActivities() {
@@ -92,11 +116,11 @@ export class ShowCartListComponent implements OnInit {
   }
 
   deleteListCard() {
-    if (!confirm('Ви впевнені, що хочете видалити картку?')) return;
+    if (!confirm('Are you sure you want to delete the card?')) return;
 
     this.listCartService.deleteCartList(this.cartListId).subscribe({
       next: () => this.cancel(),
-      error: (err) => console.error('Помилка при видаленні картки:', err)
+      error: (err) => console.error('Error while deleting card:', err),
     });
   }
 

@@ -43,7 +43,7 @@ export const updateCartListFailure = createAction(
 
 export const createCartList = createAction(
   '[CartList] Create Cart List',
-  props<{ boardId: string; name: string; }>()
+  props<{ boardId: string; name: string }>()
 );
 export const createCartListSuccess = createAction(
   '[CartList] Create Cart List Success',
@@ -66,5 +66,3 @@ export const deleteCartListFailure = createAction(
   '[CartList] Delete Cart List Failure',
   props<{ error: any }>()
 );
-
-

@@ -19,13 +19,13 @@ import * as BoardActions from '../board/boardNgRx/board.actions';
     RouterModule,
     CreateBoardComponent,
     UpdateBoardComponent,
-    ShowBoardInformationComponent
+    ShowBoardInformationComponent,
   ],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  userName: string = 'користувач'; // зробили дефолтне ім'я
+  userName: string = 'User';
   boards$: Observable<any[]>;
   isCreateBoardOpen$: Observable<boolean>;
 
@@ -43,7 +43,9 @@ export class DashboardComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
-    this.isCreateBoardOpen$ = this.store.pipe(select(BoardSelectors.selectIsCreateBoardOpen));
+    this.isCreateBoardOpen$ = this.store.pipe(
+      select(BoardSelectors.selectIsCreateBoardOpen)
+    );
   }
 
   ngOnInit() {
@@ -58,10 +60,10 @@ export class DashboardComponent implements OnInit {
     if (!token) return;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      this.userName = payload.unique_name || payload.email || 'користувач';
+      this.userName = payload.unique_name || payload.email || 'User';
     } catch (e) {
-      console.error('Помилка при розборі токена:', e);
-      this.userName = 'користувач';
+      console.error('Error parsing token:', e);
+      this.userName = 'User';
     }
   }
 
@@ -73,7 +75,10 @@ export class DashboardComponent implements OnInit {
 
   startUserMenuTimeout() {
     this.clearUserMenuTimeout();
-    this.userMenuTimeout = setTimeout(() => (this.isUserMenuOpen = false), 5000);
+    this.userMenuTimeout = setTimeout(
+      () => (this.isUserMenuOpen = false),
+      5000
+    );
   }
 
   clearUserMenuTimeout() {
@@ -83,10 +88,16 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onUserMenuMouseEnter() { this.clearUserMenuTimeout(); }
-  onUserMenuMouseLeave() { this.startUserMenuTimeout(); }
+  onUserMenuMouseEnter() {
+    this.clearUserMenuTimeout();
+  }
+  onUserMenuMouseLeave() {
+    this.startUserMenuTimeout();
+  }
 
-  openProfile() { this.router.navigate(['/profil']); }
+  openProfile() {
+    this.router.navigate(['/profil']);
+  }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
@@ -96,11 +107,30 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  openCreateBoardForm() { this.store.dispatch(BoardActions.openCreateBoardModal()); }
-  closeCreateBoardForm() { this.store.dispatch(BoardActions.closeCreateBoardModal()); }
-  openBoard(board: any) { if (board?.id) this.router.navigate(['/boards', board.id]); }
-  openUpdateBoardForm(board: any) { this.selectedBoard = board; this.showUpdateBoardForm = true; }
-  closeUpdateBoardForm() { this.showUpdateBoardForm = false; this.selectedBoard = null; }
-  openShowBoardInformation(boardId: string) { this.selectedBoardId = boardId; this.showBoardInfoForm = true; }
-  closeShowBoardInformation() { this.showBoardInfoForm = false; this.selectedBoardId = null; this.store.dispatch(BoardActions.loadBoards()); }
+  openCreateBoardForm() {
+    this.store.dispatch(BoardActions.openCreateBoardModal());
+  }
+  closeCreateBoardForm() {
+    this.store.dispatch(BoardActions.closeCreateBoardModal());
+  }
+  openBoard(board: any) {
+    if (board?.id) this.router.navigate(['/boards', board.id]);
+  }
+  openUpdateBoardForm(board: any) {
+    this.selectedBoard = board;
+    this.showUpdateBoardForm = true;
+  }
+  closeUpdateBoardForm() {
+    this.showUpdateBoardForm = false;
+    this.selectedBoard = null;
+  }
+  openShowBoardInformation(boardId: string) {
+    this.selectedBoardId = boardId;
+    this.showBoardInfoForm = true;
+  }
+  closeShowBoardInformation() {
+    this.showBoardInfoForm = false;
+    this.selectedBoardId = null;
+    this.store.dispatch(BoardActions.loadBoards());
+  }
 }

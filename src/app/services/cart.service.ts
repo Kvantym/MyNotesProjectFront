@@ -1,60 +1,64 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import{ environment } from "../../environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface ActivityCartResponse {
   id: string;
-  action: string; // відповідає UserAction
+  action: string;
   activityInformation: string;
   userId: string;
-  activityTime: string; // можна конвертувати у Date при використанні
+  activityTime: string;
   cartId: string;
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
-export class CartService   {
+export class CartService {
   private apiUrl = `${environment.apiUrl}/cart`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  createCart(listCartId: string, data: any ) {
-return this.http.post(`${this.apiUrl}/create-cart/${listCartId}`, data);
+  createCart(listCartId: string, data: any) {
+    return this.http.post(`${this.apiUrl}/create-cart/${listCartId}`, data);
   }
 
   updateCart(cartId: string, data: any) {
-   return this.http.put(`${this.apiUrl}/${cartId}`, data);
+    return this.http.put(`${this.apiUrl}/${cartId}`, data);
   }
 
   deleteCart(cartId: string) {
     return this.http.delete(`${this.apiUrl}/${cartId}`);
   }
 
- getCartById(cartId: string) {
+  getCartById(cartId: string) {
     return this.http.get(`${this.apiUrl}/${cartId}`);
   }
 
-getCartsByCartListId(listCartId: string) {
- return this.http.get<any[]>(`${this.apiUrl}/carts-by-list-cartId/${listCartId}`);
-}
- getCartsByUser() {
+  getCartsByCartListId(listCartId: string) {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/carts-by-list-cartId/${listCartId}`
+    );
+  }
+  getCartsByUser() {
     return this.http.get(`${this.apiUrl}/carts-by-user`);
   }
-moveToCartList(cartListId: string, cardId: string) {
-  const token = localStorage.getItem('authToken'); // твій JWT
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  };
+  moveToCartList(cartListId: string, cardId: string) {
+    const token = localStorage.getItem('authToken');
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
 
-  return this.http.put(
-    `${this.apiUrl}/move-to-cart-list${cartListId}?cartId=${cardId}`,
-    {},
-    { headers }
-  );
-}
-getActivityCart(cartId: string) {
-    return this.http.get<ActivityCartResponse[]>(`${this.apiUrl}/get-activity-cart/${cartId}`);
+    return this.http.put(
+      `${this.apiUrl}/move-to-cart-list${cartListId}?cartId=${cardId}`,
+      {},
+      { headers }
+    );
+  }
+  getActivityCart(cartId: string) {
+    return this.http.get<ActivityCartResponse[]>(
+      `${this.apiUrl}/get-activity-cart/${cartId}`
+    );
   }
 }

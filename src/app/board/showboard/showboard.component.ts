@@ -76,7 +76,7 @@ export class ShowBoardComponent implements OnInit {
 
     const user = this.authService.getCurrentUserLocal();
     if (!user) {
-      console.error('Користувач не авторизований!');
+      console.error('User is not authorized!');
       return;
     }
 
@@ -128,7 +128,7 @@ export class ShowBoardComponent implements OnInit {
   moveCartToCartList(cartId: string): void {
     const cartListId = this.selectedCartListIds[cartId];
     if (!cartListId) {
-      console.warn('Не вибрано новий список для картки', cartId);
+      console.warn('No new list selected for card', cartId);
       return;
     }
 
@@ -156,6 +156,4 @@ export class ShowBoardComponent implements OnInit {
     this.showCartListModalOpen = false;
     this.storeLoad();
   }
-
-
 }

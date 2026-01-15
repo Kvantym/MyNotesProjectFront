@@ -44,7 +44,6 @@ export const LoadCartsSuccess = createAction(
   props<{ listId: string; carts: any[] }>()
 );
 
-
 export const LoadCartsFailure = createAction(
   '[Board] Load Carts Failure',
   props<{ error: any }>()
@@ -52,15 +51,15 @@ export const LoadCartsFailure = createAction(
 
 export const moveCart = createAction(
   '[Board] Move Cart',
-    props<{ cartId: string; cartListId: string }>()
+  props<{ cartId: string; cartListId: string }>()
 );
 export const moveCartSuccess = createAction(
   '[Board] Move Cart Success',
-    props<{ cartId: string; cartListId: string }>()
+  props<{ cartId: string; cartListId: string }>()
 );
 export const moveCartFailure = createAction(
   '[Board] Move Cart Failure',
-    props<{ error: any }>()
+  props<{ error: any }>()
 );
 
 export const createBoard = createAction(
@@ -76,18 +75,19 @@ export const createBoardFailure = createAction(
   props<{ error: any }>()
 );
 
-export const openCreateBoardModal = createAction('[Board] Open Create Board Modal');
-export const closeCreateBoardModal = createAction('[Board] Close Create Board Modal');
+export const openCreateBoardModal = createAction(
+  '[Board] Open Create Board Modal'
+);
+export const closeCreateBoardModal = createAction(
+  '[Board] Close Create Board Modal'
+);
 
 export const loadBoards = createAction('[Board] Load Boards');
-
-// Успішне завантаження всіх дошок
 export const loadBoardsSuccess = createAction(
   '[Board] Load Boards Success',
   props<{ boards: any[] }>()
 );
 
-// Помилка при завантаженні всіх дошок
 export const loadBoardsFailure = createAction(
   '[Board] Load Boards Failure',
   props<{ error: any }>()

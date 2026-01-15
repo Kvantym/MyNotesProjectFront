@@ -1,68 +1,71 @@
-import { Component, EventEmitter, Output , Input} from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { CartService } from "../../services/cart.service";
-import { NgZone } from "@angular/core";
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
+import { NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-createCart-createCart',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './createcart.component.html',
-  styleUrls: ['./createcart.component.scss']
+  styleUrls: ['./createcart.component.scss'],
 })
 export class CreateCartComponent {
   createCartForm: FormGroup;
   errorMessage: string | null = null;
 
- @Input() cartListId!: string;
-@Output() closeModal = new EventEmitter<void>();
-@Output() cartCreated = new EventEmitter<void>();
+  @Input() cartListId!: string;
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() cartCreated = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
     private ngZone: NgZone
   ) {
-  this.createCartForm = this.fb.group({
+    this.createCartForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
       description: [''],
       dueDate: [''],
       priorityNote: [''],
-      statusNote: ['']
+      statusNote: [''],
     });
-
   }
 
   onSubmit() {
-  if (!this.createCartForm.valid) return;
+    if (!this.createCartForm.valid) return;
 
-  const newCart = {
-    ...this.createCartForm.value,
-    dueDate: this.createCartForm.value.dueDate
-      ? new Date(this.createCartForm.value.dueDate).toISOString()
-      : null,
-  priorityNote: this.createCartForm.value.priorityNote,
-  statusNote: this.createCartForm.value.statusNote
-  };
+    const newCart = {
+      ...this.createCartForm.value,
+      dueDate: this.createCartForm.value.dueDate
+        ? new Date(this.createCartForm.value.dueDate).toISOString()
+        : null,
+      priorityNote: this.createCartForm.value.priorityNote,
+      statusNote: this.createCartForm.value.statusNote,
+    };
 
-  this.cartService.createCart(this.cartListId, newCart).subscribe({
-    next: () => {
-      this.ngZone.run(() => {
-        this.onCancel();
-        this.cartCreated.emit();
-      });
-    },
-    error: (err) => {
-      console.error(err);
-      this.errorMessage = 'Не вдалося створити картку. Спробуйте ще раз.';
-    }
-  });
-}
-
+    this.cartService.createCart(this.cartListId, newCart).subscribe({
+      next: () => {
+        this.ngZone.run(() => {
+          this.onCancel();
+          this.cartCreated.emit();
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'You cannot create yourself. Try again.';
+      },
+    });
+  }
 
   onCancel() {
     this.closeModal.emit();
-     this.cartCreated.emit();
+    this.cartCreated.emit();
   }
 }

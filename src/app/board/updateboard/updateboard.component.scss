@@ -1,15 +1,14 @@
-/* Тло модалки */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* напівпрозоре тло */
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
-/* Контейнер модалки */
 .modal-container {
   position: fixed;
   top: 50%;
@@ -25,7 +24,6 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-/* Заголовок модалки */
 .modal-container h2 {
   margin-bottom: 20px;
   font-size: 1.5rem;
@@ -33,7 +31,6 @@
   text-align: center;
 }
 
-/* Форми */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -58,7 +55,6 @@
   border-color: #007bff;
 }
 
-/* Кнопки */
 .actions {
   display: flex;
   justify-content: space-between;
@@ -95,14 +91,12 @@
   background-color: #999;
 }
 
-/* Помилки */
 .error {
   color: #e74c3c;
   font-size: 0.875rem;
   margin-top: 5px;
 }
 
-/* Анімація появи */
 @keyframes fadeIn {
   from {
     opacity: 0;

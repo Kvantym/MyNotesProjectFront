@@ -7,7 +7,7 @@ export interface BoardState {
   loading: boolean;
   error: any;
   boards: any[];
-    isCreateBoardOpen: boolean;
+  isCreateBoardOpen: boolean;
 }
 
 export const initialState: BoardState = {
@@ -15,8 +15,8 @@ export const initialState: BoardState = {
   lists: [],
   loading: false,
   error: null,
-    boards: [],
-    isCreateBoardOpen: false,
+  boards: [],
+  isCreateBoardOpen: false,
 };
 
 export const boardReducer = createReducer(
@@ -45,42 +45,44 @@ export const boardReducer = createReducer(
     error,
     loading: false,
   })),
-on(BoardActions.LoadCarts, (state) => ({
-  ...state,
-  loading: true
-})),
+  on(BoardActions.LoadCarts, (state) => ({
+    ...state,
+    loading: true,
+  })),
 
-on(BoardActions.LoadCartsSuccess, (state, { listId, carts }) => ({
-  ...state,
-  loading: false,
-  lists: state.lists.map(list =>
-    list.id === listId ? { ...list, carts } : list
-  )
-})),
+  on(BoardActions.LoadCartsSuccess, (state, { listId, carts }) => ({
+    ...state,
+    loading: false,
+    lists: state.lists.map((list) =>
+      list.id === listId ? { ...list, carts } : list
+    ),
+  })),
 
+  on(BoardActions.LoadCartsFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+  on(BoardActions.moveCartSuccess, (state, { cartId, cartListId }) => {
+    const lists = state.lists.map((list) => {
+      const filteredCarts = list.carts.filter(
+        (cart: any) => cart.id !== cartId
+      );
 
-on(BoardActions.LoadCartsFailure, (state, { error }) => ({
-  ...state,
-  loading: false,
-  error
-})),
-on(BoardActions.moveCartSuccess, (state, { cartId, cartListId }) => {
-  const lists = state.lists.map(list => {
-    const filteredCarts = list.carts.filter((cart: any) => cart.id !== cartId);
+      if (list.id === cartListId) {
+        const movedCart = state.lists
+          .flatMap((l) => l.carts)
+          .find((c) => c.id === cartId);
+        return { ...list, carts: [...filteredCarts, movedCart!] };
+      }
 
-    if (list.id === cartListId) {
+      return { ...list, carts: filteredCarts };
+    });
 
-      const movedCart = state.lists.flatMap(l => l.carts).find(c => c.id === cartId);
-      return { ...list, carts: [...filteredCarts, movedCart!] };
-    }
+    return { ...state, lists };
+  }),
 
-    return { ...list, carts: filteredCarts };
-  });
-
-  return { ...state, lists };
-}),
-
-on(BoardActions.createBoard, (state) => ({
+  on(BoardActions.createBoard, (state) => ({
     ...state,
     loading: true,
   })),
@@ -97,13 +99,17 @@ on(BoardActions.createBoard, (state) => ({
     error,
   })),
 
-  on(BoardActions.openCreateBoardModal, (state) => ({ ...state, isCreateBoardOpen: true })),
-  on(BoardActions.closeCreateBoardModal, (state) => ({ ...state, isCreateBoardOpen: false })),
+  on(BoardActions.openCreateBoardModal, (state) => ({
+    ...state,
+    isCreateBoardOpen: true,
+  })),
+  on(BoardActions.closeCreateBoardModal, (state) => ({
+    ...state,
+    isCreateBoardOpen: false,
+  })),
 
   on(BoardActions.loadBoardsSuccess, (state, { boards }) => ({
-  ...state,
-  boards
-}))
-
-
+    ...state,
+    boards,
+  }))
 );

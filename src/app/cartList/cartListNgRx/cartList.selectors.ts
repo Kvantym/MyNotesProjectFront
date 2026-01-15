@@ -1,7 +1,8 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { CartListState } from './cartList.reducer';
 
-export const selectCartListState = createFeatureSelector<CartListState>('cartList');
+export const selectCartListState =
+  createFeatureSelector<CartListState>('cartList');
 
 export const selectCartList = createSelector(
   selectCartListState,
@@ -27,4 +28,3 @@ export const selectDeleteCartList = createSelector(
   selectCartListState,
   (state) => state.loading
 );
-

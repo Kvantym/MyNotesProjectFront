@@ -68,9 +68,6 @@
   <p>Load board...</p>
 </div>
 
-<!-- Модалки -->
-
-<!-- Create CartList -->
 <div *ngIf="isCreateCartListOpen" class="modal-overlay">
   <app-cartList-createCartList
     [boardId]="boardId"
@@ -82,14 +79,11 @@
   </app-cartList-createCartList>
 </div>
 
-<!-- Create Cart -->
 <div *ngIf="isCreateCartOpen" class="modal-overlay">
   <app-createCart-createCart
     [cartListId]="cartListId"
     (closeModal)="closeCreateCartModal()"
-    (cartCreated)="storeLoad()"
-
-> <!-- 🔥 оновлення після створення -->
+    (cartCreated)="storeLoad()">
   </app-createCart-createCart>
 </div>
 <div *ngIf="showCartModalOpen" class="modal-overlay" (click)="closeShowCartModal()">

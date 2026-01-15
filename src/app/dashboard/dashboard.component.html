@@ -3,8 +3,6 @@
 
   <div class="header-actions-right">
     <button (click)="openCreateBoardForm()" class="create-board-btn">Create Board</button>
-
-    <!-- Блок користувача завжди видно, дефолтне ім'я 'користувач' -->
     <div class="user-section">
       <div class="user-avatar" (click)="toggleUserMenu()">
         <span>{{ userName }}</span>
@@ -22,13 +20,10 @@
     </div>
   </div>
 </div>
-
-<!-- Модалка створення дошки -->
 <div *ngIf="isCreateBoardOpen$ | async" class="overlay">
   <app-board-createboard (closeModal)="closeCreateBoardForm()"></app-board-createboard>
 </div>
 
-<!-- Список дошок -->
 <div class="boards-list grid-container">
   <div class="board-card" *ngFor="let board of boards$ | async">
     <h3>{{ board.name }}</h3>
@@ -46,7 +41,6 @@
   </div>
 </div>
 
-<!-- Модалки редагування та інформації про дошку -->
 <div *ngIf="showUpdateBoardForm" class="overlay">
   <app-board-updateboard [board]="selectedBoard" (closeModal)="closeUpdateBoardForm()"></app-board-updateboard>
 </div>

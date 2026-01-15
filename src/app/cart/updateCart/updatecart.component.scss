@@ -1,15 +1,14 @@
-/* Затемнення */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.5); /* півпрозорий чорний фон */
-  z-index: 999; /* щоб бути поверх всього контенту */
+  background-color: rgba(0,0,0,0.5);
+  z-index: 999;
 }
 
-/* Модалка */
 .modal-container {
   position: fixed;
   top: 50%;
@@ -18,13 +17,12 @@
   background: #fff;
   padding: 24px;
   border-radius: 8px;
-  z-index: 1000; /* вище за overlay */
+  z-index: 1000;
   width: 400px;
   max-width: 90%;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* Стилі полів */
 .form-group {
   margin-bottom: 16px;
 }

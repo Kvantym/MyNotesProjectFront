@@ -1,9 +1,7 @@
-import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import{ environment } from "../../environments/environment";
-import { isPlatformBrowser } from "@angular/common";
-import { AuthService } from "./auth.service";
-import { ListCartService } from "./list-cart.service";
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 export interface ActivityBoardResponse {
   action: string;
@@ -12,17 +10,19 @@ export interface ActivityBoardResponse {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class BoardService {
   private apiUrl = `${environment.apiUrl}/board`;
 
-
-
-  constructor(private http: HttpClient, private authService: AuthService ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   createBoard(data: { name: string }) {
-    return this.http.post(`${this.apiUrl}/create-board`, data, this.authService.getAuthHeaders());
+    return this.http.post(
+      `${this.apiUrl}/create-board`,
+      data,
+      this.authService.getAuthHeaders()
+    );
   }
 
   updateBoard(boardId: string, data: any) {
@@ -37,15 +37,16 @@ export class BoardService {
     return this.http.get<any>(`${this.apiUrl}/board-by-id/${boardId}`);
   }
 
-getBoardsByUser() {
-  const token = localStorage.getItem('token');
-  return this.http.get(`${this.apiUrl}/board-by-user`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-}
+  getBoardsByUser() {
+    const token = localStorage.getItem('token');
+    return this.http.get(`${this.apiUrl}/board-by-user`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
 
-    getBoardActivityByBoardId(boardId: string){
-  return this.http.get<ActivityBoardResponse[]>(`${this.apiUrl}/get-activity-board/${boardId}`);
-    }
+  getBoardActivityByBoardId(boardId: string) {
+    return this.http.get<ActivityBoardResponse[]>(
+      `${this.apiUrl}/get-activity-board/${boardId}`
+    );
+  }
 }
-

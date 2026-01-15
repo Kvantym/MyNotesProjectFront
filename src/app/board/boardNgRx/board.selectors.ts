@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { BoardState } from './board.reducer';
-import e from 'express';
 
 export const selectBoardState = createFeatureSelector<BoardState>('board');
 
@@ -37,8 +36,5 @@ export const loadBoards = createSelector(
 );
 export const selectCurrentBoardId = createSelector(
   selectBoardState,
-  (state) => state.board.id // або заміни на твоє поле, яке містить boardId
+  (state) => state.board.id
 );
-
-
-

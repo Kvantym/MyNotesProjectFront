@@ -1,16 +1,21 @@
-import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { Router, RouterModule } from "@angular/router";
-import { AuthService } from "../../services/auth.service";
-import { CommonModule } from "@angular/common";
-import { HttpClientModule } from "@angular/common/http";
+import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth-register',
   standalone: true,
   imports: [ReactiveFormsModule, RouterModule, CommonModule, HttpClientModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
   registerForm: FormGroup;
@@ -33,26 +38,25 @@ export class RegisterComponent {
     console.log('Submit clicked', this.registerForm.value);
 
     if (this.registerForm.valid) {
-    const { username, password, email } = this.registerForm.value;
+      const { username, password, email } = this.registerForm.value;
 
-    if (this.registerForm.valid) {
-      this.authService.register({username, password, email}).subscribe({
-        next: (token: string) => {
-          console.log('Registration successful', token);
-          localStorage.setItem('authToken', token);
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err) => {
-          console.error('Registration failed', err);
-          console.error('Backend says:', err.error);
-          this.errorMessage = 'Помилка реєстрації. Спробуйте ще раз.';
-        }
-      });
+      if (this.registerForm.valid) {
+        this.authService.register({ username, password, email }).subscribe({
+          next: (token: string) => {
+            console.log('Registration successful', token);
+            localStorage.setItem('authToken', token);
+            this.router.navigate(['/dashboard']);
+          },
+          error: (err) => {
+            console.error('Registration failed', err);
+            console.error('Backend says:', err.error);
+            this.errorMessage = 'Registration error. Please try again.';
+          },
+        });
+      }
     }
   }
-
-}
-   goToLogin() {
+  goToLogin() {
     this.router.navigate(['/login']);
   }
 }

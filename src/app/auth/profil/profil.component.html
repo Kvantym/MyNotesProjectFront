@@ -2,13 +2,11 @@
   <h2>Profile User: {{ userName }}</h2>
 
 
-  <!-- Режим перегляду -->
   <div *ngIf="!isEditingUserName; else editUserName">
-    <p><strong>Ім’я:</strong> {{ userName }}</p>
+    <p><strong>Name:</strong> {{ userName }}</p>
     <button class="btn edit" (click)="isEditingUserName = true">✏️ Update</button>
   </div>
 
-  <!-- Режим редагування -->
   <ng-template #editUserName>
     <form [formGroup]="updateUserNameForm" (ngSubmit)="updateUserName()">
       <div class="form-group">
@@ -23,13 +21,11 @@
     </form>
   </ng-template>
 
-  <!-- Режим перегляду -->
   <div *ngIf="!isEditingUserEmail; else editUserEmail">
     <p><strong>Email:</strong> {{ email }}</p>
     <button class="btn edit" (click)="isEditingUserEmail = true">✏️ Update</button>
   </div>
 
-  <!-- Режим редагування -->
   <ng-template #editUserEmail>
     <form [formGroup]="updateUserEmailForm" (ngSubmit)="updateUserEmail()">
       <div class="form-group">
@@ -44,13 +40,11 @@
     </form>
   </ng-template>
 
-   <!-- Режим перегляду -->
   <div *ngIf="!isEditingUserPassword; else editUserPassword">
     <p><strong>Update Password:</strong></p>
     <button class="btn edit" (click)="isEditingUserPassword = true">✏️ Update</button>
   </div>
 
-  <!-- Режим редагування -->
   <ng-template #editUserPassword>
     <form [formGroup]="updateUserPasswordForm" (ngSubmit)="updateUserPassword()">
       <div class="form-group">

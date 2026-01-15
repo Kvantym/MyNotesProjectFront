@@ -1,4 +1,4 @@
-/* Контейнер дошки */
+
 .board-container {
   padding: 16px;
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -6,7 +6,6 @@
   border-radius: 20px;
 }
 
-/* Хедер дошки */
 .board-header {
   display: flex;
   justify-content: space-between;
@@ -34,10 +33,9 @@
   }
 }
 
-/* Горизонтальний рядок списків */
 .lists-wrapper {
   display: flex;
-  flex-wrap: nowrap; /* не переносити списки */
+  flex-wrap: nowrap;
   gap: 16px;
   overflow-x: auto;
   padding-bottom: 10px;
@@ -45,7 +43,6 @@
   align-items: flex-start;
 }
 
-/* Стиль скролу */
 .lists-wrapper::-webkit-scrollbar {
   height: 6px;
 }
@@ -57,9 +54,9 @@
   background-color: #eee;
 }
 
-/* Картки списку */
+
 .list-card {
-  flex: 0 0 280px; /* фіксована ширина */
+  flex: 0 0 280px;
   background: #ffffff;
   padding: 12px;
   border-radius: 8px;
@@ -72,7 +69,6 @@
   }
 }
 
-/* Хедер списку */
 .list-header {
   display: flex;
   justify-content: space-between;
@@ -102,7 +98,6 @@
       transition: all 0.2s;
       border: none;
 
-      /* Стиль для редагування */
       &:nth-child(1) {
         background-color: #ffeb3b;
         color: #333;
@@ -111,7 +106,6 @@
         }
       }
 
-      /* Стиль для видалення */
       &:nth-child(2) {
         background-color: #f44336;
         color: white;
@@ -120,7 +114,6 @@
         }
       }
 
-      /* Стиль для додавання картки */
       &:nth-child(3) {
         background-color: #1976d2;
         color: white;
@@ -132,7 +125,6 @@
   }
 }
 
-/* Картки всередині списку */
 .cards-wrapper {
   display: flex;
   flex-direction: column;
@@ -183,7 +175,6 @@
     cursor: pointer;
     border: none;
 
-    /* Редагування */
     &:nth-child(1) {
       background-color: #ffeb3b;
       color: #333;
@@ -192,7 +183,6 @@
       }
     }
 
-    /* Видалення */
     &:nth-child(2) {
       background-color: #f44336;
       color: white;
@@ -203,7 +193,6 @@
   }
 }
 
-/* Форма переміщення картки */
 .move-cart-container {
   margin-top: 8px;
 }
@@ -223,7 +212,6 @@
   font-size: 13px;
 }
 
-/* Завантаження */
 .loading {
   padding: 16px;
   font-size: 16px;
@@ -231,7 +219,6 @@
   color: #666;
 }
 
-/* Модалки */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -241,7 +228,7 @@
   background: rgba(0,0,0,0.4);
   z-index: 100;
 }
-/* Контейнер форми переміщення картки */
+
 .move-cart-container {
   margin-top: 8px;
   display: flex;
@@ -256,13 +243,11 @@
   transition: all 0.2s;
 }
 
-/* Підпис */
 .move-cart-container label {
   font-weight: 500;
   color: #333;
 }
 
-/* Селект */
 .move-cart-container select {
   padding: 6px 8px;
   font-size: 14px;
@@ -284,13 +269,13 @@
   box-shadow: 0 0 5px rgba(45,137,239,0.5);
 }
 
-/* Опції селекту */
+
 .move-cart-container option {
   padding: 4px 6px;
 }
 
 .card-item {
-  position: relative; // щоб кнопка могла позиціонуватися відносно картки
+  position: relative;
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 8px;

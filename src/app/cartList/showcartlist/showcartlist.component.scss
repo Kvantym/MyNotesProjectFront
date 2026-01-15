@@ -64,7 +64,6 @@
   padding-bottom: 8px;
 }
 
-/* Заголовок і кнопки */
 .modal-title-wrapper {
   display: flex;
   align-items: center;
@@ -95,7 +94,6 @@
   color: #000;
 }
 
-/* Поля вводу */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -124,7 +122,6 @@ textarea {
   max-height: 150px;
 }
 
-/* Кнопки */
 .actions {
   display: flex;
   justify-content: center;
@@ -151,7 +148,6 @@ textarea {
   margin-top: 8px;
 }
 
-/* Історія */
 .activity-list {
   list-style: none;
   padding: 0;
@@ -178,7 +174,6 @@ textarea {
   }
 }
 
-/* Кнопка "Показати ще" */
 .btn.load-more {
   display: block;
   width: 100%;
@@ -205,7 +200,6 @@ textarea {
   background-color: #283593;
 }
 
-/* Анімація */
 @keyframes fadeIn {
   from {
     opacity: 0;

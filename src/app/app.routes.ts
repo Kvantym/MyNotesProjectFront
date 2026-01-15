@@ -5,14 +5,24 @@ import { RegisterComponent } from './auth/register/register.component';
 import { CreateBoardComponent } from './board/createBoard/createboard.component';
 import { ShowBoardComponent } from './board/showboard/showboard.component';
 import { UpdateUserComponent } from './auth/profil/profil.component';
+import {MainLayoutComponent} from './main-layout-component/main-layout-component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  {path:'dashboard', component:DashboardComponent},
-  {path:'register', component:RegisterComponent },
-{path:'create-board', component:CreateBoardComponent},
- { path: 'boards/:id', component: ShowBoardComponent },
- {path: 'profil', component: UpdateUserComponent},
+  { path: 'register', component: RegisterComponent },
+  { path: 'dashboard', component: DashboardComponent },
+
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'create-board', component: CreateBoardComponent },
+      { path: 'boards/:id', component: ShowBoardComponent },
+      { path: 'profil', component: UpdateUserComponent },
+    ]
+  },
 
     { path: '**', redirectTo: 'login' },
 ];
+
+

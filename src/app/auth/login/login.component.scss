@@ -1,4 +1,4 @@
-/* Загальний контейнер */
+
 .login-container {
   max-width: 400px;
   margin: 50px auto;
@@ -9,7 +9,6 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Заголовок */
 .login-container h2 {
   text-align: center;
   margin-bottom: 25px;
@@ -18,21 +17,18 @@
   font-weight: 600;
 }
 
-/* Група форми */
 .form-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
-/* Лейбли */
 .form-group label {
   margin-bottom: 6px;
   font-weight: 500;
   color: #555;
 }
 
-/* Інпут */
 .form-group input {
   padding: 10px 12px;
   border: 1px solid #ccc;
@@ -47,7 +43,6 @@
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
 }
 
-/* Помилки */
 .error {
   margin-top: 5px;
   color: #e74c3c;
@@ -55,7 +50,6 @@
   font-weight: 500;
 }
 
-/* Кнопки */
 button {
   width: 100%;
   padding: 12px 0;
@@ -74,7 +68,6 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Кнопка реєстрації */
 .ButtonRegister {
   background-color: #3498db;
 }
@@ -83,7 +76,6 @@ button:hover {
   background-color: #2980b9;
 }
 
-/* Повідомлення про помилку форми */
 .error-message {
   margin-top: 15px;
   text-align: center;

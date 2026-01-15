@@ -1,15 +1,20 @@
-import { Component, EventEmitter, Output, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { CartService, ActivityCartResponse } from "../../services/cart.service";
-import { UpdateCartComponent } from "../updateCart/updatecart.component";
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CartService, ActivityCartResponse } from '../../services/cart.service';
+import { UpdateCartComponent } from '../updateCart/updatecart.component';
 
 @Component({
   selector: 'app-cart-showCart',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, UpdateCartComponent],
   templateUrl: './showcart.component.html',
-  styleUrls: ['./showcart.component.scss']
+  styleUrls: ['./showcart.component.scss'],
 })
 export class ShowCartComponent implements OnInit {
   @Input() cartId!: string;
@@ -28,16 +33,13 @@ export class ShowCartComponent implements OnInit {
   activitiesBatch = 10;
   currentIndex = 0;
 
-  constructor(
-    private fb: FormBuilder,
-    private cartService: CartService,
-  ) {
+  constructor(private fb: FormBuilder, private cartService: CartService) {
     this.showCartForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
       description: [''],
       dueDate: [''],
       priorityNote: ['Low'],
-      statusNote: ['Draft']
+      statusNote: ['Draft'],
     });
   }
 
@@ -51,8 +53,8 @@ export class ShowCartComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          this.errorMessage = 'Не вдалося завантажити картку.';
-        }
+          this.errorMessage = 'Failed to load the cart.';
+        },
       });
     }
   }
@@ -61,15 +63,20 @@ export class ShowCartComponent implements OnInit {
     this.cartService.getActivityCart(this.cartId).subscribe({
       next: (data) => {
         this.activities = data.sort(
-          (a, b) => new Date(b.activityTime).getTime() - new Date(a.activityTime).getTime()
+          (a, b) =>
+            new Date(b.activityTime).getTime() -
+            new Date(a.activityTime).getTime()
         );
-        this.displayedActivities = this.activities.slice(0, this.activitiesBatch);
+        this.displayedActivities = this.activities.slice(
+          0,
+          this.activitiesBatch
+        );
         this.currentIndex = this.activitiesBatch;
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Не вдалося завантажити історію дій.';
-      }
+        this.errorMessage = 'Failed to load activity history.';
+      },
     });
   }
 
@@ -89,16 +96,18 @@ export class ShowCartComponent implements OnInit {
         this.loadActivities();
         this.cartUpdated.emit();
       },
-      error: (err) => console.error("Помилка при завантаженні картки:", err)
+      error: (err) => console.error('Error loading the cart:', err),
     });
   }
 
   deleteCard(cartId: string): void {
-    if (!confirm('Ви впевнені, що хочете видалити картку?')) return;
+    if (!confirm('Are you sure you want to delete this cart?')) return;
 
     this.cartService.deleteCart(cartId).subscribe({
-      next: () => { this.onCancel() },
-      error: err => console.error('Помилка при видаленні картки:', err)
+      next: () => {
+        this.onCancel();
+      },
+      error: (err) => console.error('Error deleting the cart:', err),
     });
   }
 

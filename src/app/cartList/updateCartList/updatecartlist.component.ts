@@ -1,16 +1,21 @@
-import { Component, EventEmitter, Output, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
-import { Store } from "@ngrx/store";
-import * as CartListActions from "../cartListNgRx/cartList.actions";
+import { Store } from '@ngrx/store';
+import * as CartListActions from '../cartListNgRx/cartList.actions';
 
 @Component({
   selector: 'app-cartList-updateCartList',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './updatecartlist.component.html',
-  styleUrls: ['./updatecartlist.component.scss']
+  styleUrls: ['./updatecartlist.component.scss'],
 })
 export class UpdateCartListComponent {
   @Input() cartList: any;
@@ -19,29 +24,31 @@ export class UpdateCartListComponent {
   updateCartListForm: FormGroup;
   errorMessage: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private store: Store
-  ) {
+  constructor(private fb: FormBuilder, private store: Store) {
     this.updateCartListForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(1)]]
+      name: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 
   ngOnChanges() {
     if (this.cartList) {
       this.updateCartListForm.patchValue({
-        name: this.cartList.name
+        name: this.cartList.name,
       });
     }
   }
 
   onSubmit() {
-  if (!this.updateCartListForm.valid || !this.cartList) return;
+    if (!this.updateCartListForm.valid || !this.cartList) return;
 
-  this.store.dispatch(CartListActions.updateCartList({ cartListId: this.cartList.listCartId, updatedData: this.updateCartListForm.value.name }));
-  this.closeModal.emit();
-}
+    this.store.dispatch(
+      CartListActions.updateCartList({
+        cartListId: this.cartList.listCartId,
+        updatedData: this.updateCartListForm.value.name,
+      })
+    );
+    this.closeModal.emit();
+  }
 
   onCancel() {
     this.closeModal.emit();

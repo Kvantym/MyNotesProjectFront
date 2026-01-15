@@ -15,7 +15,6 @@ export const initialState: CartListState = {
   activities: [],
 };
 
-
 export const cartListReducer = createReducer(
   initialState,
   on(CartListActions.loadCartList, (state) => ({ ...state, loading: true })),
@@ -31,12 +30,11 @@ export const cartListReducer = createReducer(
   })),
 
   on(CartListActions.loadActivities, (state) => ({ ...state, loading: true })),
-on(CartListActions.loadActivitiesSuccess, (state, { activities }) => ({
-  ...state,
-  activities: activities,
-  loading: false,
-}))
-,
+  on(CartListActions.loadActivitiesSuccess, (state, { activities }) => ({
+    ...state,
+    activities: activities,
+    loading: false,
+  })),
   on(CartListActions.loadActivitiesFailure, (state, { error }) => ({
     ...state,
     error,
@@ -55,11 +53,13 @@ on(CartListActions.loadActivitiesSuccess, (state, { activities }) => ({
   })),
 
   on(CartListActions.createCartList, (state) => ({ ...state, loading: true })),
-on(CartListActions.createCartListSuccess, (state, { cartList }) => ({
-  ...state,
-  cartList: Array.isArray(state.cartList) ? [...state.cartList, cartList] : [cartList],
-  loading: false,
-})),
+  on(CartListActions.createCartListSuccess, (state, { cartList }) => ({
+    ...state,
+    cartList: Array.isArray(state.cartList)
+      ? [...state.cartList, cartList]
+      : [cartList],
+    loading: false,
+  })),
 
   on(CartListActions.createCartListFailure, (state, { error }) => ({
     ...state,
@@ -67,16 +67,17 @@ on(CartListActions.createCartListSuccess, (state, { cartList }) => ({
     loading: false,
   })),
   on(CartListActions.deleteCartList, (state) => ({ ...state, loading: true })),
-on(CartListActions.deleteCartListSuccess, (state, { cartListId }) => ({
-  ...state,
-  cartList: Array.isArray(state.cartList) ? state.cartList.filter(cl => cl.id !== cartListId) : [],
-  loading: false,
-})),
+  on(CartListActions.deleteCartListSuccess, (state, { cartListId }) => ({
+    ...state,
+    cartList: Array.isArray(state.cartList)
+      ? state.cartList.filter((cl) => cl.id !== cartListId)
+      : [],
+    loading: false,
+  })),
 
   on(CartListActions.deleteCartListFailure, (state, { error }) => ({
     ...state,
     error,
     loading: false,
   }))
-
 );

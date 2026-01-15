@@ -1,4 +1,4 @@
-/* Контейнер форми */
+
 .login-container {
   max-width: 420px;
   margin: 60px auto;
@@ -9,7 +9,6 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Заголовок */
 .login-container h2 {
   text-align: center;
   margin-bottom: 25px;
@@ -18,21 +17,18 @@
   color: #333;
 }
 
-/* Група форми */
 .form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-/* Лейбл */
 .form-group label {
   margin-bottom: 6px;
   font-weight: 500;
   color: #555;
 }
 
-/* Інпут */
 .form-group input {
   padding: 12px 14px;
   font-size: 14px;
@@ -47,7 +43,6 @@
   box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
 }
 
-/* Повідомлення про помилки під інпутом */
 .error {
   margin-top: 5px;
   font-size: 13px;
@@ -55,7 +50,6 @@
   font-weight: 500;
 }
 
-/* Кнопки */
 button {
   width: 100%;
   padding: 12px 0;
@@ -74,7 +68,6 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Кнопка переходу на іншу форму */
 .ButtonRegister {
   background-color: #2196F3;
   margin-top: 10px;
@@ -84,7 +77,6 @@ button:hover {
   background-color: #1976D2;
 }
 
-/* Повідомлення про глобальні помилки */
 .error-message {
   margin-top: 15px;
   text-align: center;
@@ -92,7 +84,6 @@ button:hover {
   color: #e74c3c;
 }
 
-/* Адаптивність */
 @media (max-width: 480px) {
   .login-container {
     padding: 25px 20px;

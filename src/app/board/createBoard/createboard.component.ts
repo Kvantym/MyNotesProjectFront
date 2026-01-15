@@ -1,17 +1,21 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
-
-import { Store } from "@ngrx/store";
-import * as BoardActions from "../boardNgRx/board.actions";
+import { Store } from '@ngrx/store';
+import * as BoardActions from '../boardNgRx/board.actions';
 
 @Component({
   selector: 'app-board-createboard',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './createboard.component.html',
-  styleUrls: ['./createboard.component.scss']
+  styleUrls: ['./createboard.component.scss'],
 })
 export class CreateBoardComponent {
   createBoardForm: FormGroup;
@@ -20,14 +24,10 @@ export class CreateBoardComponent {
 
   @Output() closeModal = new EventEmitter<void>();
 
-  constructor(
-    private fb: FormBuilder,
-    private store: Store
-  ) {
-  this.createBoardForm = this.fb.group({
-  name: ['', [Validators.required, Validators.minLength(1)]]
-});
-
+  constructor(private fb: FormBuilder, private store: Store) {
+    this.createBoardForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(1)]],
+    });
   }
 
   onSubmit() {
@@ -39,7 +39,6 @@ export class CreateBoardComponent {
   }
 
   onCancel() {
-this.store.dispatch(BoardActions.closeCreateBoardModal());
-   // this.closeModal.emit();
+    this.store.dispatch(BoardActions.closeCreateBoardModal());
   }
 }

@@ -1,9 +1,9 @@
-import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../environments/environment";
-import { BehaviorSubject, Observable, tap } from "rxjs";
-import { isPlatformBrowser } from "@angular/common";
-import { HttpHeaders } from "@angular/common/http";
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpHeaders } from '@angular/common/http';
 
 interface User {
   id: string;
@@ -12,7 +12,7 @@ interface User {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
@@ -29,33 +29,31 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-    public getAuthHeaders(): { headers: HttpHeaders } {
-  let headers = new HttpHeaders();
-  if (isPlatformBrowser(this.platformId)) {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      headers = headers.set("Authorization", `Bearer ${token}`);
-    } else {
-      console.warn('No token found in localStorage');
+  public getAuthHeaders(): { headers: HttpHeaders } {
+    let headers = new HttpHeaders();
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      } else {
+        console.warn('No token found in localStorage');
+      }
     }
+    return { headers };
   }
-  return { headers };
-}
-
-  // Кастомний декодер JWT
   private decodeJwt(token: string): any {
     try {
-      const payload = token.split(".")[1];
-      const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+      const payload = token.split('.')[1];
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(
         atob(base64)
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join("")
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
       );
       return JSON.parse(jsonPayload);
     } catch (error) {
-      console.error("Помилка декодування JWT:", error);
+      console.error('JWT decoding error:', error);
       return null;
     }
   }
@@ -64,7 +62,7 @@ export class AuthService {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, data).pipe(
       tap((res) => {
         if (this.isBrowser) {
-          localStorage.setItem("authToken", res.token);
+          localStorage.setItem('authToken', res.token);
         }
         const decoded: any = this.decodeJwt(res.token);
         if (decoded) {
@@ -80,22 +78,22 @@ export class AuthService {
 
   register(data: { username: string; password: string; email: string }) {
     return this.http.post(`${this.apiUrl}/register`, data, {
-      responseType: "text",
+      responseType: 'text',
     });
   }
 
   logout() {
     if (this.isBrowser) {
-      localStorage.removeItem("authToken");
+      localStorage.removeItem('authToken');
     }
     this.currentUserSubject.next(null);
     return this.http.post(`${this.apiUrl}/logout`, {});
   }
 
   getCurrentUser() {
-    return this.http.get<User>(`${this.apiUrl}/current-user`).pipe(
-      tap((user) => this.currentUserSubject.next(user))
-    );
+    return this.http
+      .get<User>(`${this.apiUrl}/current-user`)
+      .pipe(tap((user) => this.currentUserSubject.next(user)));
   }
 
   getCurrentUserLocal(): User | null {
@@ -103,31 +101,36 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return this.isBrowser ? localStorage.getItem("authToken") : null;
+    return this.isBrowser ? localStorage.getItem('authToken') : null;
   }
 
   updateUserName(newUserName: string): Observable<any> {
     const formData = new FormData();
-    formData.append("newUserName", newUserName);
-      return this.http.put(`${this.apiUrl}/update-user-name`, formData, { responseType: "text" });
+    formData.append('newUserName', newUserName);
+    return this.http.put(`${this.apiUrl}/update-user-name`, formData, {
+      responseType: 'text',
+    });
   }
-    updateUserEmail(newUserEmail: string): Observable<any> {
+  updateUserEmail(newUserEmail: string): Observable<any> {
     const formData = new FormData();
-    formData.append("newUserEmail", newUserEmail);
-      return this.http.put(`${this.apiUrl}/update-user-email`, formData, { responseType: "text" });
+    formData.append('newUserEmail', newUserEmail);
+    return this.http.put(`${this.apiUrl}/update-user-email`, formData, {
+      responseType: 'text',
+    });
   }
 
-      updateUserPassword(newUserPassword: string): Observable<any> {
+  updateUserPassword(newUserPassword: string): Observable<any> {
     const formData = new FormData();
-    formData.append("newUserPassword", newUserPassword);
-      return this.http.put(`${this.apiUrl}/update-user-password`, formData, { responseType: "text" });
+    formData.append('newUserPassword', newUserPassword);
+    return this.http.put(`${this.apiUrl}/update-user-password`, formData, {
+      responseType: 'text',
+    });
   }
-
 
   private loadUserFromStorage() {
     if (!this.isBrowser) return;
 
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem('authToken');
     if (token) {
       const decoded: any = this.decodeJwt(token);
       if (decoded) {

@@ -1,4 +1,4 @@
-/* 🔹 Загальний ресет */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -11,7 +11,6 @@ body {
   color: #333;
 }
 
-/* 🔹 Шапка */
 .dashboard-header {
   display: flex;
   align-items: center;
@@ -65,7 +64,6 @@ body {
   background: #2c3e9e;
 }
 
-/* 🔹 Список дошок */
 .boards-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -133,7 +131,6 @@ body {
   background: #3e8e41;
 }
 
-/* 🔹 Модалки */
 .overlay {
   position: fixed;
   inset: 0;
@@ -160,7 +157,6 @@ app-board-showinformitionboard {
   display: inline-block;
 }
 
-/* Кружечок з ім’ям */
 .user-avatar {
   background: #3f51b5;
   color: #fff;
@@ -181,10 +177,9 @@ app-board-showinformitionboard {
   transform: scale(1.05);
 }
 
-/* Випадаюче меню */
 .user-menu {
   position: absolute;
-  top: 50px; /* трохи нижче аватара */
+  top: 50px;
   right: 0;
   background: #fff;
   border-radius: 8px;
@@ -211,7 +206,6 @@ app-board-showinformitionboard {
   background: #f5f5f5;
 }
 
-/* Анімація */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
@@ -219,7 +213,7 @@ app-board-showinformitionboard {
 .header-actions-right {
   display: flex;
   align-items: center;
-  gap: 15px; /* відстань між кнопкою та аватаром */
+  gap: 15px;
   position: relative;
 }
 
@@ -257,7 +251,7 @@ app-board-showinformitionboard {
 
 .user-menu {
   position: absolute;
-  top: 110%; /* трохи нижче аватара */
+  top: 110%;
   right: 0;
   background-color: #fff;
   border: 1px solid #ddd;

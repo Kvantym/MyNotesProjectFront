@@ -1,12 +1,10 @@
 /* Тло модалки */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* напівпрозоре тло */
+  inset: 0;
+  background-color: rgba(44, 62, 80, 0.4);
   z-index: 1000;
+  backdrop-filter: blur(4px); /* Наш фірмовий ефект розмиття */
 }
 
 /* Контейнер модалки */
@@ -15,22 +13,24 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 35px 40px;
+  border-radius: 25px; /* Заокруглення як у Login та Register */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   width: 400px;
   max-width: 90%;
   z-index: 1001;
-  animation: fadeIn 0.2s ease-out;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: fadeInModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Заголовок модалки */
 .modal-container h2 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  font-weight: 600;
+  margin-bottom: 25px;
+  font-size: 1.6rem;
+  font-weight: 700;
   text-align: center;
+  color: #2c3e50;
 }
 
 /* Форми */
@@ -38,78 +38,97 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
-}
 
-.form-group label {
-  margin-bottom: 6px;
-  font-weight: 500;
-}
+  label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #34495e;
+    font-size: 0.9rem;
+    padding-left: 5px;
+  }
 
-.form-group input {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-}
+  input {
+    padding: 12px 16px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    font-size: 1rem;
+    background-color: #f1f3f6;
+    transition: all 0.3s ease;
 
-.form-group input:focus {
-  outline: none;
-  border-color: #007bff;
+    &:focus {
+      outline: none;
+      background-color: #ffffff;
+      border-color: #3498db;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+    }
+  }
 }
 
 /* Кнопки */
 .actions {
   display: flex;
   justify-content: space-between;
+  gap: 15px;
+  margin-top: 10px;
 }
 
 .btn {
-  padding: 10px 18px;
+  flex: 1;
+  padding: 12px 18px;
   font-size: 1rem;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .btn.save {
-  background-color: #007bff;
+  background-color: #2ecc71; /* Зелений для підтвердження */
   color: #fff;
-}
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
 
-.btn.save:disabled {
-  background-color: #99c2ff;
-  cursor: not-allowed;
-}
+  &:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
 
-.btn.save:hover:not(:disabled) {
-  background-color: #0056b3;
+  &:hover:not(:disabled) {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+  }
 }
 
 .btn.cancel {
-  background-color: #ccc;
-}
+  background-color: #95a5a6;
+  color: #fff;
 
-.btn.cancel:hover {
-  background-color: #999;
+  &:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+  }
 }
 
 /* Помилки */
 .error {
   color: #e74c3c;
-  font-size: 0.875rem;
-  margin-top: 5px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 6px;
+  padding-left: 5px;
 }
 
 /* Анімація появи */
-@keyframes fadeIn {
+@keyframes fadeInModal {
   from {
     opacity: 0;
-    transform: translate(-50%, -45%);
+    transform: translate(-50%, -45%) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
   }
 }

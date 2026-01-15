@@ -1,92 +1,109 @@
-/* Загальний контейнер */
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 30px 40px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Робимо фон сторінки таким самим, як на Welcome, щоб перехід був безшовним */
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-/* Заголовок */
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.9); /* Напівпрозорий білий */
+  border-radius: 25px; /* Більш закруглені кути */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Легша тінь */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  backdrop-filter: blur(10px); /* Ефект матового скла */
+}
+
 .login-container h2 {
   text-align: center;
-  margin-bottom: 25px;
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 700;
 }
 
-/* Група форми */
 .form-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
-/* Лейбли */
 .form-group label {
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: #555;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #34495e;
+  font-size: 14px;
+  padding-left: 5px;
 }
 
-/* Інпут */
 .form-group input {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 12px 16px;
+  border: 2px solid transparent; /* Прихована рамка */
+  border-radius: 15px;
+  font-size: 15px;
+  background-color: #f1f3f6;
+  color: #2c3e50;
   transition: all 0.3s ease;
 }
 
 .form-group input:focus {
-  border-color: #4CAF50;
+  background-color: #ffffff;
+  border-color: #3498db;
   outline: none;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
-/* Помилки */
 .error {
-  margin-top: 5px;
+  margin-top: 6px;
   color: #e74c3c;
   font-size: 13px;
   font-weight: 500;
+  padding-left: 5px;
 }
 
-/* Кнопки */
+/* Головна кнопка входу (синя) */
 button {
   width: 100%;
-  padding: 12px 0;
-  margin-top: 10px;
+  padding: 14px 0;
+  margin-top: 15px;
   border: none;
-  border-radius: 8px;
-  background-color: #4CAF50;
+  border-radius: 25px;
+  background-color: #3498db;
   color: white;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }
 
-/* Кнопка реєстрації */
+/* Кнопка переходу на реєстрацію (зелена) */
 .ButtonRegister {
-  background-color: #3498db;
+  background-color: #2ecc71;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
 }
 
 .ButtonRegister:hover {
-  background-color: #2980b9;
+  background-color: #27ae60;
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
 }
 
-/* Повідомлення про помилку форми */
 .error-message {
-  margin-top: 15px;
+  margin-top: 20px;
   text-align: center;
   color: #e74c3c;
   font-weight: 600;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 10px;
+  border-radius: 10px;
 }

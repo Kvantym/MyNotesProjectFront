@@ -1,6 +1,6 @@
-/* Модалка */
+/* Задній фон (затемнення) */
 .modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(44, 62, 80, 0.4); // Темно-синій прозорий фон
   position: fixed;
   top: 0;
   left: 0;
@@ -10,84 +10,106 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(4px); // Розмиваємо все, що за модалкою
 }
 
+/* Сама модалка */
 .modal {
-  background-color: #fff;
-  padding: 25px 30px;
-  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 35px 40px;
+  border-radius: 25px; // Наші фірмові закруглені кути
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   position: relative;
+  font-family: 'Segoe UI', sans-serif;
 
   h2 {
     margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.5rem;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-weight: 700;
     text-align: center;
-    color: #333;
+    color: #2c3e50;
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 
     input {
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 12px 16px;
+      border: 2px solid transparent;
+      border-radius: 15px;
       font-size: 1rem;
+      background-color: #f1f3f6;
+      transition: all 0.3s ease;
       width: 100%;
+      box-sizing: border-box;
 
       &:focus {
         outline: none;
-        border-color: #4caf50;
-        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        background-color: #ffffff;
+        border-color: #3498db;
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
       }
     }
 
     .error {
-      color: #f44336;
+      color: #e74c3c;
       font-size: 0.85rem;
+      font-weight: 500;
+      padding-left: 5px;
     }
 
+    /* Кнопки в модалці */
     .modal-actions {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      gap: 15px;
+      margin-top: 10px;
 
       button {
-        padding: 8px 18px;
+        flex: 1;
+        padding: 12px;
         font-size: 1rem;
-        border-radius: 5px;
+        font-weight: 600;
+        border-radius: 20px;
         border: none;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.3s ease;
 
+        // Кнопка "Створити" (Зелена)
         &:first-child {
-          background-color: #4caf50;
+          background-color: #2ecc71;
           color: #fff;
+          box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
           &:hover {
-            background-color: #45a049;
+            background-color: #27ae60;
+            transform: translateY(-2px);
           }
         }
 
+        // Кнопка "Скасувати" (Сіра)
         &:last-child {
-          background-color: #f44336;
+          background-color: #95a5a6;
           color: #fff;
           &:hover {
-            background-color: #da190b;
+            background-color: #7f8c8d;
+            transform: translateY(-2px);
           }
         }
       }
     }
 
     .error-message {
-      color: #f44336;
+      color: #e74c3c;
       text-align: center;
-      font-weight: 500;
+      font-weight: 600;
+      background: rgba(231, 76, 60, 0.1);
+      padding: 8px;
+      border-radius: 10px;
     }
   }
 }

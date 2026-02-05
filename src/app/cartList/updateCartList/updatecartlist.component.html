@@ -18,12 +18,13 @@
     </div>
 
     <div class="actions">
-      <button type="submit" class="btn save" [disabled]="!updateCartListForm.valid">
-        💾 Save
-      </button>
-      <button type="button" class="btn cancel" (click)="onCancel()">
+      <button type="button" class="buttonCancel" (click)="onCancel()">
         ❌ Cancel
       </button>
+      <button type="submit" class="buttonCreate" [disabled]="!updateCartListForm.valid">
+        💾 Save
+      </button>
+
     </div>
 
     <div class="error" *ngIf="errorMessage">

@@ -21,9 +21,56 @@
 
 
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <div class="add-collaborator-form">
+        <div class="input-group">
+          <input
+            type="text"
+            placeholder="Enter user name or email"
+            [(ngModel)]="identifier"
+            [ngModelOptions]="{standalone: true}"
+            class="colab-input"
+          >
+          <button class="btn-add-colab" (click)="addColoborator()">
+            Add
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <h3>Учасники проекту</h3>
+        <div class="scroll-area ">
+
+
+          <div *ngFor="let colab of collaborators" class="colab-card">
+            <div class="colab-actions">
+              <p><strong>Name:</strong> {{colab.userName}}</p>
+              <p><strong>Email:</strong> {{colab.email}}</p>
+            </div>
+
+            <div class="colab-actions">
+              <div *ngIf="board?.userId === currentUserId">
+                <button (click)="onDeleteCollaborator(colab.userName)" class="btn-delete" title="Видалити учасника">
+                  👤⃠
+                </button>
+              </div>
+
+              <div *ngIf="colab.email === currentUserEmail">
+                <button (click)="onLeaveColoboration(colab.userName)" class="btn-delete" title="Залишити дошку">
+                  🚪
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
       <div class="actions">
-        <button type="button" class="btn cancel" (click)="onCancel()">Cancel</button>
+        <button type="button" class="buttonCancel" (click)="onCancel()">Cancel</button>
       </div>
     </form>
   </div>

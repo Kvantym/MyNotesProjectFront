@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+.buttonCancel {
+  background-color: #ff4d4d;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.buttonCreate{
+  background-color: #28ad04;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.buttonShowInformation{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #555;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+.btn-delete{
+  background-color: #ff4d4d;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

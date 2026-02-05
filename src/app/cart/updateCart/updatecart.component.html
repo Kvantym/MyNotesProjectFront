@@ -45,8 +45,9 @@
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="actions">
-      <button type="submit" class="btn save" [disabled]="updateCartForm.invalid">💾 Seve</button>
-      <button type="button" class="btn cancel" (click)="onCancel()">❌ Cancel</button>
+      <button type="button" class="buttonCancel" (click)="onCancel()">❌ Cancel</button>
+      <button type="submit" class="buttonCreate" [disabled]="updateCartForm.invalid">💾 Save</button>
+
     </div>
   </form>
 </div>

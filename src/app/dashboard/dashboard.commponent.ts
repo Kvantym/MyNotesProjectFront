@@ -133,4 +133,8 @@ export class DashboardComponent implements OnInit {
     this.selectedBoardId = null;
     this.store.dispatch(BoardActions.loadBoards());
   }
+
+
+
+
 }

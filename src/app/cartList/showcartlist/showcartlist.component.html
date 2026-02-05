@@ -14,12 +14,13 @@
       <div class="form-group">
         <label for="name">Name</label>
         <input id="name" type="text" formControlName="name" readonly />
+        <label></label>
       </div>
 
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
       <div class="actions">
-        <button type="button" class="btn cancel" (click)="cancel()">Cancel</button>
+        <button type="button" class="buttonCancel" (click)="cancel()">Cancel</button>
       </div>
     </form>
   </div>

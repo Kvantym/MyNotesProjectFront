@@ -2,7 +2,6 @@
   <h2 class="logo">Dashboard</h2>
 
   <div class="header-actions-right">
-    <button>Archive</button>
     <button (click)="openCreateBoardForm()" class="create-board-btn">Create Board</button>
     <div class="user-section">
       <div class="user-avatar" (click)="toggleUserMenu()">
@@ -26,17 +25,17 @@
 </div>
 
 <div class="boards-list grid-container">
-  <div class="board-card" *ngFor="let board of boards$ | async">
+  <div class="board-card" *ngFor="let board of boards$ | async" (click)="openShowBoardInformation(board.id); $event.stopPropagation()">
     <h3>{{ board.name }}</h3>
     <p>Створено: {{ board.createdAt | date }}</p>
     <div class="board-actions">
-      <button
+      <!---<button
         class="btn more-btn"
         (click)="openShowBoardInformation(board.id); $event.stopPropagation()"
         title="Information about board"
       >
         ⋮
-      </button>
+      </button>--->
     </div>
     <button class="open-board-btn" (click)="openBoard(board)">Open</button>
   </div>

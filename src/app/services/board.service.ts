@@ -2,12 +2,14 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import {UserInfo} from 'node:os';
 
 export interface ActivityBoardResponse {
   action: string;
   activityInformation: string;
   activityTime: string;
 }
+
 
 @Injectable({
   providedIn: 'root',
@@ -49,4 +51,28 @@ export class BoardService {
       `${this.apiUrl}/get-activity-board/${boardId}`
     );
   }
+
+  addCollaborator(boardId: string, identifier: string) {
+    // identifier передаємо як Query параметр через ?, бо в контролері [FromQuery]
+    return this.http.post(`${this.apiUrl}/add-collaborator/${boardId}?identifier=${identifier}`, {});
+  }
+
+  getAllCollaborators(boardId: string) {
+    // Додаємо тип <any[]> або створи інтерфейс UserResponse[]
+    return this.http.get<any[]>(`${this.apiUrl}/get-collaborators/${boardId}`);
+  }
+
+  deleteCollaborator(boardId: string , collaboratorName:string) {
+    return this.http.delete(`${this.apiUrl}/delete-collaborator/${boardId}/${collaboratorName}`);
+  }
+
+  removeCollaborator(boardId: string) {
+    return this.http.delete(`${this.apiUrl}/remove-collaborator/${boardId}`)
+  }
+
+  //ask DeleteUserFromBoardIfUserIsOwner(Guid boardId, Guid ownerId, string collaborationName)
+
+
+//public async Task RemoveColoboratorFromBoard(Guid boardId, Guid collaborationId)
+
 }

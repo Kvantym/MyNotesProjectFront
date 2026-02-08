@@ -210,3 +210,132 @@ textarea {
     transform: translate(-50%, -50%);
   }
 }
+/* Область, яка обмежує список */
+.scroll-area {
+  max-height: 150px;    /* Встанови ту висоту, яка тобі зручна */
+  overflow-y: auto;     /* Скрол з'явиться тільки тоді, коли учасників стане багато */
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Стиль для картки кожного учасника */
+.colab-card {
+  background: white;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-left: 4px solid #007bff; /* Синя полоска збоку для краси */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 4px;
+}
+
+.colab-info p {
+  margin: 0; /* Щоб не було зайвих відступів між ім'ям та емейлом */
+  font-size: 14px;
+}
+
+/* Налаштування самого повзунка скролу (опціонально, для краси) */
+.scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.colab-card {
+  display: flex;
+  justify-content: space-between; // Розкидає текст вліво, а кнопку вправо
+  align-items: center;           // Вирівнює їх по одній горизонтальній лінії
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-left: 4px solid #007bff; // Та сама синя лінія зі скриншоту
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 4px;
+}
+
+.colab-info {
+  display: flex;
+  flex-direction: column; // Залишаємо Name та Email один під одним
+  gap: 4px;
+
+  p {
+    margin: 0; // Прибираємо стандартні відступи, щоб не роздувати картку
+    font-size: 14px;
+  }
+}
+
+.btn-delete {
+  background-color: #ff5252; // Твій червоний колір
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #d32f2f;
+  }
+
+  span {
+    font-size: 18px; // Розмір іконки
+  }
+}
+.add-collaborator-form {
+  margin-bottom: 20px;
+  max-width: 400px; // Обмежуємо ширину для акуратності
+
+  .input-group {
+    display: flex;
+    gap: 8px; // Відстань між інпутом та кнопкою
+    align-items: center;
+  }
+
+  .colab-input {
+    flex: 1; // Інпут займає весь вільний простір
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  .btn-add-colab {
+    padding: 10px 20px;
+    background-color: #28a745; // Зелений колір для дії "Додати"
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+
+    &:hover {
+      background-color: #218838;
+    }
+
+    &:active {
+      transform: translateY(1px); // Ефект натискання
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}

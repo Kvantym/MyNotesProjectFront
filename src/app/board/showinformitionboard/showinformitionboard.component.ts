@@ -3,7 +3,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule,
+  ReactiveFormsModule, FormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
@@ -15,11 +15,19 @@ import { UpdateBoardComponent } from '../updateboard/updateboard.component';
 import { ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as BoardActions from '../boardNgRx/board.actions';
+import {AuthService} from '../../services/auth.service';
+import {userInfo} from 'node:os';
+
+
+interface Collaborator {
+  userName: string;
+  email: string;
+}
 
 @Component({
   selector: 'app-board-showinformitionboard',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UpdateBoardComponent],
+  imports: [ReactiveFormsModule, CommonModule, UpdateBoardComponent, FormsModule],
   templateUrl: './showinformitionboard.component.html',
   styleUrls: ['./showinformitionboard.component.scss'],
 })
@@ -39,13 +47,23 @@ export class ShowBoardInformationComponent implements OnInit {
   displayedActivities: ActivityBoardResponse[] = [];
   activitiesBatch = 10;
   currentIndex = 0;
+  collaborators: Collaborator[] = [];
+  identifier: string = '';
+  board : any;
+  currentUser:any;
+
+  currentUserId: string | undefined = ''
+  currentUserEmail: string | undefined = ''
+
+
 
   constructor(
     private fb: FormBuilder,
     private boardService: BoardService,
     private ngZone: NgZone,
     private store: Store,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private  authService : AuthService,
   ) {
     this.showBoardForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
@@ -53,12 +71,29 @@ export class ShowBoardInformationComponent implements OnInit {
   }
 
   ngOnInit() {
+    const token = localStorage.getItem('authToken'); // Перевір, чи ключ називається 'token' чи 'authToken'
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Мапимо поля (враховуємо специфіку Microsoft Claims)
+        this.currentUserId = payload.sub || payload.nameid || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+        this.currentUserEmail = payload.email || payload.unique_name;
+
+        console.log("✅ Поточний користувач:", this.currentUserEmail, this.currentUserId);
+      } catch (e) {
+        console.error('Помилка парсингу токена:', e);
+      }
+    }
+
+
     if (this.boardId) {
+      this.getAllCollaborators(this.boardId);
       this.boardService.getBoardById(this.boardId).subscribe({
         next: (data) => {
           this.showBoardForm.patchValue(data);
           this.selectedBoardData = { ...data, id: this.boardId };
-
+          this.board = data;
           this.loadActivities();
         },
         error: (err) => {
@@ -67,6 +102,7 @@ export class ShowBoardInformationComponent implements OnInit {
         },
       });
     }
+
   }
   loadActivities() {
     this.boardService.getBoardActivityByBoardId(this.boardId).subscribe({
@@ -155,6 +191,7 @@ export class ShowBoardInformationComponent implements OnInit {
         console.log('Board updated successfully');
 
         this.loadBoardData(boardId);
+
         this.onCancel();
       },
       error: (err) => {
@@ -179,4 +216,75 @@ export class ShowBoardInformationComponent implements OnInit {
     this.selectedBoard = null;
     this.isUpdateBoardModalOpen = false;
   }
+  colabUser : any;
+
+
+  getAllCollaborators(boardId: string) {
+
+
+    this.boardService.getAllCollaborators(boardId).subscribe({
+      next: (data) => {
+        this.collaborators = data;
+
+        this.currentUser = this.authService.getCurrentUserEmail();
+        console.log("Loaded coloborant:",this.collaborators);
+        console.log("Current User Email:",this.currentUserEmail);
+
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+
+  }
+  addColoborator() {
+    this.boardService.addCollaborator(this.boardId, this.identifier).subscribe({
+      next: (data) => {
+       this.getAllCollaborators(this.boardId);
+       this.identifier = '';
+        this.loadActivities();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+  onDeleteCollaborator(coloboratorName:string) {
+    if(confirm('Are you sure you want to delete the coloborator?')){
+      this.boardService.deleteCollaborator(this.boardId, coloboratorName).subscribe({
+        next:(response)=>{
+        console.log('User deleted:', response);
+
+        this.getAllCollaborators(this.boardId);
+        this.loadActivities();
+      },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+
+  }
+
+  onLeaveColoboration(coloboratorid: string | undefined) {
+    if(confirm('Are you sure you want to delete the coloborator?')){
+      if (coloboratorid != null) {
+        this.boardService.removeCollaborator(this.boardId).subscribe({
+          next: (response) => {
+            console.log('User deleted:', response);
+            this.loadActivities();
+            this.getAllCollaborators(this.boardId);
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
+      }
+    }
+    this.onCancel();
+    this.store.dispatch(BoardActions.loadBoards());
+  }
+
+
 }

@@ -1,0 +1,24 @@
+<p>board-archive works!</p>
+
+<div class="boards-list grid-container">
+  <div class="board-card" *ngFor="let board of boards" (click)="openShowBoardInformation(board.id); $event.stopPropagation()">
+    <h3>{{ board.name }}</h3>
+    <p>Створено: {{ board.createdAt | date }}</p>
+
+    <div class="board-actions">
+    </div>
+
+    <button class="open-board-btn" (click)="openBoard(board); $event.stopPropagation()">Open</button>
+  </div>
+</div>
+
+<div *ngIf="showUpdateBoardForm" class="overlay">
+  <app-board-updateboard [board]="selectedBoard" (closeModal)="closeUpdateBoardForm()"></app-board-updateboard>
+</div>
+
+<app-board-showinformitionboard
+  *ngIf="showBoardInfoForm"
+  [boardId]="selectedBoardId!"
+  (closeModal)="closeShowBoardInformation()"
+  (boardUpdated)="onBoardUpdated()"
+></app-board-showinformitionboard>

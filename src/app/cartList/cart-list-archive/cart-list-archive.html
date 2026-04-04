@@ -1,0 +1,52 @@
+@if (listCarts && listCarts.length > 0) {
+  <div class="lists-wrapper">
+
+    @for (list of listCarts; track list.id) {
+      <div class="list-card" (click)="openShowListCarForm(list.id); $event.stopPropagation()">
+        <button class="btn-archive" (click)="removeListCartFromArchive(list.id);$event.stopPropagation()">
+          <i class="icon-archive"></i> UnArchive
+        </button>
+
+        <div class="list-header">
+          <h3 [title]="list.name">{{ list.name | slice:0:25 }}</h3>
+        </div>
+
+        <div class="cards-wrapper">
+          <div class="card-item" *ngFor="let card of list.carts">
+            <div class="card-info" [title]="card.name" (click)="openShowCarForm(card.id); $event.stopPropagation()">
+              <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
+              <p>Description: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
+              <p>Priority: {{card.priorityNote}}</p>
+              <p>Status: {{card.statusNote}}</p>
+              <p>Due time: {{ card.dueDate | date:'dd.MM.yyyy HH:mm' }}</p>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+  </div>
+} @else {
+  <div class="no-data">
+    <p>Архівних списків не знайдено для цієї дошки</p>
+  </div>
+}
+
+
+<div *ngIf="showCartListModalOpen" class="modal-overlay" (click)="closeShowListCartModal()">
+  <app-cartList-showcartlist
+    [cartListId]="showCartListId"
+    (closeModal)="closeShowListCartModal()"
+    (click)="$event.stopPropagation()"
+  >
+  </app-cartList-showcartlist>
+</div>
+
+@if (showCartModalOpen && showCartId) {
+  <app-cart-showCart
+    [cartId]="showCartId"
+    (closeModal)="closeShowCartModal()"
+    (click)="$event.stopPropagation()">
+  </app-cart-showCart>
+}

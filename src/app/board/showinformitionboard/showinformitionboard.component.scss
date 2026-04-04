@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 900;
+  z-index: 1000;
 }
 
 .modal {
@@ -29,6 +29,8 @@
   padding: 24px;
   width: 90%;
   max-width: 900px;
+  height: 90%;
+  max-height: 650px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.2s ease-out;
   box-sizing: border-box;
@@ -43,7 +45,8 @@
   border-radius: 8px;
   box-sizing: border-box;
   flex: 1;
-  height: 450px;
+  height: auto;
+  max-height: 650px;
 }
 
 .right-column {
@@ -124,9 +127,13 @@ textarea {
 
 .actions {
   display: flex;
-  justify-content: center;
+  flex-direction: column; // Ставить елементи один під одним
+  align-items: center;    // Вирівнює кнопки по центру горизонтально
+  gap: 10px;              // Додає відступ між кнопками замість margin
   margin-top: 18px;
+  width: 100%;            // Гарантує, що контейнер має ширину для вирівнювання
 }
+
 
 .btn.cancel {
   padding: 8px 16px;

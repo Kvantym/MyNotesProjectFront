@@ -94,6 +94,7 @@ export class ShowBoardInformationComponent implements OnInit {
           this.showBoardForm.patchValue(data);
           this.selectedBoardData = { ...data, id: this.boardId };
           this.board = data;
+          console.log(this.board)
           this.loadActivities();
         },
         error: (err) => {
@@ -230,6 +231,7 @@ export class ShowBoardInformationComponent implements OnInit {
         console.log("Loaded coloborant:",this.collaborators);
         console.log("Current User Email:",this.currentUserEmail);
 
+
       },
       error: (err) => {
         console.error(err);
@@ -285,6 +287,34 @@ export class ShowBoardInformationComponent implements OnInit {
     this.onCancel();
     this.store.dispatch(BoardActions.loadBoards());
   }
+  addToArchiveBoard(boardId: string) {
+    if(confirm('Are you sure you want to archive this board?')){
+      this.boardService.addToArchiveBoard(boardId).subscribe({
+        next: () => {
+          console.log('Board wath is archived successfully');
+          this.loadActivities();
+          this.onCancel();
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+  }
 
+  removeFromArchiveBoard(boardId: string) {
+    if(confirm('Are you sure you want  unarchive this board?')){
+      this.boardService.removeFromArchiveBoard(boardId).subscribe({
+        next: () => {
+          console.log('Board wath is archived successfully');
+          this.loadActivities();
+          this.onCancel();
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+  }
 
 }

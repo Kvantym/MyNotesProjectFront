@@ -7,9 +7,9 @@
     <h2 class="modal-title">Information about board</h2>
         <div class="modal-actions">
       <button class="btn icon" (click)="openUpdateBoardForm(selectedBoardData); $event.stopPropagation()">✏️</button>
-      <button class="btn icon" (click)="deleteBoard(boardId); $event.stopPropagation()">🗑️</button>
 
-    </div>
+          <button class="btn icon" (click)="deleteBoard(boardId); $event.stopPropagation()">🗑️</button>
+        </div>
     </div>
 
 
@@ -64,13 +64,28 @@
           </div>
 
         </div>
+
       </div>
 
 
 
       <div class="actions">
         <button type="button" class="buttonCancel" (click)="onCancel()">Cancel</button>
+        <div *ngIf="board?.isArchive === false && board.userId ===currentUserId" class="archive-section">
+          <button class="btn-archive" (click)="addToArchiveBoard(this.boardId)">
+            <i class="icon-archive"></i> Archived Board
+          </button>
+        </div>
+        <div *ngIf="board?.isArchive === true && board.userId ===currentUserId" class="archive-section">
+          <button class="btn-archive" (click)="removeFromArchiveBoard(this.boardId)">
+            <i class="icon-archive"></i> UnArchived Board
+          </button>
+        </div>
       </div>
+
+
+
+
     </form>
   </div>
 

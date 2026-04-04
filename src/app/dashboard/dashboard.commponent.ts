@@ -135,6 +135,10 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  goToArchive(){
+    this.router.navigate(['/archive']);
+  }
+
 
 
 }

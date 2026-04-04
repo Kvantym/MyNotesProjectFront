@@ -33,3 +33,114 @@
   padding: 10px 20px;
   cursor: pointer;
 }
+/* Контейнер для списку дошок */
+.boards-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 25px;
+}
+
+/* Сама картка дошки */
+.board-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.board-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.12);
+}
+
+.board-card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.board-card p {
+  font-size: 13px;
+  color: #666;
+}
+
+
+.board-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.open-board-btn {
+  margin-top: 15px;
+  width: 100%;
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.open-board-btn:hover {
+  background: #3e8e41;
+}
+
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+
+.overlay app-board-updateboard,
+app-board-showinformitionboard {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+}
+.archive-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-archive {
+  background-color: transparent;
+  color: #607d8b;
+  border: 2px solid #607d8b;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #607d8b;
+    color: white;
+    box-shadow: 0 2px 8px rgba(96, 125, 139, 0.3);
+  }
+
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+}

@@ -1,5 +1,5 @@
 import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -19,6 +19,9 @@ import { CreateCartListComponent } from '../../cartList/createCartList/createcar
 import { CreateCartComponent } from '../../cart/createCart/createcart.component';
 import { ShowCartComponent } from '../../cart/showCart/showcart.component';
 import { ShowCartListComponent } from '../../cartList/showcartlist/showcartlist.component';
+import {routes} from '../../app.routes';
+import {ListCartService} from '../../services/list-cart.service';
+import {CartService} from '../../services/cart.service';
 
 interface ListCart {
   id: string;
@@ -66,6 +69,9 @@ export class ShowBoardComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private store: Store,
+    private routes : Router,
+    private cartService: CartService,
+    private listCartService: ListCartService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -155,5 +161,41 @@ export class ShowBoardComponent implements OnInit {
     this.showCartListId = '';
     this.showCartListModalOpen = false;
     this.storeLoad();
+  }
+  goToArchiveCartList(){
+    this.routes.navigate(['/archive-cart-list',this.boardId]);
+  }
+  addListCartToArchive(listCartId: string): void {
+    if(confirm('Are you sure you want  archive this list cart?')){
+      this.listCartService.addListCartToArchive(listCartId).subscribe({
+        next: () => {
+          console.log('Add listCartFromArchive');
+          this.storeLoad();
+        },
+        error: (error) => {
+          console.error('Error remove listCartFromArchive');
+        }
+      });
+    }
+
+  }
+
+  goToCartArchive(listCartId: string): void {
+    this.routes.navigate(['/archive-cart',listCartId]);
+  }
+
+  addCartToArchive(cartId: string) {
+    if(confirm('Are you sure you want archive this cart?')) {
+      this.cartService.addCartToArchive(cartId).subscribe({
+        next:() => {
+          console.log(cartId);
+          console.log('Successfully added cart in archive');
+          this.storeLoad();
+        },
+        error: err => {
+          console.log(err);
+        }
+      });
+    }
   }
 }

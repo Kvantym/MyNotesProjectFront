@@ -61,4 +61,15 @@ export class CartService {
       `${this.apiUrl}/get-activity-cart/${cartId}`
     );
   }
+
+  getArchivedCart(cartListId: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/carts-by-list-cartId-isArchive/${cartListId}`)
+  }
+
+  addCartToArchive(cartId: string) {
+   return  this.http.put(`${this.apiUrl}/add-cart-to-archive/${cartId}`,{})
+  }
+  removeCartFromArchive(cartId: string) {
+    return  this.http.put(`${this.apiUrl}/remove-cart-from-archive/${cartId}`,{})
+  }
 }

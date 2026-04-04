@@ -70,9 +70,16 @@ export class BoardService {
     return this.http.delete(`${this.apiUrl}/remove-collaborator/${boardId}`)
   }
 
-  //ask DeleteUserFromBoardIfUserIsOwner(Guid boardId, Guid ownerId, string collaborationName)
+  addToArchiveBoard(boardId: string) {
+     return this.http.post(`${this.apiUrl}/archive-board/${boardId}`, {});
+  }
 
+  removeFromArchiveBoard(boardId: string) {
+    return this.http.post(`${this.apiUrl}/unarchive-board/${boardId}`, {});
+  }
 
-//public async Task RemoveColoboratorFromBoard(Guid boardId, Guid collaborationId)
+  getBoardIfIsArchived() {
+    return this.http.get<any>(`${this.apiUrl}/board-by-user-if-isArchive-true`);
+  }
 
 }

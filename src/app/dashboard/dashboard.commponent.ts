@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import {Component, Inject, PLATFORM_ID, OnInit, ViewChild} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -10,9 +10,14 @@ import { ShowBoardInformationComponent } from '../board/showinformitionboard/sho
 
 import * as BoardSelectors from '../board/boardNgRx/board.selectors';
 import * as BoardActions from '../board/boardNgRx/board.actions';
+import {BoardService} from '../services/board.service';
+
+import {Subscription, of } from 'rxjs';
+import {ChatComponent} from '../ai/chat.component';
 
 @Component({
   selector: 'app-dashboard',
+
   standalone: true,
   imports: [
     CommonModule,
@@ -20,11 +25,14 @@ import * as BoardActions from '../board/boardNgRx/board.actions';
     CreateBoardComponent,
     UpdateBoardComponent,
     ShowBoardInformationComponent,
+    ChatComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('aiChat') aiChat!: ChatComponent;
+
   userName: string = 'User';
   boards$: Observable<any[]>;
   isCreateBoardOpen$: Observable<boolean>;
@@ -37,9 +45,14 @@ export class DashboardComponent implements OnInit {
   isUserMenuOpen = false;
   userMenuTimeout: any;
 
+
+
+  private searchSubscription?: Subscription;
+
   constructor(
     private router: Router,
     private store: Store,
+    private boardService: BoardService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
@@ -139,6 +152,31 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/archive']);
   }
 
+  public searchBoard(boardName: string, isArchive: boolean): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
 
+    const query = boardName.trim();
 
+    if (!query) {
+      this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+      return;
+    }
+
+    this.searchSubscription = this.boardService
+      .searchBoardByName(query, isArchive)
+      .subscribe({
+        next: (results) => {
+          this.boards$ = of(results);
+        },
+        error: (err) => {
+          console.error('Search failed', err);
+          this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+        }
+      });
+  }
+  openChat() {
+    this.aiChat.toggleChat();
+  }
 }

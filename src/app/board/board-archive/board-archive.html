@@ -1,4 +1,11 @@
-<p>board-archive works!</p>
+<div class="search-container">
+  <input
+    type="text"
+    #searchInput
+    (input)="searchBoardByName(searchInput.value, true)"
+    placeholder="Search boards..."
+  />
+</div>
 
 <div class="boards-list grid-container">
   <div class="board-card" *ngFor="let board of boards" (click)="openShowBoardInformation(board.id); $event.stopPropagation()">

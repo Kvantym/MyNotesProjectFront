@@ -7,10 +7,58 @@
     </button>
     <button class="btn add-list" (click)="addList()">Add list</button>
   </div>
+  <div class="search-container">
+    <input
+      type="text"
+      #searchInput
+      (input)="searchListCart(searchInput.value, board.id, false)"
+      placeholder="Search boards..."
+    />
+  </div>
 
 <div class="lists-wrapper" *ngIf="lists$ | async as lists" >
-  <div class="list-card" *ngFor="let list of lists" (click)="openShowListCarForm(list.id); $event.stopPropagation()">
+  <div class="list-card" *ngFor="let list of (searchListCartsResults[boardId] || lists)" (click)="openShowListCarForm(list.id); $event.stopPropagation()">
+    <div class="search-container">
+      <input
+        (click)="$event.stopPropagation()"
+        type="text"
+        #searchInput
+        (input)="searchCart(list.id, false, searchInput.value)"
+        placeholder="Search Cart..."
+      />
+      <select #prioritySelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, prioritySelect.value)">
+        <option [value]="null">Priority</option>
+        <option value="0">Low</option>
+        <option value="1">Medium</option>
+        <option value="2">High</option>
+        <option value="3">Urgent</option>
+      </select>
 
+      <select #statusSelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, undefined, statusSelect.value)">
+        <option [value]="null">Status</option>
+        <option value="0">Draft</option>
+        <option value="1">Published</option>
+        <option value="2">Done</option>
+      </select>
+      <div class="date-wrapper">
+        <label>Created At:</label>
+        <div class="input-with-clear">
+          <input
+            #createdAtInput
+            type="date"
+            (click)="$event.stopPropagation()"
+            (change)="searchCart(list.id, true, undefined, undefined, undefined, undefined, createdAtInput.value)"
+          />
+          <button
+            *ngIf="createdAtInput.value"
+            class="btn-delete-date"
+            (click)="$event.stopPropagation(); createdAtInput.value = ''; searchCart(list.id, true, undefined, undefined, undefined, undefined, null)"
+            title="Clear date">
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
     <button class="btn-archive" (click)="addListCartToArchive(list.id); $event.stopPropagation()">
       <i class="icon-archive"></i> Archived
     </button>
@@ -32,7 +80,7 @@
 
 
  <div class="cards-wrapper">
-      <div class="card-item" *ngFor="let card of list.carts">
+      <div class="card-item" *ngFor="let card of (searchCartsResults[list.id] || list.carts)">
         <div class="card-info" [title]="card.name" (click)="openShowCarForm(card.id); $event.stopPropagation()">
           <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
           <p>Description: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
@@ -99,6 +147,7 @@
 <div *ngIf="showCartModalOpen" class="modal-overlay" (click)="closeShowCartModal()">
   <app-cart-showCart
     [cartId]="showCartId"
+    [currentUserId] = "currentUserId"
     (closeModal)="closeShowCartModal()"
     (click)="$event.stopPropagation()"
 >

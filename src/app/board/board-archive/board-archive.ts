@@ -69,4 +69,11 @@ export class BoardArchive implements OnInit {
   onBoardUpdated() {
     this.getBoardIfIsArchived();
   }
+
+  searchBoardByName(boardName: string, isArchive: boolean): void {
+    this.boardService.searchBoardByName(boardName, isArchive).subscribe({
+      next: (data) => this.boards = data,
+      error: (err) => console.error(err)
+    });
+  }
 }

@@ -1,7 +1,16 @@
+<div class="search-container">
+  <input
+    type="text"
+    #searchInput
+    (input)="searchListCart(searchInput.value, boardId, true)"
+    placeholder="Search ListCart..."
+  />
+</div>
 @if (listCarts && listCarts.length > 0) {
   <div class="lists-wrapper">
 
-    @for (list of listCarts; track list.id) {
+    @for (list of (searchListCartsResults[boardId] || listCarts); track list.id) {
+
       <div class="list-card" (click)="openShowListCarForm(list.id); $event.stopPropagation()">
         <button class="btn-archive" (click)="removeListCartFromArchive(list.id);$event.stopPropagation()">
           <i class="icon-archive"></i> UnArchive
@@ -9,10 +18,51 @@
 
         <div class="list-header">
           <h3 [title]="list.name">{{ list.name | slice:0:25 }}</h3>
-        </div>
+        </div><div class="search-container">
+        <input
+          (click)="$event.stopPropagation()"
+          type="text"
+          #searchInput
+          (input)="searchCart(list.id, true, searchInput.value)"
+          placeholder="Search Cart..."
+        />
+        <select #prioritySelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, prioritySelect.value)">
+          <option [value]="null">Priority</option>
+          <option value="0">Low</option>
+          <option value="1">Medium</option>
+          <option value="2">High</option>
+          <option value="3">Urgent</option>
+        </select>
 
+        <select #statusSelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, undefined, statusSelect.value)">
+          <option [value]="null">Status</option>
+          <option value="0">Draft</option>
+          <option value="1">Published</option>
+          <option value="2">Done</option>
+        </select>
+        <div class="date-wrapper">
+          <label>Due Date:</label>
+          <div class="input-with-clear">
+            <input
+              #dateInput
+              type="date"
+              (click)="$event.stopPropagation()"
+              (change)="searchCart(list.id, true, undefined, undefined, undefined, dateInput.value)"
+            />
+
+            <button
+              *ngIf="dateInput.value"
+              class="btn-delete-date"
+              (click)="$event.stopPropagation(); dateInput.value = ''; searchCart(list.id, true, undefined, undefined, undefined, null)"
+              title="Clear date">
+              🗑️
+            </button>
+          </div>
+
+        </div>
+      </div>
         <div class="cards-wrapper">
-          <div class="card-item" *ngFor="let card of list.carts">
+          <div class="card-item" *ngFor="let card of (searchCartsResults[list.id] || list.carts)">
             <div class="card-info" [title]="card.name" (click)="openShowCarForm(card.id); $event.stopPropagation()">
               <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
               <p>Description: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>

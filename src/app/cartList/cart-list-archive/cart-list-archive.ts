@@ -7,6 +7,7 @@ import {ShowBoardComponent} from '../../board/showboard/showboard.component';
 import {Observable} from 'rxjs';
 import {ShowCartListComponent} from '../showcartlist/showcartlist.component';
 import {ShowCartComponent} from '../../cart/showCart/showcart.component';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-cart-list-archive',
@@ -40,9 +41,14 @@ export class CartListArchive implements OnInit {
   showCartModalOpen = false;
   showCartListModalOpen = false;
 
+
+  searchCartsResults: { [listId: string]: any[] } = {};
+  searchListCartsResults: { [listId: string]: any[] } = {};
+
   constructor(
     private listCartService: ListCartService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +110,75 @@ export class CartListArchive implements OnInit {
 
   }
 
+  filters: { [listId: string]: any } = {};
 
+  searchCart(
+    listCartId: string,
+    isArchive: boolean,
+    name?: string,
+    priority?: any,
+    status?: any,
+    dueDate?: string | null,
+    createdAt?: string | null // Новий параметр
+  ): void {
+
+    const parsedPriority = (priority === 'null' || priority === undefined) ? null : Number(priority);
+    const parsedStatus = (status === 'null' || status === undefined) ? null : Number(status);
+
+    // Оновлюємо об'єкт фільтрів
+    this.filters[listCartId] = {
+      name: name ?? this.filters[listCartId]?.name ?? '',
+      priority: priority !== undefined ? parsedPriority : this.filters[listCartId]?.priority,
+      status: status !== undefined ? parsedStatus : this.filters[listCartId]?.status,
+      dueDate: dueDate !== undefined ? dueDate : this.filters[listCartId]?.dueDate,
+      createdAt: createdAt !== undefined ? createdAt : this.filters[listCartId]?.createdAt // Зберігаємо нову дату
+    };
+
+    const f = this.filters[listCartId];
+
+    // Перевірка активності фільтрів (додано f.createdAt)
+    const hasActiveFilters = f.name.trim() !== '' || f.priority !== null || f.status !== null || f.dueDate || f.createdAt;
+
+    if (!hasActiveFilters) {
+      delete this.searchCartsResults[listCartId];
+      return;
+    }
+
+    // Відправляємо на сервіс (переконайся, що в сервісі теж додано цей аргумент)
+    this.cartService.searchCartWithFilter(
+      f.name,
+      listCartId,
+      isArchive,
+      f.priority ?? undefined,
+      f.status ?? undefined,
+      f.dueDate ?? undefined,
+      f.createdAt ?? undefined // Передаємо на бекенд
+    ).subscribe({
+      next: (data) => {
+        this.searchCartsResults = { ...this.searchCartsResults, [listCartId]: data };
+      },
+      error: (err) => console.error('Помилка фільтрації:', err)
+    });
+  }
+  searchListCart(cartName: string, boardId: string, isArchive:boolean): void {
+    const query = cartName.trim();
+
+    if (!query) {
+      delete this.searchListCartsResults[boardId];
+      return;
+    }
+
+    this.listCartService.searchListCart(query, boardId, isArchive).subscribe({
+      next: (data: any[]) => {
+        console.log('Результати пошуку:', data);
+        // 2. Зберігаємо результати у локальну змінну
+        this.searchListCartsResults[boardId] = data;
+      },
+      error: (err) => {
+        console.error('Помилка при пошуку карток:', err);
+      }
+    });
+  }
 
 
 }

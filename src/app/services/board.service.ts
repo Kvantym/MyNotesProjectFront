@@ -1,5 +1,5 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import {UserInfo} from 'node:os';
@@ -8,6 +8,14 @@ export interface ActivityBoardResponse {
   action: string;
   activityInformation: string;
   activityTime: string;
+}
+export interface BoardResponse {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  isArchive: boolean;
 }
 
 
@@ -82,4 +90,12 @@ export class BoardService {
     return this.http.get<any>(`${this.apiUrl}/board-by-user-if-isArchive-true`);
   }
 
+  searchBoardByName(boardName: string, isArchive : boolean) {
+    // HttpParams автоматично підготує рядок типу ?userId=...&boardName=...
+    const params = new HttpParams()
+      .set('searchName', boardName)
+    .set('isArchive', isArchive);
+
+    return this.http.get<BoardResponse[]>(`${this.apiUrl}/get-search-board`, { params });
+  }
 }

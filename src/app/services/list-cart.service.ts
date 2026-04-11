@@ -112,4 +112,9 @@ export class ListCartService {
   addListCartToArchive(listCartId:string){
     return this.http.put(`${this.apiUrl}/add-cartList-to-archive/${listCartId}`, {});
   }
+  searchListCart(cartName: string, boardId: string,isArchive : boolean): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/search-listcart-by-name`, {
+      params: { cartName, boardId, isArchive },
+    });
+  }
 }

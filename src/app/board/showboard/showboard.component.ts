@@ -65,15 +65,19 @@ export class ShowBoardComponent implements OnInit {
   selectedCartListIds: { [cartId: string]: string } = {};
   currentUserId: string | null = null;
 
+  searchCartsResults: { [listId: string]: any[] } = {};
+  searchListCartsResults: { [listId: string]: any[] } = {};
+
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
     private store: Store,
-    private routes : Router,
+    private routes: Router,
     private cartService: CartService,
     private listCartService: ListCartService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -127,8 +131,8 @@ export class ShowBoardComponent implements OnInit {
   }
 
   public storeLoad(): void {
-    this.store.dispatch(BoardActions.loadBoard({ boardId: this.boardId }));
-    this.store.dispatch(BoardActions.loadLists({ boardId: this.boardId }));
+    this.store.dispatch(BoardActions.loadBoard({boardId: this.boardId}));
+    this.store.dispatch(BoardActions.loadLists({boardId: this.boardId}));
   }
 
   moveCartToCartList(cartId: string): void {
@@ -138,7 +142,7 @@ export class ShowBoardComponent implements OnInit {
       return;
     }
 
-    this.store.dispatch(BoardActions.moveCart({ cartId, cartListId }));
+    this.store.dispatch(BoardActions.moveCart({cartId, cartListId}));
   }
 
   openShowCarForm(cartId: string): void {
@@ -162,11 +166,13 @@ export class ShowBoardComponent implements OnInit {
     this.showCartListModalOpen = false;
     this.storeLoad();
   }
-  goToArchiveCartList(){
-    this.routes.navigate(['/archive-cart-list',this.boardId]);
+
+  goToArchiveCartList() {
+    this.routes.navigate(['/archive-cart-list', this.boardId]);
   }
+
   addListCartToArchive(listCartId: string): void {
-    if(confirm('Are you sure you want  archive this list cart?')){
+    if (confirm('Are you sure you want  archive this list cart?')) {
       this.listCartService.addListCartToArchive(listCartId).subscribe({
         next: () => {
           console.log('Add listCartFromArchive');
@@ -181,13 +187,13 @@ export class ShowBoardComponent implements OnInit {
   }
 
   goToCartArchive(listCartId: string): void {
-    this.routes.navigate(['/archive-cart',listCartId]);
+    this.routes.navigate(['/archive-cart', listCartId]);
   }
 
   addCartToArchive(cartId: string) {
-    if(confirm('Are you sure you want archive this cart?')) {
+    if (confirm('Are you sure you want archive this cart?')) {
       this.cartService.addCartToArchive(cartId).subscribe({
-        next:() => {
+        next: () => {
           console.log(cartId);
           console.log('Successfully added cart in archive');
           this.storeLoad();
@@ -197,5 +203,75 @@ export class ShowBoardComponent implements OnInit {
         }
       });
     }
+  }
+  filters: { [listId: string]: any } = {};
+
+  searchCart(
+    listCartId: string,
+    isArchive: boolean,
+    name?: string,
+    priority?: any,
+    status?: any,
+    dueDate?: string | null,
+    createdAt?: string | null // Новий параметр
+  ): void {
+
+    const parsedPriority = (priority === 'null' || priority === undefined) ? null : Number(priority);
+    const parsedStatus = (status === 'null' || status === undefined) ? null : Number(status);
+
+    // Оновлюємо об'єкт фільтрів
+    this.filters[listCartId] = {
+      name: name ?? this.filters[listCartId]?.name ?? '',
+      priority: priority !== undefined ? parsedPriority : this.filters[listCartId]?.priority,
+      status: status !== undefined ? parsedStatus : this.filters[listCartId]?.status,
+      dueDate: dueDate !== undefined ? dueDate : this.filters[listCartId]?.dueDate,
+      createdAt: createdAt !== undefined ? createdAt : this.filters[listCartId]?.createdAt // Зберігаємо нову дату
+    };
+
+    const f = this.filters[listCartId];
+
+    // Перевірка активності фільтрів (додано f.createdAt)
+    const hasActiveFilters = f.name.trim() !== '' || f.priority !== null || f.status !== null || f.dueDate || f.createdAt;
+
+    if (!hasActiveFilters) {
+      delete this.searchCartsResults[listCartId];
+      return;
+    }
+
+    // Відправляємо на сервіс (переконайся, що в сервісі теж додано цей аргумент)
+    this.cartService.searchCartWithFilter(
+      f.name,
+      listCartId,
+      isArchive,
+      f.priority ?? undefined,
+      f.status ?? undefined,
+      f.dueDate ?? undefined,
+      f.createdAt ?? undefined // Передаємо на бекенд
+    ).subscribe({
+      next: (data) => {
+        this.searchCartsResults = { ...this.searchCartsResults, [listCartId]: data };
+      },
+      error: (err) => console.error('Помилка фільтрації:', err)
+    });
+  }
+
+  searchListCart(cartName: string, boardId: string, isArchive:boolean): void {
+    const query = cartName.trim();
+
+    if (!query) {
+      delete this.searchListCartsResults[boardId];
+      return;
+    }
+
+    this.listCartService.searchListCart(query, boardId, isArchive).subscribe({
+      next: (data: any[]) => {
+        console.log('Результати пошуку:', data);
+        // 2. Зберігаємо результати у локальну змінну
+        this.searchListCartsResults[boardId] = data;
+      },
+      error: (err) => {
+        console.error('Помилка при пошуку карток:', err);
+      }
+    });
   }
 }

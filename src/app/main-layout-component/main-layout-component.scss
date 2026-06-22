@@ -1,22 +1,23 @@
-.home-link nav {
-  padding: 20px;
+﻿.home-link nav {
+  padding: 16px clamp(16px, 3vw, 34px) 0;
 }
 
 .home-link a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text-soft);
+  font-weight: 800;
   text-decoration: none;
-  color: #333;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  background-color: #f0f2f5;
-  border: 1px solid transparent;
+  box-shadow: 0 8px 18px rgba(35, 55, 72, 0.08);
 }
 
 .home-link a:hover {
-  background-color: #e4e6e9;
-  color: #007bff; /* Колір бренду */
-  border-color: #007bff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  color: var(--accent);
 }

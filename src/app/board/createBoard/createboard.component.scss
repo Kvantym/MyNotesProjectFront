@@ -1,6 +1,5 @@
-
-.modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+﻿.modal-backdrop {
+  background-color: rgba(15, 23, 42, 0.6);
   position: fixed;
   top: 0;
   left: 0;
@@ -13,12 +12,13 @@
 }
 
 .modal {
-  background-color: #fff;
+  background-color: var(--surface);
   padding: 25px 30px;
-  border-radius: 10px;
+  border-radius: var(--radius);
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  /* Рњ'СЏРєС€Р° С‚С–РЅСЊ */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
   position: relative;
 
   h2 {
@@ -26,7 +26,7 @@
     margin-bottom: 15px;
     font-size: 1.5rem;
     text-align: center;
-    color: #333;
+    color: var(--text);
   }
 
   form {
@@ -35,59 +35,71 @@
     gap: 15px;
 
     input {
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
       font-size: 1rem;
       width: 100%;
+      background-color: var(--surface-soft);
+      color: var(--text-soft);
+      transition: all 0.2s ease;
 
       &:focus {
         outline: none;
-        border-color: #4caf50;
-        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        border-color: var(--accent);
+        background-color: var(--surface);
+        box-shadow: 0 0 0 4px var(--accent-soft);
       }
     }
 
     .error {
-      color: #f44336;
+      color: var(--danger);
       font-size: 0.85rem;
+      font-weight: 500;
     }
 
     .modal-actions {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
 
-      /*button {
-        padding: 8px 18px;
+      button {
+        flex: 1;
+        padding: 10px 18px;
         font-size: 1rem;
-        border-radius: 5px;
+        border-radius: 8px;
         border: none;
         cursor: pointer;
+        font-weight: 600;
         transition: 0.2s;
 
         &:first-child {
-          background-color: #4caf50;
-          color: #fff;
+          background-color: var(--accent);
+          color: var(--surface);
           &:hover {
-            background-color: #45a049;
+            background-color: var(--accent-hover);
           }
         }
 
         &:last-child {
-          background-color: #f44336;
-          color: #fff;
+          background-color: #f1f5f9;
+          color: #475569;
           &:hover {
-            background-color: #da190b;
+            background-color: var(--line);
+            color: var(--danger);
           }
         }
-      }*/
+      }
     }
 
     .error-message {
-      color: #f44336;
+      color: var(--danger);
+      background-color: rgba(239, 68, 68, 0.05);
+      padding: 10px;
+      border-radius: 8px;
       text-align: center;
-      font-weight: 500;
+      font-weight: 600;
+      font-size: 0.9rem;
     }
   }
 }

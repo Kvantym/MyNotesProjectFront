@@ -4,6 +4,9 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CartService} from '../../services/cart.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ShowCartComponent} from '../showCart/showcart.component';
+import { LocalizationService } from '../../services/localization.service';
+import { EnumLabelPipe } from '../../shared/enum-label.pipe';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-cart-archive',
@@ -14,6 +17,8 @@ import {ShowCartComponent} from '../showCart/showcart.component';
     ReactiveFormsModule,
     SlicePipe,
     ShowCartComponent,
+    TranslatePipe,
+    EnumLabelPipe,
   ],
   templateUrl: './cart-archive.html',
   styleUrl: './cart-archive.scss'
@@ -26,7 +31,12 @@ export class CartArchive implements OnInit {
   showCartId: string | null = '';
   showCartModalOpen: boolean = false;
 
-  constructor(private cartService: CartService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private localization: LocalizationService
+  ) {
   }
 
   ngOnInit(): void {
@@ -63,7 +73,7 @@ export class CartArchive implements OnInit {
   }
 
   removeCartToArchive(cartId: string) {
-    if(confirm('Are you sure you want unarchive this cart?')) {
+    if(confirm(this.localization.translate('card.confirmRestore'))) {
       this.cartService.removeCartFromArchive(cartId).subscribe({
         next:() => {
           console.log(cartId);

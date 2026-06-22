@@ -17,6 +17,8 @@ import { Store } from '@ngrx/store';
 import * as BoardActions from '../boardNgRx/board.actions';
 import {AuthService} from '../../services/auth.service';
 import {userInfo} from 'node:os';
+import { LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 
 interface Collaborator {
@@ -27,7 +29,7 @@ interface Collaborator {
 @Component({
   selector: 'app-board-showinformitionboard',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UpdateBoardComponent, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, UpdateBoardComponent, FormsModule, TranslatePipe],
   templateUrl: './showinformitionboard.component.html',
   styleUrls: ['./showinformitionboard.component.scss'],
 })
@@ -64,6 +66,7 @@ export class ShowBoardInformationComponent implements OnInit {
     private store: Store,
     private cd: ChangeDetectorRef,
     private  authService : AuthService,
+    private localization: LocalizationService,
   ) {
     this.showBoardForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
@@ -99,7 +102,7 @@ export class ShowBoardInformationComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          this.errorMessage = 'Failed to load the card.';
+          this.errorMessage = this.localization.translate('board.loadError');
         },
       });
     }
@@ -121,7 +124,7 @@ export class ShowBoardInformationComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to load activity history.';
+        this.errorMessage = this.localization.translate('board.loadHistoryError');
       },
     });
   }
@@ -147,13 +150,13 @@ export class ShowBoardInformationComponent implements OnInit {
           },
           error: (err) => {
             console.error(err);
-            this.errorMessage = 'Could not load card activity.';
+            this.errorMessage = this.localization.translate('board.loadActivityError');
           },
         });
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to load the card.';
+        this.errorMessage = this.localization.translate('board.loadError');
       },
     });
   }
@@ -171,7 +174,7 @@ export class ShowBoardInformationComponent implements OnInit {
   }
 
   deleteBoard(boardId: string): void {
-    if (!confirm('Are you sure you want to delete the card?')) return;
+    if (!confirm(this.localization.translate('board.confirmDelete'))) return;
 
     this.boardService.deleteBoard(this.boardId).subscribe({
       next: () => {
@@ -197,7 +200,7 @@ export class ShowBoardInformationComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error updating card:', err);
-        this.errorMessage = 'Failed to update card. Please try again.';
+        this.errorMessage = this.localization.translate('board.updateError');
       },
     });
   }
@@ -253,7 +256,7 @@ export class ShowBoardInformationComponent implements OnInit {
   }
 
   onDeleteCollaborator(coloboratorName:string) {
-    if(confirm('Are you sure you want to delete the coloborator?')){
+    if(confirm(this.localization.translate('board.confirmDeleteMember'))){
       this.boardService.deleteCollaborator(this.boardId, coloboratorName).subscribe({
         next:(response)=>{
         console.log('User deleted:', response);
@@ -270,7 +273,7 @@ export class ShowBoardInformationComponent implements OnInit {
   }
 
   onLeaveColoboration(coloboratorid: string | undefined) {
-    if(confirm('Are you sure you want to delete the coloborator?')){
+    if(confirm(this.localization.translate('board.confirmLeave'))){
       if (coloboratorid != null) {
         this.boardService.removeCollaborator(this.boardId).subscribe({
           next: (response) => {
@@ -288,7 +291,7 @@ export class ShowBoardInformationComponent implements OnInit {
     this.store.dispatch(BoardActions.loadBoards());
   }
   addToArchiveBoard(boardId: string) {
-    if(confirm('Are you sure you want to archive this board?')){
+    if(confirm(this.localization.translate('board.confirmArchive'))){
       this.boardService.addToArchiveBoard(boardId).subscribe({
         next: () => {
           console.log('Board wath is archived successfully');
@@ -303,7 +306,7 @@ export class ShowBoardInformationComponent implements OnInit {
   }
 
   removeFromArchiveBoard(boardId: string) {
-    if(confirm('Are you sure you want  unarchive this board?')){
+    if(confirm(this.localization.translate('board.confirmRestore'))){
       this.boardService.removeFromArchiveBoard(boardId).subscribe({
         next: () => {
           console.log('Board wath is archived successfully');

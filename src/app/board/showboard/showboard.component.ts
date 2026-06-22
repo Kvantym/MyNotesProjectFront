@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Component, DestroyRef, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +22,11 @@ import { ShowCartListComponent } from '../../cartList/showcartlist/showcartlist.
 import {routes} from '../../app.routes';
 import {ListCartService} from '../../services/list-cart.service';
 import {CartService} from '../../services/cart.service';
+import { LocalizationService } from '../../services/localization.service';
+import { EnumLabelPipe } from '../../shared/enum-label.pipe';
+import { TranslatePipe } from '../../shared/translate.pipe';
+import { ProjectRefreshService } from '../../services/project-refresh.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface ListCart {
   id: string;
@@ -43,6 +48,8 @@ interface ListCart {
     CreateCartComponent,
     ShowCartComponent,
     ShowCartListComponent,
+    TranslatePipe,
+    EnumLabelPipe,
   ],
 })
 export class ShowBoardComponent implements OnInit {
@@ -75,6 +82,9 @@ export class ShowBoardComponent implements OnInit {
     private routes: Router,
     private cartService: CartService,
     private listCartService: ListCartService,
+    private localization: LocalizationService,
+    private projectRefreshService: ProjectRefreshService,
+    private destroyRef: DestroyRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
   }
@@ -109,6 +119,19 @@ export class ShowBoardComponent implements OnInit {
         }
       }
     });
+
+    this.projectRefreshService.refresh$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event) => {
+        if (
+          (event.type === 'list-created' || event.type === 'card-created') &&
+          event.boardId === this.boardId
+        ) {
+          this.searchCartsResults = {};
+          this.searchListCartsResults = {};
+          this.storeLoad();
+        }
+      });
   }
 
   addList(): void {
@@ -172,7 +195,7 @@ export class ShowBoardComponent implements OnInit {
   }
 
   addListCartToArchive(listCartId: string): void {
-    if (confirm('Are you sure you want  archive this list cart?')) {
+    if (confirm(this.localization.translate('board.confirmArchiveList'))) {
       this.listCartService.addListCartToArchive(listCartId).subscribe({
         next: () => {
           console.log('Add listCartFromArchive');
@@ -191,7 +214,7 @@ export class ShowBoardComponent implements OnInit {
   }
 
   addCartToArchive(cartId: string) {
-    if (confirm('Are you sure you want archive this cart?')) {
+    if (confirm(this.localization.translate('board.confirmArchiveCard'))) {
       this.cartService.addCartToArchive(cartId).subscribe({
         next: () => {
           console.log(cartId);
@@ -213,13 +236,12 @@ export class ShowBoardComponent implements OnInit {
     priority?: any,
     status?: any,
     dueDate?: string | null,
-    createdAt?: string | null // Новий параметр
+    createdAt?: string | null
   ): void {
 
     const parsedPriority = (priority === 'null' || priority === undefined) ? null : Number(priority);
     const parsedStatus = (status === 'null' || status === undefined) ? null : Number(status);
 
-    // Оновлюємо об'єкт фільтрів
     this.filters[listCartId] = {
       name: name ?? this.filters[listCartId]?.name ?? '',
       priority: priority !== undefined ? parsedPriority : this.filters[listCartId]?.priority,
@@ -230,7 +252,6 @@ export class ShowBoardComponent implements OnInit {
 
     const f = this.filters[listCartId];
 
-    // Перевірка активності фільтрів (додано f.createdAt)
     const hasActiveFilters = f.name.trim() !== '' || f.priority !== null || f.status !== null || f.dueDate || f.createdAt;
 
     if (!hasActiveFilters) {
@@ -238,7 +259,6 @@ export class ShowBoardComponent implements OnInit {
       return;
     }
 
-    // Відправляємо на сервіс (переконайся, що в сервісі теж додано цей аргумент)
     this.cartService.searchCartWithFilter(
       f.name,
       listCartId,
@@ -246,7 +266,7 @@ export class ShowBoardComponent implements OnInit {
       f.priority ?? undefined,
       f.status ?? undefined,
       f.dueDate ?? undefined,
-      f.createdAt ?? undefined // Передаємо на бекенд
+      f.createdAt ?? undefined
     ).subscribe({
       next: (data) => {
         this.searchCartsResults = { ...this.searchCartsResults, [listCartId]: data };
@@ -266,7 +286,6 @@ export class ShowBoardComponent implements OnInit {
     this.listCartService.searchListCart(query, boardId, isArchive).subscribe({
       next: (data: any[]) => {
         console.log('Результати пошуку:', data);
-        // 2. Зберігаємо результати у локальну змінну
         this.searchListCartsResults[boardId] = data;
       },
       error: (err) => {

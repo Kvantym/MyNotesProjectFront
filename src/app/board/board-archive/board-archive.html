@@ -1,21 +1,21 @@
-<div class="search-container">
+﻿<div class="search-container">
   <input
     type="text"
     #searchInput
     (input)="searchBoardByName(searchInput.value, true)"
-    placeholder="Search boards..."
+    [placeholder]="'common.searchBoards' | translate"
   />
 </div>
 
 <div class="boards-list grid-container">
   <div class="board-card" *ngFor="let board of boards" (click)="openShowBoardInformation(board.id); $event.stopPropagation()">
     <h3>{{ board.name }}</h3>
-    <p>Створено: {{ board.createdAt | date }}</p>
+    <p>{{ 'common.created' | translate }}: {{ board.createdAt | date }}</p>
 
     <div class="board-actions">
     </div>
 
-    <button class="open-board-btn" (click)="openBoard(board); $event.stopPropagation()">Open</button>
+    <button class="open-board-btn" (click)="openBoard(board); $event.stopPropagation()">{{ 'common.open' | translate }}</button>
   </div>
 </div>
 

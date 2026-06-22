@@ -9,11 +9,13 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-auth-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule, HttpClientModule, TranslatePipe],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -24,7 +26,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private localization: LocalizationService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -48,7 +51,7 @@ export class LoginComponent {
         },
         error: (err) => {
           console.error('Login failed', err);
-          this.errorMessage = 'Incorrect username or password';
+          this.errorMessage = this.localization.translate('auth.loginError');
         },
       });
     } else {

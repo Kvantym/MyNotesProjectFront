@@ -15,14 +15,17 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { PLATFORM_ID } from '@angular/core';
+import { AppLanguage, LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-auth-profil',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, TranslatePipe],
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.scss'],
 })
@@ -41,14 +44,18 @@ export class UpdateUserComponent implements OnChanges {
   updateUserEmailForm: FormGroup;
   updateUserPasswordForm: FormGroup;
   errorMessage: string | null = null;
+  selectedLanguage: AppLanguage;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public localization: LocalizationService
   ) {
+    this.selectedLanguage = this.localization.language();
+
     this.updateUserNameForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
     });
@@ -64,12 +71,12 @@ export class UpdateUserComponent implements OnChanges {
       if (token) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
-          this.userName = payload.unique_name || payload.email || 'user';
+          this.userName = payload.unique_name || payload.email || this.localization.translate('auth.defaultUser');
           this.email = payload.email || null;
           this.password = payload.password || null;
         } catch (e) {
           console.error('Error parsing token:', e);
-          this.userName = 'user';
+          this.userName = this.localization.translate('auth.defaultUser');
         }
       }
     }
@@ -118,7 +125,7 @@ export class UpdateUserComponent implements OnChanges {
         }),
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to update user. Please try again.';
+        this.errorMessage = this.localization.translate('profile.updateError');
       },
     });
   }
@@ -139,7 +146,7 @@ export class UpdateUserComponent implements OnChanges {
         }),
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to update user. Please try again.';
+        this.errorMessage = this.localization.translate('profile.updateError');
       },
     });
   }
@@ -159,7 +166,7 @@ export class UpdateUserComponent implements OnChanges {
         }),
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to update user. Please try again.';
+        this.errorMessage = this.localization.translate('profile.updateError');
       },
     });
   }
@@ -179,5 +186,10 @@ export class UpdateUserComponent implements OnChanges {
   }
   onCancelEditPassword() {
     this.isEditingUserPassword = false;
+  }
+
+  onLanguageChange(language: string) {
+    this.selectedLanguage = language as AppLanguage;
+    this.localization.setLanguage(this.selectedLanguage);
   }
 }

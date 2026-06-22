@@ -1,18 +1,18 @@
-<div class="board-container" *ngIf="board$ | async as board">
+﻿<div class="board-container" *ngIf="board$ | async as board">
   <div class="board-header">
     <h2>{{ board.name }}</h2>
 
     <button class="btn-archive" (click)="goToArchiveCartList()">
-      <i class="icon-archive"></i> Archive List
+      {{ 'board.archiveLists' | translate }}
     </button>
-    <button class="btn add-list" (click)="addList()">Add list</button>
+    <button class="btn add-list" (click)="addList()">{{ 'board.addList' | translate }}</button>
   </div>
   <div class="search-container">
     <input
       type="text"
       #searchInput
       (input)="searchListCart(searchInput.value, board.id, false)"
-      placeholder="Search boards..."
+      [placeholder]="'common.searchLists' | translate"
     />
   </div>
 
@@ -24,53 +24,58 @@
         type="text"
         #searchInput
         (input)="searchCart(list.id, false, searchInput.value)"
-        placeholder="Search Cart..."
+        [placeholder]="'common.searchCards' | translate"
       />
-      <select #prioritySelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, prioritySelect.value)">
-        <option [value]="null">Priority</option>
-        <option value="0">Low</option>
-        <option value="1">Medium</option>
-        <option value="2">High</option>
-        <option value="3">Urgent</option>
+      <select #prioritySelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, false, undefined, prioritySelect.value)">
+        <option [value]="null">{{ 'common.priority' | translate }}</option>
+        <option value="0">{{ 'priority.0' | translate }}</option>
+        <option value="1">{{ 'priority.1' | translate }}</option>
+        <option value="2">{{ 'priority.2' | translate }}</option>
+        <option value="3">{{ 'priority.3' | translate }}</option>
       </select>
 
-      <select #statusSelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, undefined, statusSelect.value)">
-        <option [value]="null">Status</option>
-        <option value="0">Draft</option>
-        <option value="1">Published</option>
-        <option value="2">Done</option>
+      <select #statusSelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, false, undefined, undefined, statusSelect.value)">
+        <option [value]="null">{{ 'common.status' | translate }}</option>
+        <option value="0">{{ 'status.0' | translate }}</option>
+        <option value="1">{{ 'status.1' | translate }}</option>
+        <option value="2">{{ 'status.2' | translate }}</option>
       </select>
       <div class="date-wrapper">
-        <label>Created At:</label>
+        <label>{{ 'common.dueDate' | translate }}:</label>
         <div class="input-with-clear">
           <input
-            #createdAtInput
+            #dateInput
             type="date"
             (click)="$event.stopPropagation()"
-            (change)="searchCart(list.id, true, undefined, undefined, undefined, undefined, createdAtInput.value)"
+            (change)="searchCart(list.id, true, undefined, undefined, undefined, dateInput.value)"
           />
+
           <button
-            *ngIf="createdAtInput.value"
+            *ngIf="dateInput.value"
             class="btn-delete-date"
-            (click)="$event.stopPropagation(); createdAtInput.value = ''; searchCart(list.id, true, undefined, undefined, undefined, undefined, null)"
-            title="Clear date">
-            🗑️
+            (click)="$event.stopPropagation(); dateInput.value = ''; searchCart(list.id, true, undefined, undefined, undefined, null)"
+            [title]="'common.clearDate' | translate">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
           </button>
         </div>
       </div>
     </div>
     <button class="btn-archive" (click)="addListCartToArchive(list.id); $event.stopPropagation()">
-      <i class="icon-archive"></i> Archived
+      {{ 'common.archive' | translate }}
     </button>
       <div class="list-header">
         <h3 [title]="list.name">{{ list.name | slice:0:25 }}{{ list.name.length > 25 ? '...' : '' }}</h3>
 
         <div class="list-actions">
 
-          <button class="btn icon add-card" (click)="addCard(list.id); $event.stopPropagation()" title="Add cart">
+          <button class="btn icon add-card" (click)="addCard(list.id); $event.stopPropagation()" [title]="'card.createTitle' | translate">
 
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-    <path d="M8 1a.5.5 0 0 1 .5.5V7.5H14a.5.5 0 0 1 0 1H8.5V14a.5.5 0 0 1-1 0V8.5H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z"/>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 5v14" />
+    <path d="M5 12h14" />
   </svg>
 </button>
 
@@ -83,16 +88,16 @@
       <div class="card-item" *ngFor="let card of (searchCartsResults[list.id] || list.carts)">
         <div class="card-info" [title]="card.name" (click)="openShowCarForm(card.id); $event.stopPropagation()">
           <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
-          <p>Description: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
-          <p>Priority: {{card.priorityNote}}</p>
-          <p>Status: {{card.statusNote}}</p>
-          <p>Due time: {{ card.dueDate | date:'dd.MM.yyyy HH:mm' }}</p>
+          <p>{{ 'common.description' | translate }}: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
+          <p>{{ 'common.priority' | translate }}: {{card.priorityNote | enumLabel:'priority'}}</p>
+          <p>{{ 'common.status' | translate }}: {{card.statusNote | enumLabel:'status'}}</p>
+          <p>{{ 'common.dueDate' | translate }}: {{ card.dueDate | date:'dd.MM.yyyy HH:mm' }}</p>
 
         </div>
 
 
 <div class="move-cart-container" *ngIf="lists && lists.length">
-  <label for="moveCartSelect">Move cart to list:</label>
+  <label for="moveCartSelect">{{ 'card.moveToList' | translate }}</label>
   <select id="moveCartSelect"
           [(ngModel)]="selectedCartListIds[card.id]"
           (click)="$event.stopPropagation()"
@@ -105,7 +110,7 @@
     </option>
   </select>
   <button class="btn-archive" (click)="addCartToArchive(card.id); $event.stopPropagation()">
-    <i class="icon-archive"></i> Archived
+    {{ 'common.archive' | translate }}
   </button>
 
 </div>
@@ -113,17 +118,15 @@
 
   </div>
    <button class="btn-archive" (click)="goToCartArchive(list.id); $event.stopPropagation()">
-     <i class="icon-archive"></i> Archive Cart
+     {{ 'board.archiveCards' | translate }}
    </button>
 
 </div>
-
-    </div>
   </div>
 </div>
 
 <div *ngIf="loading$ | async" class="loading">
-  <p>Load board...</p>
+  <p>{{ 'board.loading' | translate }}</p>
 </div>
 
 <div *ngIf="isCreateCartListOpen" class="modal-overlay">

@@ -48,7 +48,7 @@ export class BoardService {
   }
 
   getBoardsByUser() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     return this.http.get(`${this.apiUrl}/board-by-user`, {
       headers: { Authorization: `Bearer ${token}` },
     });

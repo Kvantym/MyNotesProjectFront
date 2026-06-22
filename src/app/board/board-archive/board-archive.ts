@@ -4,17 +4,17 @@ import {CommonModule} from '@angular/common';
 import {ShowBoardInformationComponent} from '../showinformitionboard/showinformitionboard.component';
 import {UpdateBoardComponent} from '../updateboard/updateboard.component';
 import {Router} from '@angular/router';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-board-archive',
-  imports: [CommonModule, ShowBoardInformationComponent, UpdateBoardComponent],
+  imports: [CommonModule, ShowBoardInformationComponent, UpdateBoardComponent, TranslatePipe],
   templateUrl: './board-archive.html',
   styleUrl: './board-archive.scss'
 })
 export class BoardArchive implements OnInit {
   boards: any[] = [];
 
-  // Змінні стану для модалок (копіпаст з Dashboard)
   showUpdateBoardForm = false;
   selectedBoard: any = null;
   showBoardInfoForm = false;
@@ -22,7 +22,7 @@ export class BoardArchive implements OnInit {
 
   constructor(
     public boardService: BoardService,
-    private router: Router // Додай Router в constructor для методу openBoard
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -36,9 +36,6 @@ export class BoardArchive implements OnInit {
       error: (err) => console.error(err)
     });
   }
-
-  // --- МЕТОДИ ДЛЯ КОПІПАСТУ (Адаптовані) ---
-
   openBoard(board: any) {
     if (board?.id) this.router.navigate(['/boards', board.id]);
   }
@@ -51,7 +48,7 @@ export class BoardArchive implements OnInit {
   closeUpdateBoardForm() {
     this.showUpdateBoardForm = false;
     this.selectedBoard = null;
-    this.getBoardIfIsArchived(); // Оновлюємо список після редагування
+    this.getBoardIfIsArchived();
   }
 
   openShowBoardInformation(boardId: string) {
@@ -62,10 +59,9 @@ export class BoardArchive implements OnInit {
   closeShowBoardInformation() {
     this.showBoardInfoForm = false;
     this.selectedBoardId = null;
-    this.getBoardIfIsArchived(); // Оновлюємо список, щоб побачити зміни
+    this.getBoardIfIsArchived();
   }
 
-  // Цей метод викликається, коли в модалці щось змінили (наприклад, видалили колоборанта)
   onBoardUpdated() {
     this.getBoardIfIsArchived();
   }

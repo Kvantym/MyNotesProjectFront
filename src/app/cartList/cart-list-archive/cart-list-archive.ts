@@ -8,20 +8,25 @@ import {Observable} from 'rxjs';
 import {ShowCartListComponent} from '../showcartlist/showcartlist.component';
 import {ShowCartComponent} from '../../cart/showCart/showcart.component';
 import {CartService} from '../../services/cart.service';
+import { LocalizationService } from '../../services/localization.service';
+import { EnumLabelPipe } from '../../shared/enum-label.pipe';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-cart-list-archive',
-  standalone: true, // Переконайся, що компонент standalone
+  standalone: true,
   imports: [
-    CommonModule, // Рекомендую замість окремих NgIf/NgFor
+    CommonModule,
     AsyncPipe,
     DatePipe,
     ReactiveFormsModule,
-    FormsModule, // Потрібен для [(ngModel)] у шаблоні
+    FormsModule,
     SlicePipe,
     ShowBoardComponent,
     ShowCartListComponent,
     ShowCartComponent,
+    TranslatePipe,
+    EnumLabelPipe,
   ],
   templateUrl: './cart-list-archive.html',
   styleUrl: './cart-list-archive.scss',
@@ -31,11 +36,9 @@ export class CartListArchive implements OnInit {
   listCarts: ListCart[] = [];
   boardId: string = '';
 
-  // Властивості для сумісності з шаблоном (TS2339)
   lists$!: Observable<any[]>;
   selectedCartListIds: { [cartId: string]: string } = {};
 
-  // Стан для модалок
   showCartId: string = '';
   showCartListId: string = '';
   showCartModalOpen = false;
@@ -49,10 +52,10 @@ export class CartListArchive implements OnInit {
     private listCartService: ListCartService,
     private route: ActivatedRoute,
     private cartService: CartService,
+    private localization: LocalizationService,
   ) {}
 
   ngOnInit(): void {
-    // 1. Отримуємо ID прямо з параметрів маршруту (URL)
     const idParam = this.route.snapshot.paramMap.get('id');
 
     if (idParam) {
@@ -87,7 +90,7 @@ export class CartListArchive implements OnInit {
   }
 
   removeListCartFromArchive(listCartId: string): void {
-    if(confirm('Are you sure you want  unarchive this list cart?')) {
+    if(confirm(this.localization.translate('list.confirmRestore'))) {
       this.listCartService.removeListCartFromArchive(listCartId).subscribe({
         next: () => {
           console.log('Remove listCartFromArchive');
@@ -119,13 +122,12 @@ export class CartListArchive implements OnInit {
     priority?: any,
     status?: any,
     dueDate?: string | null,
-    createdAt?: string | null // Новий параметр
+    createdAt?: string | null
   ): void {
 
     const parsedPriority = (priority === 'null' || priority === undefined) ? null : Number(priority);
     const parsedStatus = (status === 'null' || status === undefined) ? null : Number(status);
 
-    // Оновлюємо об'єкт фільтрів
     this.filters[listCartId] = {
       name: name ?? this.filters[listCartId]?.name ?? '',
       priority: priority !== undefined ? parsedPriority : this.filters[listCartId]?.priority,
@@ -136,7 +138,6 @@ export class CartListArchive implements OnInit {
 
     const f = this.filters[listCartId];
 
-    // Перевірка активності фільтрів (додано f.createdAt)
     const hasActiveFilters = f.name.trim() !== '' || f.priority !== null || f.status !== null || f.dueDate || f.createdAt;
 
     if (!hasActiveFilters) {
@@ -144,7 +145,6 @@ export class CartListArchive implements OnInit {
       return;
     }
 
-    // Відправляємо на сервіс (переконайся, що в сервісі теж додано цей аргумент)
     this.cartService.searchCartWithFilter(
       f.name,
       listCartId,
@@ -152,7 +152,7 @@ export class CartListArchive implements OnInit {
       f.priority ?? undefined,
       f.status ?? undefined,
       f.dueDate ?? undefined,
-      f.createdAt ?? undefined // Передаємо на бекенд
+      f.createdAt ?? undefined
     ).subscribe({
       next: (data) => {
         this.searchCartsResults = { ...this.searchCartsResults, [listCartId]: data };
@@ -171,7 +171,6 @@ export class CartListArchive implements OnInit {
     this.listCartService.searchListCart(query, boardId, isArchive).subscribe({
       next: (data: any[]) => {
         console.log('Результати пошуку:', data);
-        // 2. Зберігаємо результати у локальну змінну
         this.searchListCartsResults[boardId] = data;
       },
       error: (err) => {

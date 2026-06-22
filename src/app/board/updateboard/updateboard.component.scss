@@ -1,4 +1,4 @@
-
+﻿
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -14,9 +14,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
+  background-color: var(--surface);
   padding: 30px 40px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   width: 400px;
   max-width: 90%;
@@ -52,7 +52,7 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--accent);
 }
 
 .actions {
@@ -70,7 +70,7 @@
 }
 
 .btn.save {
-  background-color: #007bff;
+  background-color: var(--accent);
   color: #fff;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .btn.save:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--accent-hover);
 }
 
 .btn.cancel {

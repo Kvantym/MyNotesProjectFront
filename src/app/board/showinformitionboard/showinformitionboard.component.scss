@@ -1,8 +1,12 @@
-.modal-overlay {
+﻿.modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal {
@@ -10,7 +14,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 1001;
   width: 100%;
   max-width: 950px;
   max-height: 90vh;
@@ -24,59 +28,67 @@
 .modal-with-right-column {
   display: flex;
   gap: 24px;
-  background: #fff;
-  border-radius: 12px;
+  background: var(--surface);
+  border-radius: var(--radius);
   padding: 24px;
-  width: 90%;
+  width: 100%;
   max-width: 900px;
-  height: 90%;
+  height: auto;
   max-height: 650px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.2s ease-out;
   box-sizing: border-box;
 }
 
-.left-column,
+.left-column {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-soft);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-sizing: border-box;
+  flex: 1.2;
+  height: auto;
+  max-height: 600px;
+}
+
 .right-column {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
+  background-color: var(--surface);
   padding: 16px;
-  border-radius: 8px;
+  border-radius: var(--radius);
   box-sizing: border-box;
-  flex: 1;
-  height: auto;
-  max-height: 650px;
-}
-
-.right-column {
-  background-color: #f7f7f7;
-  border: 1px solid #ddd;
-  max-height: 450px;
+  flex: 0.8;
+  max-height: 600px;
   overflow-y: auto;
-  padding: 1rem;
-  border-left: 1px solid #ccc;
-}
+  border: 1px solid var(--line);
 
-.right-column h3 {
-  margin-top: 0;
-  text-align: center;
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 8px;
+  h3 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+  }
 }
 
 .modal-title-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .modal-title {
   margin: 0;
   font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
 }
 
 .modal-actions {
@@ -85,98 +97,142 @@
 }
 
 .btn.icon {
-  font-size: 1.2rem;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   background: transparent;
-  border: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
   cursor: pointer;
-  color: #555;
-  transition: color 0.2s;
-}
+  color: var(--muted-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 
-.btn.icon:hover {
-  color: #000;
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    color: var(--text);
+    transform: translateY(-1px);
+  }
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 
   label {
-    font-weight: 500;
-    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
   }
 
   input,
   textarea {
     width: 100%;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 0.95rem;
-    background-color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-size: 14px;
+    background-color: var(--surface);
+    color: var(--text-soft);
     resize: none;
     box-sizing: border-box;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    &::placeholder {
+      color: #cbd5e0;
+    }
   }
 }
 
 textarea {
-  min-height: 60px;
+  min-height: 80px;
   max-height: 150px;
 }
 
 .actions {
   display: flex;
-  flex-direction: column; // Ставить елементи один під одним
-  align-items: center;    // Вирівнює кнопки по центру горизонтально
-  gap: 10px;              // Додає відступ між кнопками замість margin
-  margin-top: 18px;
-  width: 100%;            // Гарантує, що контейнер має ширину для вирівнювання
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
 }
-
 
 .btn.cancel {
-  padding: 8px 16px;
-  border-radius: 6px;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
   border: none;
-  background-color: #ddd;
+  background-color: #f1f5f9;
+  color: var(--muted);
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
-}
+  transition: all 0.2s;
 
-.btn.cancel:hover {
-  background-color: #ccc;
+  &:hover {
+    background-color: var(--line);
+    color: var(--text);
+  }
 }
 
 .error {
-  color: #d9534f;
-  font-size: 0.9rem;
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 500;
   text-align: center;
   margin-top: 8px;
+  background-color: rgba(239, 68, 68, 0.05);
+  padding: 6px;
+  border-radius: 6px;
 }
 
 .activity-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 
   .activity-item {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
-    font-size: 0.9rem;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+    line-height: 1.4;
 
     .activity-time {
-      color: #888;
-      margin-right: 0.5rem;
+      color: var(--muted-2);
+      font-weight: 500;
+      margin-right: 6px;
     }
 
     .activity-action {
-      margin-right: 0.5rem;
-      color: #007bff;
+      font-weight: 600;
+      color: var(--accent); /* Indigo */
+      margin-right: 4px;
     }
 
     .activity-info {
-      color: #333;
+      color: var(--text-soft);
     }
   }
 }
@@ -184,27 +240,161 @@ textarea {
 .btn.load-more {
   display: block;
   width: 100%;
-  padding: 10px 15px;
-  margin: 10px 0;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
   color: #fff;
-  background-color: #3f51b5;
+  background-color: var(--accent);
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
   text-align: center;
+
+  &:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-1px);
+  }
 }
 
-.btn.load-more:hover {
-  background-color: #303f9f;
-  transform: translateY(-2px);
+.scroll-area {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  padding: 12px;
+  border-radius: var(--radius);
+  background-color: var(--surface-soft);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: var(--radius);
+  }
 }
 
-.btn.load-more:active {
-  transform: translateY(0);
-  background-color: #283593;
+.colab-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-top: 1px solid #f1f5f9;
+  border-right: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.colab-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+
+    &:last-child {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+  }
+}
+
+.btn-delete {
+  background-color: #fee2e2;
+  color: var(--danger);
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    background-color: var(--danger);
+    color: var(--surface);
+  }
+}
+
+.add-collaborator-form {
+  margin-bottom: 20px;
+
+  .input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .colab-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+  }
+
+  .btn-add-colab {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    &:hover {
+      background-color: var(--accent-hover);
+    }
+
+    &:disabled {
+      background-color: #cbd5e0;
+      cursor: not-allowed;
+    }
+  }
 }
 
 @keyframes fadeIn {
@@ -215,134 +405,5 @@ textarea {
   to {
     opacity: 1;
     transform: translate(-50%, -50%);
-  }
-}
-/* Область, яка обмежує список */
-.scroll-area {
-  max-height: 150px;    /* Встанови ту висоту, яка тобі зручна */
-  overflow-y: auto;     /* Скрол з'явиться тільки тоді, коли учасників стане багато */
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-/* Стиль для картки кожного учасника */
-.colab-card {
-  background: white;
-  margin-bottom: 10px;
-  padding: 8px;
-  border-left: 4px solid #007bff; /* Синя полоска збоку для краси */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  border-radius: 4px;
-}
-
-.colab-info p {
-  margin: 0; /* Щоб не було зайвих відступів між ім'ям та емейлом */
-  font-size: 14px;
-}
-
-/* Налаштування самого повзунка скролу (опціонально, для краси) */
-.scroll-area::-webkit-scrollbar {
-  width: 6px;
-}
-.scroll-area::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 10px;
-}
-.colab-card {
-  display: flex;
-  justify-content: space-between; // Розкидає текст вліво, а кнопку вправо
-  align-items: center;           // Вирівнює їх по одній горизонтальній лінії
-  padding: 12px 15px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  border-left: 4px solid #007bff; // Та сама синя лінія зі скриншоту
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  border-radius: 4px;
-}
-
-.colab-info {
-  display: flex;
-  flex-direction: column; // Залишаємо Name та Email один під одним
-  gap: 4px;
-
-  p {
-    margin: 0; // Прибираємо стандартні відступи, щоб не роздувати картку
-    font-size: 14px;
-  }
-}
-
-.btn-delete {
-  background-color: #ff5252; // Твій червоний колір
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-
-  &:hover {
-    background-color: #d32f2f;
-  }
-
-  span {
-    font-size: 18px; // Розмір іконки
-  }
-}
-.add-collaborator-form {
-  margin-bottom: 20px;
-  max-width: 400px; // Обмежуємо ширину для акуратності
-
-  .input-group {
-    display: flex;
-    gap: 8px; // Відстань між інпутом та кнопкою
-    align-items: center;
-  }
-
-  .colab-input {
-    flex: 1; // Інпут займає весь вільний простір
-    padding: 10px 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-
-    &:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    }
-
-    &::placeholder {
-      color: #999;
-    }
-  }
-
-  .btn-add-colab {
-    padding: 10px 20px;
-    background-color: #28a745; // Зелений колір для дії "Додати"
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-
-    &:hover {
-      background-color: #218838;
-    }
-
-    &:active {
-      transform: translateY(1px); // Ефект натискання
-    }
-
-    &:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
   }
 }

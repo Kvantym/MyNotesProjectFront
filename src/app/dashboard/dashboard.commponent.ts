@@ -1,4 +1,4 @@
-import {Component, Inject, PLATFORM_ID, OnInit, ViewChild} from '@angular/core';
+import {Component, DestroyRef, Inject, PLATFORM_ID, OnInit} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -13,7 +13,10 @@ import * as BoardActions from '../board/boardNgRx/board.actions';
 import {BoardService} from '../services/board.service';
 
 import {Subscription, of } from 'rxjs';
-import {ChatComponent} from '../ai/chat.component';
+import { TranslatePipe } from '../shared/translate.pipe';
+import { ProjectRefreshService } from '../services/project-refresh.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChatPanelService } from '../services/chat-panel.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,15 +28,13 @@ import {ChatComponent} from '../ai/chat.component';
     CreateBoardComponent,
     UpdateBoardComponent,
     ShowBoardInformationComponent,
-    ChatComponent
+    TranslatePipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('aiChat') aiChat!: ChatComponent;
-
-  userName: string = 'User';
+  userName: string = 'Користувач';
   boards$: Observable<any[]>;
   isCreateBoardOpen$: Observable<boolean>;
 
@@ -53,6 +54,9 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private store: Store,
     private boardService: BoardService,
+    private projectRefreshService: ProjectRefreshService,
+    private chatPanelService: ChatPanelService,
+    private destroyRef: DestroyRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
@@ -66,6 +70,15 @@ export class DashboardComponent implements OnInit {
       this.store.dispatch(BoardActions.loadBoards());
       this.loadUserNameFromToken();
     }
+
+    this.projectRefreshService.refresh$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event) => {
+        if (event.type === 'board-created') {
+          this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+          this.store.dispatch(BoardActions.loadBoards());
+        }
+      });
   }
 
   private loadUserNameFromToken() {
@@ -73,10 +86,10 @@ export class DashboardComponent implements OnInit {
     if (!token) return;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      this.userName = payload.unique_name || payload.email || 'User';
+      this.userName = payload.unique_name || payload.email || 'Користувач';
     } catch (e) {
       console.error('Error parsing token:', e);
-      this.userName = 'User';
+      this.userName = 'Користувач';
     }
   }
 
@@ -177,6 +190,6 @@ export class DashboardComponent implements OnInit {
       });
   }
   openChat() {
-    this.aiChat.toggleChat();
+    this.chatPanelService.toggle();
   }
 }

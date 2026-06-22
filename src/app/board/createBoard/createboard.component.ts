@@ -9,11 +9,12 @@ import { CommonModule } from '@angular/common';
 
 import { Store } from '@ngrx/store';
 import * as BoardActions from '../boardNgRx/board.actions';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-board-createboard',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslatePipe],
   templateUrl: './createboard.component.html',
   styleUrls: ['./createboard.component.scss'],
 })

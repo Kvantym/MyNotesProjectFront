@@ -14,11 +14,13 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-cart-updateCart',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslatePipe],
   templateUrl: './updatecart.component.html',
   styleUrls: ['./updatecart.component.scss'],
 })
@@ -30,14 +32,18 @@ export class UpdateCartComponent implements OnChanges {
   updateCartForm: FormGroup;
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private cartService: CartService) {
+  constructor(
+    private fb: FormBuilder,
+    private cartService: CartService,
+    private localization: LocalizationService
+  ) {
     this.updateCartForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
       dueDate: [''],
       listCartId: ['', Validators.required],
-      priorityNote: ['Low', Validators.required],
-      statusNote: ['Draft', Validators.required],
+      priorityNote: [0, Validators.required],
+      statusNote: [0, Validators.required],
     });
   }
 
@@ -58,6 +64,9 @@ export class UpdateCartComponent implements OnChanges {
     const formValue = this.updateCartForm.value;
     const payload = {
       ...formValue,
+      dueDate: formValue.dueDate ? new Date(formValue.dueDate).toISOString() : null,
+      priorityNote: Number(formValue.priorityNote),
+      statusNote: Number(formValue.statusNote),
     };
 
     this.cartService.updateCart(this.cart.id, payload).subscribe({
@@ -67,7 +76,7 @@ export class UpdateCartComponent implements OnChanges {
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to update the cart. Please try again.';
+        this.errorMessage = this.localization.translate('card.updateError');
       },
     });
   }

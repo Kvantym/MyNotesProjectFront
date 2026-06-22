@@ -8,11 +8,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { NgZone } from '@angular/core';
+import { LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-createCart-createCart',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslatePipe],
   templateUrl: './createcart.component.html',
   styleUrls: ['./createcart.component.scss'],
 })
@@ -27,14 +29,15 @@ export class CreateCartComponent {
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private localization: LocalizationService
   ) {
     this.createCartForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
       description: [''],
       dueDate: [''],
-      priorityNote: [''],
-      statusNote: [''],
+      priorityNote: [0, Validators.required],
+      statusNote: [0, Validators.required],
     });
   }
 
@@ -46,8 +49,8 @@ export class CreateCartComponent {
       dueDate: this.createCartForm.value.dueDate
         ? new Date(this.createCartForm.value.dueDate).toISOString()
         : null,
-      priorityNote: this.createCartForm.value.priorityNote,
-      statusNote: this.createCartForm.value.statusNote,
+      priorityNote: Number(this.createCartForm.value.priorityNote),
+      statusNote: Number(this.createCartForm.value.statusNote),
     };
 
     this.cartService.createCart(this.cartListId, newCart).subscribe({
@@ -59,7 +62,7 @@ export class CreateCartComponent {
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'You cannot create yourself. Try again.';
+        this.errorMessage = this.localization.translate('card.createError');
       },
     });
   }

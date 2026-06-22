@@ -1,9 +1,12 @@
-/* 1. Фон та загальний контейнер модалки */
-.modal-overlay {
+﻿.modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-three-columns {
@@ -14,294 +17,372 @@
   z-index: 1000;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  background: #fff;
-  border-radius: 12px;
+  background: var(--surface);
+  border-radius: var(--radius);
   max-width: 1350px;
   width: 95%;
-  height: 600px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  height: 650px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.25s ease-out;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* 2. Спільні стилі для всіх колонок */
 .left-column,
 .right-column,
 .comments-column {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
   padding: 24px;
   box-sizing: border-box;
   height: 100%;
-  overflow: hidden; /* Важливо: сама колонка не скролиться, скроляться лише контейнери всередині */
+  overflow: hidden;
+}
+
+.left-column {
+  background-color: var(--surface);
 }
 
 .right-column,
 .comments-column {
-  border-left: 1px solid #ddd;
+  background-color: var(--surface-soft);
+  border-left: 1px solid var(--line);
 }
 
-/* 3. Заголовки колонок */
-.modal-title, .column-title {
-  margin-top: 0;
-  text-align: center;
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 8px;
-  color: #333;
-  flex-shrink: 0;
-}
-
-/* Специфічно для заголовка форми зліва */
 .modal-title-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
-  .modal-title { border-bottom: none; margin: 0; font-size: 1.5rem; }
+  margin-bottom: 20px;
+  flex-shrink: 0;
+
+  .modal-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
 }
 
-/* 4. Контейнери для скролу (БЕЗ ВИДИМОГО СКРОЛБАРУ) */
+.modal-actions {
+  display: flex;
+  gap: 8px;
+
+  .btn.icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    &:first-child:hover {
+      background: #eef2ff;
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    &:last-child:hover {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+      color: var(--danger);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.column-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--line);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.form-group {
+  margin-bottom: 14px;
+
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background-color: var(--surface-soft);
+    color: var(--text-soft);
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+
+    &[readonly] {
+      background-color: #f1f5f9;
+      cursor: default;
+      border-color: transparent;
+    }
+
+    &:focus:not([readonly]) {
+      outline: none;
+      border-color: var(--accent);
+      background-color: var(--surface);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+  }
+
+  textarea {
+    resize: none;
+    min-height: 60px;
+  }
+}
+
 .history-list-container,
 .comments-list-container {
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 15px;
-  padding-right: 5px;
+  padding-right: 8px;
 
-  /* Ховаємо скролбар візуально */
-  &::-webkit-scrollbar { display: none; }
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: var(--radius);
+  }
+
+  .no-data {
+    text-align: center;
+    color: var(--muted-2);
+    font-size: 0.9rem;
+    margin-top: 20px;
+  }
 }
 
-/* 5. Елементи списку (History & Comments) */
 .activity-list {
   list-style: none;
   padding: 0;
   margin: 0;
 
   .activity-item {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
+    background: var(--surface);
+    margin-bottom: 10px;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
     font-size: 0.9rem;
-    word-break: break-word;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 
-    .activity-time { color: #888; font-size: 0.85rem; margin-right: 8px; }
-    .activity-action { color: #007bff; font-weight: 600; }
-    .activity-info { color: #333; margin-top: 2px; }
-
-    /* Для коментарів: ім'я та час в один рядок */
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
+    .activity-time {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.75rem;
       margin-bottom: 4px;
+    }
+
+    .activity-action {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .activity-info {
+      color: #475569;
+      margin-top: 4px;
+      line-height: 1.4;
     }
   }
 }
 
-/* 6. Форма додавання коментаря (Фіксована знизу) */
-.add-comment-form {
-  flex-shrink: 0;
+.comment-header {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid #eee;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.add-comment-form {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  position: relative;
 
   .comment-input {
     width: 100%;
-    height: 70px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    min-height: 100px;
+    padding: 14px 58px 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 14px;
     resize: none;
-    font-family: inherit;
-    font-size: 0.95rem;
+    transition: border-color 0.2s;
     box-sizing: border-box;
-    &:focus { outline: none; border-color: #3f51b5; }
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
   }
 
   .btn-send {
-    align-self: flex-end;
-    background-color: #3f51b5;
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    background: var(--accent);
     color: white;
     border: none;
-    padding: 6px 20px;
-    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 8px;
+    font-weight: 700;
     cursor: pointer;
-    font-weight: 600;
-    &:hover { background-color: #303f9f; }
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    &:hover { background: var(--accent-hover); }
+    &:active { transform: scale(0.98); }
   }
 }
 
-/* 7. Кнопки та форма зліва */
-.form-group {
-  margin-bottom: 12px;
-  label { display: block; font-weight: 500; margin-bottom: 4px; }
-  input, textarea {
-    width: 100%;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    box-sizing: border-box;
+.btn-close-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: white;
+  border: 1px solid var(--line);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  color: var(--muted-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1010;
+  transition: all 0.2s;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    color: var(--danger);
+    border-color: #fee2e2;
+    background: var(--danger-soft);
+    transform: translateY(-1px);
   }
 }
 
 .btn.load-more {
-  display: block;
   width: 100%;
   padding: 10px;
-  background-color: #3f51b5;
-  color: #fff;
-  border: none;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
   margin-top: 10px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--accent);
+    color: white;
+  }
 }
 
-.buttonCancel {
-  padding: 10px 25px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.btn-delete-comment {
+  background: var(--danger-soft);
+  border: 1px solid #f0c7c7;
+  border-radius: 7px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   cursor: pointer;
-  font-weight: 600;
-  &:hover { background-color: #d32f2f; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -48%); }
-  to { opacity: 1; transform: translate(-50%, -50%); }
-}
-/* --- ІСНУЮЧІ СТИЛІ --- */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 900;
-}
-
-.modal-three-columns {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  background: #fff;
-  border-radius: 12px;
-  max-width: 1350px;
-  width: 95%;
-  height: 600px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  animation: fadeIn 0.2s ease-out;
-  box-sizing: border-box;
-
-  /* ДОДАЄМО: Необхідно для абсолютного позиціонування кнопки-хрестика всередині модалки */
-  position: relative;
-}
-
-/* --- НОВИЙ СТИЛЬ ДЛЯ КНОПКИ-ХРЕСТИКА --- */
-.btn-close-modal {
-  position: absolute;
-  top: 15px;      /* Відступ зверху */
-  right: 15px;    /* Відступ справа */
-  z-index: 1010;  /* Вище, ніж контент колонок */
-
-  /* Перетворюємо на квадрат */
-  width: 32px;
-  height: 32px;
-
-  /* Центруємо хрестик всередині */
+  font-size: 12px;
+  color: var(--danger);
+  opacity: 0.85;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  /* Стиль самого хрестика */
-  font-size: 24px;
-  line-height: 1;
-  color: #888; /* Сірий колір */
-
-  /* Стиль квадрата */
-  background: transparent;
-  border: 1px solid #ddd;
-  border-radius: 6px; /* Легке закруглення, як у твоїх інпутів */
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.2s;
+  svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 
   &:hover {
-    background-color: #f5f5f5;
-    color: #333;
-    border-color: #ccc;
-    transform: scale(1.05); /* Легке збільшення при наведенні */
-  }
-
-  &:active {
-    background-color: #eee;
-    transform: scale(0.98);
+    opacity: 1;
+    color: var(--danger);
+    transform: translateY(-1px);
   }
 }
 
-/* --- ІСНУЮЧІ СТИЛІ КОЛОНОК (БЕЗ ЗМІН) --- */
-.left-column,
-.right-column,
-.comments-column {
-  display: flex;
-  flex-direction: column;
-  background-color: #f9f9f9;
-  padding: 24px;
-  box-sizing: border-box;
-  height: 100%;
-  overflow: hidden;
+.error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  background: var(--danger-soft);
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
 }
-
-.right-column,
-.comments-column {
-  border-left: 1px solid #ddd;
-}
-
-/* ... решта твого CSS для заголовків, списків, форм вводу ... */
-
-/* --- Я ВИДАЛИВ СТАРИЙ СТИЛЬ .buttonCancel ЗВІДСИ --- */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translate(-50%, -48%); }
   to { opacity: 1; transform: translate(-50%, -50%); }
-}.comment-header {
-   display: flex;
-   justify-content: space-between; /* Ім'я зліва, кошик справа */
-   align-items: flex-start;
-   margin-bottom: 4px;
- }
-
-.user-info {
-  display: flex;
-  flex-direction: column; /* Час під ім'ям або в рядок */
-}
-
-.btn-delete-comment {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  opacity: 0.5;
-  transition: opacity 0.2s, transform 0.2s;
-  padding: 0 4px;
-
-  &:hover {
-    opacity: 1;
-    color: #f44336; /* Червоний при наведенні */
-    transform: scale(1.1);
-  }
 }

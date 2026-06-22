@@ -9,11 +9,12 @@ import { CommonModule } from '@angular/common';
 
 import { Store } from '@ngrx/store';
 import * as CartListActions from '../cartListNgRx/cartList.actions';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-cartList-createCartList',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslatePipe],
   templateUrl: './createcartlist.component.html',
   styleUrls: ['./createcartlist.component.scss'],
 })

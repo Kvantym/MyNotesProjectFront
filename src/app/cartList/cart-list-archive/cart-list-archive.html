@@ -1,9 +1,9 @@
-<div class="search-container">
+﻿<div class="search-container">
   <input
     type="text"
     #searchInput
     (input)="searchListCart(searchInput.value, boardId, true)"
-    placeholder="Search ListCart..."
+    [placeholder]="'common.searchLists' | translate"
   />
 </div>
 @if (listCarts && listCarts.length > 0) {
@@ -13,7 +13,7 @@
 
       <div class="list-card" (click)="openShowListCarForm(list.id); $event.stopPropagation()">
         <button class="btn-archive" (click)="removeListCartFromArchive(list.id);$event.stopPropagation()">
-          <i class="icon-archive"></i> UnArchive
+          {{ 'common.restoreFromArchive' | translate }}
         </button>
 
         <div class="list-header">
@@ -24,24 +24,24 @@
           type="text"
           #searchInput
           (input)="searchCart(list.id, true, searchInput.value)"
-          placeholder="Search Cart..."
+          [placeholder]="'common.searchCards' | translate"
         />
         <select #prioritySelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, prioritySelect.value)">
-          <option [value]="null">Priority</option>
-          <option value="0">Low</option>
-          <option value="1">Medium</option>
-          <option value="2">High</option>
-          <option value="3">Urgent</option>
+          <option [value]="null">{{ 'common.priority' | translate }}</option>
+          <option value="0">{{ 'priority.0' | translate }}</option>
+          <option value="1">{{ 'priority.1' | translate }}</option>
+          <option value="2">{{ 'priority.2' | translate }}</option>
+          <option value="3">{{ 'priority.3' | translate }}</option>
         </select>
 
         <select #statusSelect (click)="$event.stopPropagation()" (change)="searchCart(list.id, true, undefined, undefined, statusSelect.value)">
-          <option [value]="null">Status</option>
-          <option value="0">Draft</option>
-          <option value="1">Published</option>
-          <option value="2">Done</option>
+          <option [value]="null">{{ 'common.status' | translate }}</option>
+          <option value="0">{{ 'status.0' | translate }}</option>
+          <option value="1">{{ 'status.1' | translate }}</option>
+          <option value="2">{{ 'status.2' | translate }}</option>
         </select>
         <div class="date-wrapper">
-          <label>Due Date:</label>
+          <label>{{ 'common.dueDate' | translate }}:</label>
           <div class="input-with-clear">
             <input
               #dateInput
@@ -54,8 +54,11 @@
               *ngIf="dateInput.value"
               class="btn-delete-date"
               (click)="$event.stopPropagation(); dateInput.value = ''; searchCart(list.id, true, undefined, undefined, undefined, null)"
-              title="Clear date">
-              🗑️
+              [title]="'common.clearDate' | translate">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
             </button>
           </div>
 
@@ -65,10 +68,10 @@
           <div class="card-item" *ngFor="let card of (searchCartsResults[list.id] || list.carts)">
             <div class="card-info" [title]="card.name" (click)="openShowCarForm(card.id); $event.stopPropagation()">
               <strong>{{ card.name | slice:0:25 }}{{ card.name.length > 25 ? '...' : '' }}</strong>
-              <p>Description: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
-              <p>Priority: {{card.priorityNote}}</p>
-              <p>Status: {{card.statusNote}}</p>
-              <p>Due time: {{ card.dueDate | date:'dd.MM.yyyy HH:mm' }}</p>
+              <p>{{ 'common.description' | translate }}: {{ card.description | slice:0:50 }}{{ card.description.length > 50 ? '...' : '' }}</p>
+              <p>{{ 'common.priority' | translate }}: {{card.priorityNote | enumLabel:'priority'}}</p>
+              <p>{{ 'common.status' | translate }}: {{card.statusNote | enumLabel:'status'}}</p>
+              <p>{{ 'common.dueDate' | translate }}: {{ card.dueDate | date:'dd.MM.yyyy HH:mm' }}</p>
 
             </div>
           </div>
@@ -79,7 +82,7 @@
   </div>
 } @else {
   <div class="no-data">
-    <p>Архівних списків не знайдено для цієї дошки</p>
+    <p>{{ 'board.noArchivedLists' | translate }}</p>
   </div>
 }
 

@@ -1,19 +1,19 @@
-<div class="modal-overlay" (click)="onCancel()"></div>
+﻿<div class="modal-overlay" (click)="onCancel()"></div>
 
 <div class="modal-container">
-  <h2>Create List</h2>
+  <h2>{{ 'list.createTitle' | translate }}</h2>
 
   <form [formGroup]="createCartListForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Name</label>
+      <label for="name">{{ 'common.name' | translate }}</label>
       <input
         id="name"
         type="text"
         formControlName="name"
-        placeholder="Enter name"
+        [placeholder]="'common.enterName' | translate"
       />
       <div class="error" *ngIf="createCartListForm.get('name')?.touched && createCartListForm.get('name')?.invalid">
-        Name must be at least 1 character long
+        {{ 'common.nameMinLength' | translate }}
       </div>
     </div>
 
@@ -21,12 +21,13 @@
     <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="actions">
-      <button type="submit" class="btn save" [disabled]="createCartListForm.invalid">
-        ➕ Create
+      <button type="button" class="buttonCancel" (click)="onCancel()">
+        {{ 'common.cancel' | translate }}
       </button>
-      <button type="button" class="btn cancel" (click)="onCancel()">
-        ❌ Cancel
+      <button type="submit" class="buttonCreate" [disabled]="createCartListForm.invalid">
+        {{ 'common.create' | translate }}
       </button>
+
     </div>
   </form>
 </div>

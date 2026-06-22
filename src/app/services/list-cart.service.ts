@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
-interface ListCart {
+export interface ListCart {
   id: string;
   name: string;
   boardId: string;
@@ -101,5 +101,20 @@ export class ListCartService {
       `${this.apiUrl}/list-cart-by-id/${listCartId}`,
       this.getAuthHeaders()
     );
+  }
+
+  getArchiveListCart(boardId:string){
+    return this.http.get<ListCart[]>(`${this.apiUrl}/list-cart-by-boardid-if-archive/${boardId}`)
+  }
+  removeListCartFromArchive(listCartId:string){
+ return this.http.put(`${this.apiUrl}/remove-cartList-from-archive/${listCartId}`, {});
+  }
+  addListCartToArchive(listCartId:string){
+    return this.http.put(`${this.apiUrl}/add-cartList-to-archive/${listCartId}`, {});
+  }
+  searchListCart(cartName: string, boardId: string,isArchive : boolean): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/search-listcart-by-name`, {
+      params: { cartName, boardId, isArchive },
+    });
   }
 }

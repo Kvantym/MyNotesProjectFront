@@ -1,116 +1,126 @@
+﻿:host {
+  display: block;
+  min-height: 100vh;
+  padding: 34px 16px;
+}
+
 .profile-container {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 30px 25px;
-  background: linear-gradient(135deg, #ffffff, #e0f7fa);
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
-  transition: all 0.3s ease-in-out;
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 30px;
 }
 
 .profile-container h2 {
+  margin: 0 0 24px;
+  color: var(--text);
+  font-size: 30px;
+  font-weight: 850;
   text-align: center;
-  font-size: 2rem;
-  color: #00796b;
-  margin-bottom: 25px;
-  letter-spacing: 0.5px;
 }
 
 .profile-container p {
-  font-size: 1.1rem;
-  color: #004d40;
-  margin-bottom: 12px;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  color: var(--text-soft);
+  font-size: 16px;
 }
 
-.btn {
-  display: inline-block;
-  padding: 8px 18px;
-  font-size: 0.95rem;
-  margin-right: 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.25s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.profile-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.language-row {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.language-row label {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.language-row select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.btn,
+.buttonCancel,
+.buttonCreate {
+  padding: 0 16px;
+  border-radius: var(--radius);
 }
 
 .btn.edit {
-  background-color: #ff9800;
-  color: #fff;
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn.edit:hover {
-  background-color: #fb8c00;
-  transform: scale(1.05);
+@media (max-width: 520px) {
+  .profile-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-.btn.save {
-  background-color: #4caf50;
-  color: #fff;
-}
-
-.btn.save:hover {
-  background-color: #43a047;
-  transform: scale(1.05);
-}
-
-.btn.cancel {
-  background-color: #f44336;
-  color: #fff;
-}
-
-.btn.cancel:hover {
-  background-color: #e53935;
-  transform: scale(1.05);
+.btn.edit svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .form-group {
-  margin-bottom: 18px;
-  position: relative;
+  margin-bottom: 16px;
 }
 
 .form-group label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: #00695c;
+  margin-bottom: 7px;
 }
 
 .form-group input {
-  width: 95%;
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: 2px solid #b2dfdb;
-  border-radius: 10px;
-  background-color: #ffffffaa;
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus {
-  border-color: #00796b;
-  box-shadow: 0 0 10px rgba(0, 121, 107, 0.2);
-  outline: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
 }
 
 .actions {
-  margin-top: 15px;
   display: flex;
   gap: 10px;
+  margin-bottom: 20px;
+}
+
+.actions button {
+  flex: 1;
 }
 
 .error-message {
-  margin-top: 18px;
-  color: #d32f2f;
-  font-weight: 600;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-weight: 700;
   text-align: center;
-  animation: shake 0.3s ease-in-out;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
 }

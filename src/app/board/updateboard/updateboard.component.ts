@@ -8,11 +8,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../services/board.service';
 import { NgZone } from '@angular/core';
+import { LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-board-updateboard',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TranslatePipe],
   templateUrl: './updateboard.component.html',
   styleUrls: ['./updateboard.component.scss'],
 })
@@ -26,7 +28,8 @@ export class UpdateBoardComponent {
   constructor(
     private fb: FormBuilder,
     private boardService: BoardService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private localization: LocalizationService
   ) {
     this.updateBoardForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
@@ -49,7 +52,7 @@ export class UpdateBoardComponent {
       next: () => this.ngZone.run(() => this.onCancel()),
       error: (err) => {
         console.error(err);
-        this.errorMessage = 'Failed to refresh the board. Please try again.';
+        this.errorMessage = this.localization.translate('board.updateError');
       },
     });
   }

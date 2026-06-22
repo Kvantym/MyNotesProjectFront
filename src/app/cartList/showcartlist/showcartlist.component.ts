@@ -20,11 +20,13 @@ import * as CartListActions from '../cartListNgRx/cartList.actions';
 import { CartListState } from '../cartListNgRx/cartList.reducer';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { LocalizationService } from '../../services/localization.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-cartList-showcartlist',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UpdateCartListComponent],
+  imports: [ReactiveFormsModule, CommonModule, UpdateCartListComponent, TranslatePipe],
   templateUrl: './showcartlist.component.html',
   styleUrls: ['./showcartlist.component.scss'],
 })
@@ -51,7 +53,8 @@ export class ShowCartListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private store: Store<{ cartList: CartListState }>,
-    private listCartService: ListCartService
+    private listCartService: ListCartService,
+    private localization: LocalizationService
   ) {
     this.showCartListForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
@@ -116,7 +119,7 @@ export class ShowCartListComponent implements OnInit {
   }
 
   deleteListCard() {
-    if (!confirm('Are you sure you want to delete the card?')) return;
+    if (!confirm(this.localization.translate('list.confirmDelete'))) return;
 
     this.listCartService.deleteCartList(this.cartListId).subscribe({
       next: () => this.cancel(),

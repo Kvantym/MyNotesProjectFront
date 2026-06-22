@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import {Component, DestroyRef, Inject, PLATFORM_ID, OnInit} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -10,9 +10,17 @@ import { ShowBoardInformationComponent } from '../board/showinformitionboard/sho
 
 import * as BoardSelectors from '../board/boardNgRx/board.selectors';
 import * as BoardActions from '../board/boardNgRx/board.actions';
+import {BoardService} from '../services/board.service';
+
+import {Subscription, of } from 'rxjs';
+import { TranslatePipe } from '../shared/translate.pipe';
+import { ProjectRefreshService } from '../services/project-refresh.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChatPanelService } from '../services/chat-panel.service';
 
 @Component({
   selector: 'app-dashboard',
+
   standalone: true,
   imports: [
     CommonModule,
@@ -20,12 +28,13 @@ import * as BoardActions from '../board/boardNgRx/board.actions';
     CreateBoardComponent,
     UpdateBoardComponent,
     ShowBoardInformationComponent,
+    TranslatePipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  userName: string = 'User';
+  userName: string = 'Користувач';
   boards$: Observable<any[]>;
   isCreateBoardOpen$: Observable<boolean>;
 
@@ -37,9 +46,17 @@ export class DashboardComponent implements OnInit {
   isUserMenuOpen = false;
   userMenuTimeout: any;
 
+
+
+  private searchSubscription?: Subscription;
+
   constructor(
     private router: Router,
     private store: Store,
+    private boardService: BoardService,
+    private projectRefreshService: ProjectRefreshService,
+    private chatPanelService: ChatPanelService,
+    private destroyRef: DestroyRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
@@ -53,6 +70,15 @@ export class DashboardComponent implements OnInit {
       this.store.dispatch(BoardActions.loadBoards());
       this.loadUserNameFromToken();
     }
+
+    this.projectRefreshService.refresh$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event) => {
+        if (event.type === 'board-created') {
+          this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+          this.store.dispatch(BoardActions.loadBoards());
+        }
+      });
   }
 
   private loadUserNameFromToken() {
@@ -60,10 +86,10 @@ export class DashboardComponent implements OnInit {
     if (!token) return;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      this.userName = payload.unique_name || payload.email || 'User';
+      this.userName = payload.unique_name || payload.email || 'Користувач';
     } catch (e) {
       console.error('Error parsing token:', e);
-      this.userName = 'User';
+      this.userName = 'Користувач';
     }
   }
 
@@ -132,5 +158,38 @@ export class DashboardComponent implements OnInit {
     this.showBoardInfoForm = false;
     this.selectedBoardId = null;
     this.store.dispatch(BoardActions.loadBoards());
+  }
+
+
+  goToArchive(){
+    this.router.navigate(['/archive']);
+  }
+
+  public searchBoard(boardName: string, isArchive: boolean): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+
+    const query = boardName.trim();
+
+    if (!query) {
+      this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+      return;
+    }
+
+    this.searchSubscription = this.boardService
+      .searchBoardByName(query, isArchive)
+      .subscribe({
+        next: (results) => {
+          this.boards$ = of(results);
+        },
+        error: (err) => {
+          console.error('Search failed', err);
+          this.boards$ = this.store.pipe(select(BoardSelectors.loadBoards));
+        }
+      });
+  }
+  openChat() {
+    this.chatPanelService.toggle();
   }
 }

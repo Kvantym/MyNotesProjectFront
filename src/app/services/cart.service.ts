@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import {Observable} from 'rxjs';
 
 export interface ActivityCartResponse {
   id: string;
@@ -61,4 +62,53 @@ export class CartService {
       `${this.apiUrl}/get-activity-cart/${cartId}`
     );
   }
+
+  getArchivedCart(cartListId: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/carts-by-list-cartId-isArchive/${cartListId}`)
+  }
+
+  addCartToArchive(cartId: string) {
+   return  this.http.put(`${this.apiUrl}/add-cart-to-archive/${cartId}`,{})
+  }
+  removeCartFromArchive(cartId: string) {
+    return  this.http.put(`${this.apiUrl}/remove-cart-from-archive/${cartId}`,{})
+  }
+
+  searchCartWithFilter(
+    cartName: string,
+    listCartId: string,
+    isArchive: boolean,
+    priority?: number | null,
+    status?: number | null,
+    dueDate?: string | null,
+    createdAt?: string | null
+  ): Observable<any[]> {
+
+    let params = new HttpParams()
+      .set('listCartId', listCartId)
+      .set('isArchive', isArchive);
+
+    if (cartName) {
+      params = params.set('cartName', cartName);
+    }
+
+    if (priority !== undefined && priority !== null) {
+      params = params.set('priority', priority.toString());
+    }
+
+    if (status !== undefined && status !== null) {
+      params = params.set('status', status.toString());
+    }
+
+    if (dueDate) {
+      params = params.set('dueDate', dueDate);
+    }
+
+    if (createdAt) {
+      params = params.set('createdAt', createdAt);
+    }
+
+    return this.http.get<any[]>(`${this.apiUrl}/search-cart-by-filter`, { params });
+  }
+
 }

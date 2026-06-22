@@ -1,92 +1,72 @@
+﻿:host {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+}
 
 .login-container {
-  max-width: 420px;
-  margin: 60px auto;
-  padding: 35px 40px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: min(100%, 440px);
+  padding: 30px;
 }
 
 .login-container h2 {
+  margin: 0 0 24px;
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 850;
   text-align: center;
-  margin-bottom: 25px;
-  font-size: 26px;
-  font-weight: 600;
-  color: #333;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: #555;
+  gap: 7px;
+  margin-bottom: 18px;
 }
 
 .form-group input {
-  padding: 12px 14px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus {
-  border-color: #4CAF50;
-  outline: none;
-  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
-}
-
-.error {
-  margin-top: 5px;
-  font-size: 13px;
-  color: #e74c3c;
-  font-weight: 500;
+  min-height: 44px;
+  padding: 0 14px;
 }
 
 button {
   width: 100%;
-  padding: 12px 0;
   margin-top: 10px;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 0 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--surface);
 }
 
 button:hover {
-  background-color: #45a049;
+  background: var(--accent-hover);
 }
 
 .ButtonRegister {
-  background-color: #2196F3;
-  margin-top: 10px;
+  border-color: var(--line-strong);
+  background: var(--surface);
+  color: var(--text-soft);
 }
 
 .ButtonRegister:hover {
-  background-color: #1976D2;
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+
+.error,
+.error-message {
+  margin-top: 6px;
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .error-message {
-  margin-top: 15px;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: var(--danger-soft);
   text-align: center;
-  font-weight: 600;
-  color: #e74c3c;
-}
-
-@media (max-width: 480px) {
-  .login-container {
-    padding: 25px 20px;
-    margin: 40px 15px;
-  }
 }

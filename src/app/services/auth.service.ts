@@ -144,4 +144,17 @@ export class AuthService {
       }
     }
   }
+  getCurrentUserEmail(): string | null {
+    const user = this.currentUserSubject.value;
+    return user?.email || user?.userName || null; // повертаємо імейл
+  }
+
+  getUserByEmail(email: string) {
+    return this.http.get<User>(`${this.apiUrl}/get-user-by-email${email}`);
+  }
+
+  getUserById(userId: string | undefined): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/get-user-by-id/${userId}`); // Додано / перед ID
+  }
+
 }
